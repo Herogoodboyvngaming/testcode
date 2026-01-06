@@ -146,22 +146,6 @@
             {id: 'doublePoint', name: 'NHÂN ĐÔI ĐIỂM', desc: 'ĐOÁN ĐÚNG LẦN NÀY +200 ĐIỂM', price: 80000},
         ];
 
-        // Tạo modal trước
-        const authModal = document.createElement('DIV');
-        authModal.id = 'AUTH-MODAL';
-        authModal.classList.add('MODAL');
-        document.body.appendChild(authModal);
-
-        const bugModal = document.createElement('DIV');
-        bugModal.id = 'BUG-MODAL';
-        bugModal.classList.add('MODAL');
-        document.body.appendChild(bugModal);
-
-        const infoModal = document.createElement('DIV');
-        infoModal.id = 'INFO-MODAL';
-        infoModal.classList.add('MODAL');
-        document.body.appendChild(infoModal);
-
         if (!player) {
             const container = document.createElement('DIV');
             container.id = 'CONTAINER';
@@ -217,6 +201,8 @@
             createFooter(container);
 
             // AUTH MODAL
+            const authModal = document.createElement('DIV');
+            authModal.id = 'AUTH-MODAL';
             authModal.innerHTML = `
                 <H2>ĐĂNG NHẬP / ĐĂNG KÝ (BẮT BUỘC ĐỂ CHƠI)</H2>
                 <BUTTON class="BTN" onclick="SHOW_LOGIN()">ĐĂNG NHẬP</BUTTON>
@@ -234,6 +220,7 @@
                 </DIV>
                 <BUTTON class="BTN" onclick="document.getElementById('AUTH-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
             `;
+            document.body.appendChild(authModal);
 
             window.SHOW_LOGIN = function() {
                 document.getElementById('LOGIN-FORM').style.display = 'block';
@@ -282,6 +269,8 @@
             };
 
             // BUG MODAL
+            const bugModal = document.createElement('DIV');
+            bugModal.id = 'BUG-MODAL';
             bugModal.innerHTML = `
                 <H2>BÁO CÁO LỖI</H2>
                 <INPUT placeholder="TÊN CỦA BẠN (BẮT BUỘC)">
@@ -290,8 +279,11 @@
                 <BUTTON class="BTN" onclick="alert('CẢM ƠN BẠN ĐÃ BÁO CÁO! MÌNH SẼ SỬA NGAY NHA 😊'); document.getElementById('BUG-MODAL').style.display = 'none';">GỬI BÁO CÁO</BUTTON>
                 <BUTTON class="BTN" onclick="document.getElementById('BUG-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
             `;
+            document.body.appendChild(bugModal);
 
             // INFO MODAL
+            const infoModal = document.createElement('DIV');
+            infoModal.id = 'INFO-MODAL';
             infoModal.innerHTML = `
                 <H2>ℹ️ THÔNG TIN & UPDATE</H2>
                 <P>
@@ -305,11 +297,12 @@
                     • Bấm "BẮT ĐẦU CHƠI VỚI BOT" ở trang chủ là vào chơi luôn (không xác nhận).<br>
                     • Không còn timer đếm ngược khi đoán, chỉ hiện cảnh báo khi sắp hết giờ.<br>
                     • Giao diện tối ưu cho mọi thiết bị (PC, Android, iOS).<br>
-                    • BẮT BUỘC ĐĂNG NHẬP / ĐĂNG KÝ ĐỂ CHƠI VÀ LƯU ĐIỂM!<br><br>
+                    • <strong>BẮT BUỘC ĐĂNG NHẬP / ĐĂNG KÝ ĐỂ CHƠI VÀ LƯU ĐIỂM!</strong><br><br>
                     CHƠI VUI VẺ NHÉ! 🎉
                 </P>
                 <BUTTON class="BTN" onclick="document.getElementById('INFO-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
             `;
+            document.body.appendChild(infoModal);
         } else if (player === 2) {
             if (!CURRENT_USER) {
                 alert('BẠN PHẢI ĐĂNG NHẬP / ĐĂNG KÝ ĐỂ CHƠI!');
