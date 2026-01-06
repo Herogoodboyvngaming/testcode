@@ -580,9 +580,9 @@
 
                 showInventory();
 
-                if (state.state === 'WAITING') {
+                if (state && state.state === 'WAITING') {
                     overlay.style.display = 'flex';
-                } else if (state.state === 'GUESSING' || state.wrongGuesses >= 3) {
+                } else if (state && (state.state === 'GUESSING' || state.wrongGuesses >= 3)) {
                     if (state.wrongGuesses >= 3) {
                         showResult(false);
                         return;
