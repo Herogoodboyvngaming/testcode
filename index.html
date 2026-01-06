@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TRÒ CHƠI ĐỐ MÀU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script>
+        const USER_KEY = 'COLORGAME_USERS';
+
+        let CURRENT_USER = null;
+
+        function LOAD_USER() {
+            const KEY = localStorage.getItem('CURRENT_COLORGAME_USER');
+            if (KEY) {
+                const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+                CURRENT_USER = USERS[KEY];
+            }
+        }
+
+        function LOGOUT() {
+            localStorage.removeItem('CURRENT_COLORGAME_USER');
+            CURRENT_USER = null;
+            location.reload();
+        }
+
+        LOAD_USER();
+
+        const params = new URLSearchParams(window.location.search);
+        const player = params.get('player') ? Number(params.get('player')) : null;
+
+        const COLORS = [
+            {name: 'ĐỎ', hex: '#FF0000'},
+            {name: 'CAM', hex: '#FFA500'},
+            {name: 'VÀNG', hex: '#FFFF00'},
+            {name: 'XANH LÁ', hex: '#00FF00'},
+            {name: 'XANH DƯƠNG', hex: '#0000FF'},
+            {name: 'TÍM', hex: '#800080'},
+            {name: 'HỒNG', hex: '#FFC0CB'},
+            {name: 'NÂU', hex: '#A52A2A'},
+            {name: 'ĐEN', hex: '#000000'},
+            {name: 'TRẮNG', hex: '#FFFFFF'},
+            {name: 'XÁM', hex: '#808080'},
+            {name: 'XANH NGỌC', hex: '#00FFFF'},
+            {name: 'HỒNG PHẤN', hex: '#FF69B4'},
+            {name: 'VÀNG KIM', hex: '#FFD700'},
+            {name: 'NAVY', hex: '#000080'},
+            {name: 'ĐỎ RƯỢU', hex: '#8B0000'},
+            {name: 'OLIVE', hex: '#808000'},
+            {name: 'TEAL', hex: '#008080'},
+            {name: 'VIOLET', hex: '#EE82EE'},
+            {name: 'CORAL', hex: '#FF7F50'},
+        ];
+
+        const SOUNDS = {
+            correct: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_4e79e3c6d3.mp3?filename=success-1-6297.mp3',
+            wrong: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_8c8b6d1f3f.mp3?filename=wrong-answer-129254.mp3',
+            victory: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_3d7c5a3a3e.mp3?filename=fanfare-6302.mp3',
+            buy: 'https://cdn.pixabay.com/download/audio/2022/05/13/audio_8c3e3d3e4f.mp3?filename=cash-register-172293.mp3',
+            warning: 'https://cdn.pixabay.com/download/audio/2023/08/22/audio_9d8e3b3e4f.mp3?filename=alarm-clock-64535.mp3',
+            fail: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_8c8b6d1f3f.mp3?filename=wrong-answer-129254.mp3'
+        };
+
+        function playSound(type) {
+            const audio = new Audio(SOUNDS[type] || SOUNDS.correct);
+            audio.volume = 0.6;
+            audio.play().catch(() => {});
+        }
+
+        const STATE_KEY = 'COLORGAME_STATE';
+
+        function getGameState() {
+            const s = localStorage.getItem(STATE_KEY);
+            return s ? JSON.parse(s) : null;
+        }
+
+        function setGameState(state) {
+            if (state) {
+                localStorage.setItem(STATE_KEY, JSON.stringify(state));
+            } else {
+                localStorage.removeItem(STATE_KEY);
+            }
+        }
+
+        function getUserScore() {
+            return CURRENT_USER ? CURRENT_USER.SCORE || 0 : 0;
+        }
+
+        function getUserInventory() {
+            return CURRENT_USER ? CURRENT_USER.INVENTORY || [] : [];
+        }
+
+        function saveUserData(score, inventory) {
+            if (CURRENT_USER) {
+                CURRENT_USER.SCORE = score;
+                CURRENT_USER.INVENTORY = inventory;
+                const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+                USERS[localStorage.getItem('CURRENT_COLORGAME_USER')] = CURRENT_USER;
+                localStorage.setItem(USER_KEY, JSON.stringify(USERS));
+            }
+        }
+
+        function getTextColor(hex) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+            return luma > 186 ? '#000000' : '#FFFFFF';
+        }
+
+        function createButton(text, onclick) {
+            const btn = document.createElement('BUTTON');
+            btn.textContent = text;
+            btn.classList.add('BTN');
+            btn.onclick = onclick;
+            return btn;
+        }
+
+        function createFooter(parent) {
+            const footer = document.createElement('FOOTER');
+            const lines = [
+                'MADE IN VN 🇻🇳',
+                'MADE BY : NGUYỄN CHÍ DỰ ♥️🇻🇳',
+                'GMAIL HỖ TRỢ : Herogoodboymc2024@gmail.com'
+            ];
+            lines.forEach(line => {
+                const p = document.createElement('P');
+                p.textContent = line;
+                footer.appendChild(p);
+            });
+            const reportBtn = createButton('BÁO CÁO LỖI', () => {
+                document.getElementById('BUG-MODAL').style.display = 'block';
+            });
+            footer.appendChild(reportBtn);
+            parent.appendChild(footer);
+        }
+
+        const shopItems = [
+            {id: 'reveal', name: 'MẮT NHÌN XUYÊN THẤU', desc: 'NHÌN THẤY MÀU ĐÚNG TRONG 10 GIÂY', price: 100000},
+            {id: 'hint3', name: 'GỢI Ý 3 MÀU SAI', desc: 'LOẠI BỎ 3 MÀU SAI KHỎI BẢNG', price: 50000},
+            {id: 'extraTime', name: 'THỜI GIAN THÊM', desc: '+3 PHÚT ĐẾM NGƯỢC', price: 40000},
+            {id: 'halfWrong', name: 'GIẢM NỬA SAI', desc: 'GIẢM 1/2 SỐ LẦN SAI ĐÃ CÓ', price: 35000},
+            {id: 'doublePoint', name: 'NHÂN ĐÔI ĐIỂM', desc: 'ĐOÁN ĐÚNG LẦN NÀY +200 ĐIỂM', price: 80000},
+        ];
+
+        // Tạo modal trước
+        const authModal = document.createElement('DIV');
+        authModal.id = 'AUTH-MODAL';
+        authModal.classList.add('MODAL');
+        document.body.appendChild(authModal);
+
+        const bugModal = document.createElement('DIV');
+        bugModal.id = 'BUG-MODAL';
+        bugModal.classList.add('MODAL');
+        document.body.appendChild(bugModal);
+
+        const infoModal = document.createElement('DIV');
+        infoModal.id = 'INFO-MODAL';
+        infoModal.classList.add('MODAL');
+        document.body.appendChild(infoModal);
+
+        if (!player) {
+            const container = document.createElement('DIV');
+            container.id = 'CONTAINER';
+            document.body.appendChild(container);
+
+            const header = document.createElement('HEADER');
+            const title = document.createElement('H1');
+            title.textContent = 'TRÒ CHƠI ĐỐ MÀU';
+            header.appendChild(title);
+
+            const subtitle = document.createElement('P');
+            subtitle.textContent = 'CHÚC CÁC BẠN CHƠI VUI VẺ CÓ LỖI KÉO XUỐNG DƯỚI CHÂN TRANG BẤM VÀO NÚT BÁO CÁO NHA :)';
+            subtitle.classList.add('SUBTITLE');
+            header.appendChild(subtitle);
+            container.appendChild(header);
+
+            const main = document.createElement('DIV');
+            main.classList.add('HOME-MAIN');
+
+            const scoreText = CURRENT_USER ? `ĐIỂM CỦA ${CURRENT_USER.NAME}: ${CURRENT_USER.SCORE.toLocaleString()}` : 'ĐIỂM HIỆN TẠI: 0';
+            const scoreInfo = document.createElement('P');
+            scoreInfo.textContent = scoreText;
+            scoreInfo.style.fontWeight = 'BOLD';
+            scoreInfo.style.color = '#FFFF00';
+            scoreInfo.style.fontSize = '2.2EM';
+            scoreInfo.style.marginBottom = '30PX';
+            main.appendChild(scoreInfo);
+
+            const info = document.createElement('P');
+            info.textContent = 'PLAYER 1 LÀ BOT - BẠN LÀ NGƯỜI ĐOÁN MÀU!';
+            info.style.fontWeight = 'BOLD';
+            info.style.color = '#FFFF00';
+            info.style.fontSize = '2EM';
+            main.appendChild(info);
+
+            const startBtn = createButton('BẮT ĐẦU CHƠI VỚI BOT', () => {
+                if (CURRENT_USER) {
+                    location.href = '?player=2';
+                } else {
+                    document.getElementById('AUTH-MODAL').style.display = 'block';
+                }
+            });
+            startBtn.classList.add('LARGE');
+            main.appendChild(startBtn);
+
+            if (CURRENT_USER) {
+                const logoutBtn = createButton('ĐĂNG XUẤT', LOGOUT);
+                logoutBtn.style.background = '#FF4444';
+                main.appendChild(logoutBtn);
+            }
+
+            container.appendChild(main);
+            createFooter(container);
+
+            // AUTH MODAL
+            authModal.innerHTML = `
+                <H2>ĐĂNG NHẬP / ĐĂNG KÝ (BẮT BUỘC ĐỂ CHƠI)</H2>
+                <BUTTON class="BTN" onclick="SHOW_LOGIN()">ĐĂNG NHẬP</BUTTON>
+                <BUTTON class="BTN" onclick="SHOW_REGISTER()">ĐĂNG KÝ</BUTTON>
+                <DIV id="LOGIN-FORM" style="display:none;">
+                    <INPUT id="LOGIN-KEY" placeholder="GMAIL HOẶC TÊN">
+                    <INPUT id="LOGIN-PASS" type="password" placeholder="MẬT KHẨU">
+                    <BUTTON class="BTN" onclick="DO_LOGIN()">ĐĂNG NHẬP</BUTTON>
+                </DIV>
+                <DIV id="REGISTER-FORM" style="display:none;">
+                    <INPUT id="REG-NAME" placeholder="TÊN CỦA BẠN">
+                    <INPUT id="REG-GMAIL" placeholder="GMAIL CỦA BẠN">
+                    <INPUT id="REG-PASS" type="password" placeholder="MẬT KHẨU">
+                    <BUTTON class="BTN" onclick="DO_REGISTER()">ĐĂNG KÝ</BUTTON>
+                </DIV>
+                <BUTTON class="BTN" onclick="document.getElementById('AUTH-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
+            `;
+
+            window.SHOW_LOGIN = function() {
+                document.getElementById('LOGIN-FORM').style.display = 'block';
+                document.getElementById('REGISTER-FORM').style.display = 'none';
+            };
+
+            window.SHOW_REGISTER = function() {
+                document.getElementById('REGISTER-FORM').style.display = 'block';
+                document.getElementById('LOGIN-FORM').style.display = 'none';
+            };
+
+            window.DO_LOGIN = function() {
+                const KEY = document.getElementById('LOGIN-KEY').value.trim();
+                const PASS = document.getElementById('LOGIN-PASS').value;
+                const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+                if (USERS[KEY] && USERS[KEY].PASS === PASS) {
+                    localStorage.setItem('CURRENT_COLORGAME_USER', KEY);
+                    location.href = '?player=2';
+                } else {
+                    alert('SAI THÔNG TIN ĐĂNG NHẬP!');
+                }
+            };
+
+            window.DO_REGISTER = function() {
+                const NAME = document.getElementById('REG-NAME').value.trim();
+                const GMAIL = document.getElementById('REG-GMAIL').value.trim();
+                const PASS = document.getElementById('REG-PASS').value;
+                if (NAME && GMAIL && PASS) {
+                    const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+                    if (USERS[GMAIL]) {
+                        alert('GMAIL ĐÃ ĐƯỢC ĐĂNG KÝ!');
+                        return;
+                    }
+                    USERS[GMAIL] = {
+                        NAME: NAME,
+                        PASS: PASS,
+                        SCORE: 0,
+                        INVENTORY: []
+                    };
+                    localStorage.setItem(USER_KEY, JSON.stringify(USERS));
+                    localStorage.setItem('CURRENT_COLORGAME_USER', GMAIL);
+                    location.href = '?player=2';
+                } else {
+                    alert('VUI LÒNG NHẬP ĐẦY ĐỦ!');
+                }
+            };
+
+            // BUG MODAL
+            bugModal.innerHTML = `
+                <H2>BÁO CÁO LỖI</H2>
+                <INPUT placeholder="TÊN CỦA BẠN (BẮT BUỘC)">
+                <INPUT placeholder="GMAIL CỦA BẠN (BẮT BUỘC)">
+                <TEXTAREA placeholder="MÔ TẢ LỖI (BẮT BUỘC)" rows="6"></TEXTAREA>
+                <BUTTON class="BTN" onclick="alert('CẢM ƠN BẠN ĐÃ BÁO CÁO! MÌNH SẼ SỬA NGAY NHA 😊'); document.getElementById('BUG-MODAL').style.display = 'none';">GỬI BÁO CÁO</BUTTON>
+                <BUTTON class="BTN" onclick="document.getElementById('BUG-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
+            `;
+
+            // INFO MODAL
+            infoModal.innerHTML = `
+                <H2>ℹ️ THÔNG TIN & UPDATE</H2>
+                <P>
+                    <strong>CẬP NHẬT MỚI NHẤT:</strong><br><br>
+                    • Bot đặt màu bí mật chỉ trong <strong>30 GIÂY</strong> (cố định).<br>
+                    • Đoán đúng +<strong>100 ĐIỂM</strong> (nhân đôi thành 200 nếu dùng skill).<br>
+                    • Đoán sai / Từ bỏ -<strong>50 ĐIỂM</strong> (chỉ trừ khi còn điểm, không âm).<br>
+                    • Khi chọn màu sẽ có popup "ĐANG KIỂM TRA MÀU" trong 3 giây.<br>
+                    • <strong>THÊM GỢI Ý</strong>: Bấm nút "GỢI Ý" để loại bỏ 3 màu sai (miễn phí 1 lần/lượt).<br>
+                    • Nút "CHƠI LẠI VỚI BOT" có xác nhận tránh bấm nhầm.<br>
+                    • Bấm "BẮT ĐẦU CHƠI VỚI BOT" ở trang chủ là vào chơi luôn (không xác nhận).<br>
+                    • Không còn timer đếm ngược khi đoán, chỉ hiện cảnh báo khi sắp hết giờ.<br>
+                    • Giao diện tối ưu cho mọi thiết bị (PC, Android, iOS).<br>
+                    • BẮT BUỘC ĐĂNG NHẬP / ĐĂNG KÝ ĐỂ CHƠI VÀ LƯU ĐIỂM!<br><br>
+                    CHƠI VUI VẺ NHÉ! 🎉
+                </P>
+                <BUTTON class="BTN" onclick="document.getElementById('INFO-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
+            `;
+        } else if (player === 2) {
+            if (!CURRENT_USER) {
+                alert('BẠN PHẢI ĐĂNG NHẬP / ĐĂNG KÝ ĐỂ CHƠI!');
+                location.href = location.pathname;
+                return;
+            }
+
+            document.body.innerHTML = '';
+            const container = document.createElement('DIV');
+            container.id = 'CONTAINER';
+            document.body.appendChild(container);
+
+            const header = document.createElement('DIV');
+            header.classList.add('GAME-HEADER');
+            const title = document.createElement('H1');
+            title.textContent = 'TRÒ CHƠI ĐỐ MÀU - BẠN VS BOT';
+            header.appendChild(title);
+
+            const shopBtn = createButton('CỬA HÀNG SKILL', () => showShop());
+            shopBtn.classList.add('SHOP-BTN');
+            header.appendChild(shopBtn);
+
+            const backBtn = createButton('TRỞ VỀ TRANG CHỦ', () => {
+                if (confirm('THOÁT KHỎI TRÒ CHƠI?')) {
+                    location.href = location.pathname;
+                }
+            });
+            header.appendChild(backBtn);
+
+            const resetBtn = createButton('RESET ĐIỂM', () => {
+                if (confirm('RESET ĐIỂM CỦA BẠN VỀ 0? (KHÔNG THỂ HOÀN TÁC)')) {
+                    saveUserData(0, []);
+                    updateScores();
+                    alert('ĐIỂM ĐÃ ĐƯỢC RESET VỀ 0!');
+                }
+            });
+            header.appendChild(resetBtn);
+
+            const infoBtn = createButton('ℹ️ THÔNG TIN & UPDATE', () => document.getElementById('INFO-MODAL').style.display = 'block');
+            header.appendChild(infoBtn);
+
+            container.appendChild(header);
+
+            const scoreBoard = document.createElement('DIV');
+            scoreBoard.id = 'SCORE-BOARD';
+            const playerScore = document.createElement('DIV');
+            playerScore.id = 'PLAYER-SCORE';
+            scoreBoard.appendChild(playerScore);
+            container.appendChild(scoreBoard);
+
+            const mainView = document.createElement('DIV');
+            mainView.id = 'MAIN-VIEW';
+            container.appendChild(mainView);
+
+            const overlay = document.createElement('DIV');
+            overlay.id = 'OVERLAY';
+            const waitText = document.createElement('DIV');
+            waitText.textContent = 'BOT ĐANG ĐẶT MÀU BÍ MẬT...';
+            waitText.classList.add('BLINK');
+            const waitTimer = document.createElement('DIV');
+            waitTimer.id = 'WAIT-TIMER';
+            overlay.appendChild(waitText);
+            overlay.appendChild(waitTimer);
+            document.body.appendChild(overlay);
+
+            const checkOverlay = document.createElement('DIV');
+            checkOverlay.id = 'CHECK-OVERLAY';
+            checkOverlay.style.display = 'none';
+            const checkText = document.createElement('DIV');
+            checkText.textContent = '⏰ ĐANG KIỂM TRA MÀU VUI LÒNG ĐỢI ⏰';
+            checkText.style.fontSize = 'clamp(2em, 6vw, 3.5em)';
+            checkText.style.fontWeight = 'bold';
+            checkText.style.color = '#FFD700';
+            checkText.style.textShadow = '0 0 20px #000';
+            checkOverlay.appendChild(checkText);
+            document.body.appendChild(checkOverlay);
+
+            const warningMsg = document.createElement('DIV');
+            warningMsg.id = 'WARNING-MSG';
+            warningMsg.textContent = '🚨 NHANH LÊN THỜI GIAN SẮP HẾT, HẾT LÀ BẠN THUA ĐÓ! 🚨';
+            warningMsg.style.display = 'none';
+            document.body.appendChild(warningMsg);
+
+            const timeUpMsg = document.createElement('DIV');
+            timeUpMsg.id = 'TIME-UP-MSG';
+            timeUpMsg.textContent = 'THỜI GIAN HẾT!';
+            timeUpMsg.style.display = 'none';
+            document.body.appendChild(timeUpMsg);
+
+            const shopModal = document.createElement('DIV');
+            shopModal.id = 'SHOP-MODAL';
+            document.body.appendChild(shopModal);
+
+            const inventoryBar = document.createElement('DIV');
+            inventoryBar.id = 'INVENTORY-BAR';
+            inventoryBar.style.display = 'none';
+            document.body.appendChild(inventoryBar);
+
+            createFooter(container);
+
+            let hasWarned = false;
+            let hintUsed = false;
+
+            function updateScores() {
+                document.getElementById('PLAYER-SCORE').textContent = `ĐIỂM CỦA ${CURRENT_USER.NAME}: ${getUserScore().toLocaleString()}`;
+            }
+
+            function showShop() {
+                shopModal.innerHTML = '';
+                shopModal.style.display = 'block';
+
+                const title = document.createElement('H2');
+                title.textContent = 'CỬA HÀNG SKILL';
+                shopModal.appendChild(title);
+
+                const currentPoint = document.createElement('P');
+                currentPoint.textContent = `ĐIỂM HIỆN TẠI: ${getUserScore().toLocaleString()}`;
+                currentPoint.style.fontSize = '1.8EM';
+                currentPoint.style.color = '#FFFF00';
+                shopModal.appendChild(currentPoint);
+
+                shopItems.forEach(item => {
+                    const card = document.createElement('DIV');
+                    card.classList.add('SHOP-ITEM');
+
+                    const name = document.createElement('H3');
+                    name.textContent = item.name;
+                    card.appendChild(name);
+
+                    const desc = document.createElement('P');
+                    desc.textContent = item.desc;
+                    card.appendChild(desc);
+
+                    const price = document.createElement('P');
+                    price.textContent = `GIÁ: ${item.price.toLocaleString()} ĐIỂM`;
+                    price.style.color = '#FF4444';
+                    price.style.fontWeight = 'BOLD';
+                    card.appendChild(price);
+
+                    const buyBtn = createButton('MUA NGAY', () => {
+                        if (getUserScore() < item.price) {
+                            playSound('fail');
+                            alert('KHÔNG ĐỦ ĐIỂM!');
+                            return;
+                        }
+                        if (confirm(`MUA ${item.name} VỚI ${item.price.toLocaleString()} ĐIỂM?`)) {
+                            playSound('buy');
+                            const newScore = getUserScore() - item.price;
+                            const newInventory = [...getUserInventory(), item.id];
+                            saveUserData(newScore, newInventory);
+                            alert('MUA THÀNH CÔNG!');
+                            shopModal.style.display = 'none';
+                            updateView();
+                        }
+                    });
+                    card.appendChild(buyBtn);
+
+                    shopModal.appendChild(card);
+                });
+
+                const closeBtn = createButton('ĐÓNG CỬA HÀNG', () => shopModal.style.display = 'none');
+                shopModal.appendChild(closeBtn);
+            }
+
+            function showInventory() {
+                inventoryBar.innerHTML = '';
+                inventoryBar.style.display = 'flex';
+
+                const title = document.createElement('P');
+                title.textContent = 'TÚI ĐỒ SKILL:';
+                title.style.marginRight = '10PX';
+                inventoryBar.appendChild(title);
+
+                shopItems.forEach(item => {
+                    if (getUserInventory().includes(item.id)) {
+                        const useBtn = createButton(item.name, () => {
+                            alert(`ĐÃ KÍCH HOẠT ${item.name}!`);
+                            updateView();
+                        });
+                        useBtn.classList.add('INVENTORY-BTN');
+                        inventoryBar.appendChild(useBtn);
+                    }
+                });
+            }
+
+            function createPalette(state) {
+                const wrapper = document.createElement('DIV');
+                wrapper.classList.add('COLOR-WRAPPER');
+
+                let availableColors = COLORS.slice();
+
+                availableColors.forEach(c => {
+                    const btn = document.createElement('BUTTON');
+                    btn.classList.add('COLOR-BTN');
+                    btn.style.backgroundColor = c.hex;
+                    btn.style.color = getTextColor(c.hex);
+                    btn.textContent = c.name;
+
+                    btn.onclick = () => {
+                        document.getElementById('CHECK-OVERLAY').style.display = 'flex';
+
+                        setTimeout(() => {
+                            document.getElementById('CHECK-OVERLAY').style.display = 'none';
+
+                            if (c.hex === state.secretColor) {
+                                playSound('correct');
+                                playSound('victory');
+                                let bonus = 100;
+                                const newScore = getUserScore() + bonus;
+                                saveUserData(newScore, getUserInventory());
+                                showResult(true, bonus);
+                            } else {
+                                playSound('wrong');
+                                const penalty = 50;
+                                const newScore = getUserScore() > 0 ? Math.max(0, getUserScore() - penalty) : 0;
+                                saveUserData(newScore, getUserInventory());
+                                if (getUserScore() > 0) {
+                                    alert(`SAI RỒI!!! -${penalty} ĐIỂM 😭`);
+                                } else {
+                                    alert('SAI RỒI!!! KHÔNG BỊ TRỪ 😅');
+                                }
+                                const newState = {...state};
+                                newState.wrongGuesses += 1;
+                                setGameState(newState);
+                                updateView();
+                            }
+                        }, 3000);
+                    };
+                    wrapper.appendChild(btn);
+                });
+                return wrapper;
+            }
+
+            function showResult(correct, bonus = 100) {
+                mainView.innerHTML = '';
+                const msg = document.createElement('H2');
+                msg.textContent = correct ? `CHÚC MỪNG! +${bonus} ĐIỂM 🎉🎉` : 'HẾT GIỜ HOẶC SAI QUÁ 3 LẦN - BẠN THUA RỒI!';
+                msg.style.color = correct ? '#00FF00' : '#FF4444';
+                mainView.appendChild(msg);
+
+                const nextBtn = createButton('CHƠI LẠI VỚI BOT', () => {
+                    if (confirm('BẠN MUỐN CHƠI LẠI VỚI BOT THẬT CHỨ? (ĐIỂM VÀ TÚI ĐỒ GIỮ NGUYÊN)')) {
+                        botSetColorAndWait();
+                    }
+                });
+                nextBtn.classList.add('LARGE');
+                mainView.appendChild(nextBtn);
+            }
+
+            function botSetColorAndWait() {
+                const secret = COLORS[Math.floor(Math.random() * COLORS.length)].hex;
+                const waitDuration = 30000;
+                const newState = {
+                    secretColor: secret,
+                    state: 'WAITING',
+                    timerStart: Date.now(),
+                    timerDuration: waitDuration,
+                    wrongGuesses: 0
+                };
+                setGameState(newState);
+                hintUsed = false;
+                updateView();
+            }
+
+            function updateView() {
+                updateScores();
+                const state = getGameState();
+                mainView.innerHTML = '';
+                overlay.style.display = 'none';
+                document.getElementById('CHECK-OVERLAY').style.display = 'none';
+                warningMsg.style.display = 'none';
+                timeUpMsg.style.display = 'none';
+                inventoryBar.style.display = 'none';
+                hasWarned = false;
+
+                showInventory();
+
+                if (state.state === 'WAITING') {
+                    overlay.style.display = 'flex';
+                } else if (state.state === 'GUESSING' || state.wrongGuesses >= 3) {
+                    if (state.wrongGuesses >= 3) {
+                        showResult(false);
+                        return;
+                    }
+
+                    const ready = document.createElement('H2');
+                    ready.textContent = 'BẠN ĐÃ SẴN SÀNG ĐOÁN MÀU CHƯA?';
+                    mainView.appendChild(ready);
+                    const h = document.createElement('H2');
+                    h.textContent = 'ĐOÁN ĐI NÀO!!!';
+                    mainView.appendChild(h);
+
+                    if (!hintUsed) {
+                        const hintBtn = createButton('GỢI Ý (LOẠI 3 MÀU SAI)', () => {
+                            if (hintUsed) {
+                                alert('BẠN ĐÃ DÙNG GỢI Ý RỒI!');
+                                return;
+                            }
+                            hintUsed = true;
+                            updateView();
+                            alert('ĐÃ LOẠI BỎ 3 MÀU SAI! CHỌN LẠI ĐI!');
+                        });
+                        hintBtn.style.background = 'linear-gradient(#FFD700, #FFA500)';
+                        mainView.appendChild(hintBtn);
+                    }
+
+                    mainView.appendChild(createPalette(state));
+
+                    const surrender = createButton('TỪ BỎ (-50 ĐIỂM)', () => {
+                        if (getUserScore() <= 0) {
+                            alert('BẠN KHÔNG CÓ ĐIỂM NÊN KHÔNG BỊ TRỪ KHI TỪ BỎ 😅');
+                            showResult(false);
+                            return;
+                        }
+                        if (confirm('TỪ BỎ THẬT À? -50 ĐIỂM')) {
+                            const newScore = Math.max(0, getUserScore() - 50);
+                            saveUserData(newScore, getUserInventory());
+                            showResult(false);
+                        }
+                    });
+                    surrender.style.background = '#FF4444';
+                    mainView.appendChild(surrender);
+                }
+            }
+
+            setInterval(() => {
+                const state = getGameState();
+                if (!state || !state.state) return;
+
+                if (state.state === 'WAITING') {
+                    const elapsed = Date.now() - state.timerStart;
+                    const remaining = state.timerDuration - elapsed;
+                    if (remaining <= 0) {
+                        const guessDuration = Math.floor(Math.random() * 540000) + 60000;
+                        const newState = {...state};
+                        newState.state = 'GUESSING';
+                        newState.guessTimerStart = Date.now();
+                        newState.guessTimerDuration = guessDuration;
+                        setGameState(newState);
+                        updateView();
+                    } else {
+                        const m = String(Math.floor(remaining / 60000)).padStart(2, '0');
+                        const s = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
+                        const timerEl = document.getElementById('WAIT-TIMER');
+                        if (timerEl) timerEl.textContent = m + ':' + s;
+                    }
+                } else if (state.state === 'GUESSING') {
+                    const elapsed = Date.now() - state.guessTimerStart;
+                    const remaining = Math.max(0, state.guessTimerDuration - elapsed);
+                    const totalSeconds = Math.floor(remaining / 1000);
+
+                    if (totalSeconds <= 10 && totalSeconds > 5 && !hasWarned) {
+                        warningMsg.style.display = 'block';
+                        playSound('warning');
+                        hasWarned = true;
+                    } else if (totalSeconds <= 5) {
+                        warningMsg.style.color = '#FF0000';
+                        warningMsg.style.animation = 'BLINK 0.4s infinite';
+                    }
+
+                    if (remaining <= 0) {
+                        timeUpMsg.style.display = 'block';
+                        playSound('wrong');
+                        setTimeout(() => {
+                            showResult(false);
+                        }, 2000);
+                    }
+                }
+            }, 500);
+
+            botSetColorAndWait();
+        }
+    </script>
+</body>
+</html>
