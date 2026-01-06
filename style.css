@@ -34,12 +34,12 @@ h1 {
     color: #ff6b6b;
 }
 
-#login-btn {
+.auth-buttons button {
     background-color: #ff4757;
     color: white;
     padding: 20px 40px;
     font-size: 24px;
-    margin: 40px;
+    margin: 20px;
     cursor: pointer;
     border-radius: 15px;
     border: none;
@@ -73,7 +73,7 @@ h1 {
     color: #ff6b6b;
 }
 
-.close-login, .close-report {
+.close-register, .close-login, .close-report {
     color: #aaa;
     float: right;
     font-size: 40px;
@@ -81,7 +81,7 @@ h1 {
     cursor: pointer;
 }
 
-.close-login:hover, .close-report:hover {
+.close-register:hover, .close-login:hover, .close-report:hover {
     color: #000;
 }
 
