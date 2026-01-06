@@ -2,679 +2,660 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TRÒ CHƠI ĐỐ MÀU</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tiếng Anh Cùng Chí Dự 🇻🇳</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>🇻🇳 Học Tiếng Anh Cùng Chí Dự 🇻🇳</h1>
+            <p class="clock">🕒 Thời gian hiện tại: <span id="clock">--:--:--</span></p>
+            <p class="user-info">Chào: <strong id="username-display">Khách</strong> | <button id="logout-btn" class="small-btn hidden">Đăng Xuất</button></p>
+            <p class="subtitle">Chơi vui nha, có góp ý thì bấm nút bên dưới nhé! ❤️</p>
+        </header>
+
+        <div class="controls">
+            <button id="auth-btn">🔐 Đăng Nhập / Đăng Ký</button>
+            <button id="lang-learn-btn">📚 Đổi Ngôn Ngữ Học</button>
+            <button id="lang-btn">🌍 Ngôn Ngữ Phát Âm</button>
+            <button id="mode-btn">⚡ Mode: Dễ</button>
+            <button id="shop-btn">🛒 Shop Quốc Kỳ</button>
+            <button id="status-btn">ℹ️ Thông Tin</button>
+        </div>
+
+        <div id="status-info" class="info-box hidden">
+            <h3>ℹ️ Thông Tin & Update</h3>
+            <p><strong>Phiên bản:</strong> Có Đăng Nhập Bắt Buộc (06/01/2026)</p>
+            <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳 (OWNER)</p>
+            <p><strong>Gmail hỗ trợ:</strong> Herogoodboymc2024@gmail.com</p>
+            <p>Phải đăng nhập mới được học nha!</p>
+        </div>
+
+        <div id="start-screen">
+            <div class="welcome-box">
+                <h2>Chào mừng bạn đến với Quiz Học Tiếng Anh! 🎉</h2>
+                <p>Bạn đã sẵn sàng chưa? Bấm bắt đầu nha!</p>
+                <p>Điểm hiện tại: <strong id="current-score">0</strong></p>
+                <button id="start-btn" class="big-btn">Bắt Đầu Học 📚</button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <p id="question"></p>
+            <button id="speak-btn">🔊 Nghe Phát Âm</button>
+            <div id="options"></div>
+
+            <div class="quiz-controls">
+                <button id="skip-btn">⏭️ Skip (-30đ)</button>
+                <button id="restart-btn">🔄 Chơi Lại</button>
+                <button id="reset-score-btn">🗑️ Reset Điểm</button>
+                <button id="quit-btn">✖️ Từ Bỏ (-10đ)</button>
+                <button id="back-menu-btn">🏠 Trở Về Menu Chính</button>
+            </div>
+
+            <div id="result"></div>
+            <p id="score">Điểm: 0</p>
+        </div>
+
+        <div id="shop-screen" class="hidden">
+            <h2>🛒 Shop Quốc Kỳ Nền</h2>
+            <p>Điểm hiện tại: <strong id="shop-score">0</strong></p>
+            <div class="shop-items">
+                <div class="shop-item" data-country="vn" data-price="0">🇻🇳 Việt Nam - Miễn phí</div>
+                <div class="shop-item" data-country="us" data-price="100">🇺🇸 Mỹ - 100 điểm</div>
+                <div class="shop-item" data-country="gb" data-price="120">🇬🇧 Anh - 120 điểm</div>
+                <div class="shop-item" data-country="jp" data-price="150">🇯🇵 Nhật - 150 điểm</div>
+                <div class="shop-item" data-country="kr" data-price="200">🇰🇷 Hàn - 200 điểm</div>
+                <div class="shop-item" data-country="fr" data-price="250">🇫🇷 Pháp - 250 điểm</div>
+                <div class="shop-item" data-country="de" data-price="180">🇩🇪 Đức - 180 điểm</div>
+                <div class="shop-item" data-country="it" data-price="220">🇮🇹 Ý - 220 điểm</div>
+                <div class="shop-item" data-country="cn" data-price="300">🇨🇳 Trung Quốc - 300 điểm</div>
+                <div class="shop-item" data-country="es" data-price="280">🇪🇸 Tây Ban Nha - 280 điểm</div>
+                <div class="shop-item" data-country="ru" data-price="350">🇷🇺 Nga - 350 điểm</div>
+                <div class="shop-item" data-country="th" data-price="400">🇹🇭 Thái Lan - 400 điểm</div>
+                <div class="shop-item" data-country="id" data-price="320">🇮🇩 Indonesia - 320 điểm</div>
+            </div>
+            <button id="back-shop" class="big-btn">Quay Lại</button>
+        </div>
+
+        <footer>
+            <p>Made in VN 🇻🇳♥️</p>
+            <p>Made by: <strong>Nguyễn Chí Dự</strong> (OWNER)</p>
+
+            <div class="footer-buttons">
+                <button id="report-btn">🐛 Report Bug</button>
+                <button id="suggest-btn">💡 Gợi Ý Thêm Từ Học</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal Đăng Nhập / Đăng Ký -->
+    <div id="auth-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>🔐 Đăng Nhập / Đăng Ký</h3>
+            <input type="text" id="auth-username" placeholder="Tên đăng nhập">
+            <input type="password" id="auth-password" placeholder="Mật khẩu">
+            <button id="login-btn" class="big-btn">Đăng Nhập</button>
+            <button id="register-btn" class="big-btn">Đăng Ký</button>
+            <button id="close-auth" class="close-btn">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Modal Ngôn Ngữ Học -->
+    <div id="lang-learn-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Chọn Ngôn Ngữ Học</h3>
+            <button data-learn-lang="en" data-country="us">🇬🇧 Tiếng Anh</button>
+            <button data-learn-lang="ja" data-country="jp">🇯🇵 Tiếng Nhật</button>
+            <button data-learn-lang="ko" data-country="kr">🇰🇷 Tiếng Hàn</button>
+            <button data-learn-lang="fr" data-country="fr">🇫🇷 Tiếng Pháp</button>
+            <button data-learn-lang="de" data-country="de">🇩🇪 Tiếng Đức</button>
+            <button data-learn-lang="it" data-country="it">🇮🇹 Tiếng Ý</button>
+            <button data-learn-lang="zh" data-country="cn">🇨🇳 Tiếng Trung</button>
+            <button data-learn-lang="es" data-country="es">🇪🇸 Tiếng Tây Ban Nha</button>
+            <button data-learn-lang="ru" data-country="ru">🇷🇺 Tiếng Nga</button>
+            <button data-learn-lang="th" data-country="th">🇹🇭 Tiếng Thái</button>
+            <button data-learn-lang="id" data-country="id">🇮🇩 Tiếng Indonesia</button>
+            <button data-learn-lang="vi" data-country="vn">🇻🇳 Tiếng Việt (dịch nghĩa)</button>
+            <button id="close-learn-lang" class="close-btn">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Modal Ngôn Ngữ Phát Âm -->
+    <div id="lang-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Chọn Ngôn Ngữ Phát Âm</h3>
+            <button data-lang="vi">🇻🇳 Tiếng Việt</button>
+            <button data-lang="en">🇬🇧 English</button>
+            <button data-lang="ja">🇯🇵 Tiếng Nhật</button>
+            <button data-lang="ko">🇰🇷 Tiếng Hàn</button>
+            <button data-lang="fr">🇫🇷 Tiếng Pháp</button>
+            <button data-lang="zh">🇨🇳 Tiếng Trung</button>
+            <button data-lang="es">🇪🇸 Tiếng Tây Ban Nha</button>
+            <button data-lang="de">🇩🇪 Tiếng Đức</button>
+            <button data-lang="it">🇮🇹 Tiếng Ý</button>
+            <button data-lang="ru">🇷🇺 Tiếng Nga</button>
+            <button data-lang="th">🇹🇭 Tiếng Thái</button>
+            <button data-lang="id">🇮🇩 Tiếng Indonesia</button>
+            <button id="close-lang" class="close-btn">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Form Report Bug -->
+    <div id="report-form" class="modal hidden">
+        <div class="modal-content">
+            <h3>🐛 Báo Cáo Lỗi</h3>
+            <input type="email" id="report-email" placeholder="Gmail của bạn (bắt buộc)">
+            <textarea id="report-message" placeholder="Mô tả lỗi chi tiết (bắt buộc)"></textarea>
+            <button id="send-report" class="big-btn">Gửi Báo Cáo</button>
+            <button id="cancel-report" class="close-btn">Hủy</button>
+        </div>
+    </div>
+
+    <!-- Form Gợi Ý -->
+    <div id="suggest-form" class="modal hidden">
+        <div class="modal-content">
+            <h3>💡 Gợi Ý Thêm Từ Học</h3>
+            <input type="email" id="suggest-email" placeholder="Gmail của bạn (bắt buộc)">
+            <textarea id="suggest-word" placeholder="Từ/câu muốn thêm (bắt buộc)"></textarea>
+            <button id="send-suggest" class="big-btn">Gửi Gợi Ý</button>
+            <button id="cancel-suggest" class="close-btn">Hủy</button>
+        </div>
+    </div>
+
     <script>
-        const USER_KEY = 'COLORGAME_USERS';
+        window.onload = function() {
+            let currentLang = 'vi';
+            let currentLearnLang = 'en';
+            let currentMode = 'easy';
+            let score = 0;
+            let currentQuestion = 0;
+            let unlockedFlags = ['vn'];
+            let isLoggedIn = false;
+            let currentUser = null;
 
-        let CURRENT_USER = null;
+            const modes = {
+                easy: { name: "Dễ", bonus: 10 },
+                normal: { name: "Bình Thường", bonus: 15 },
+                hard: { name: "Khó", bonus: 30 },
+                superhard: { name: "Siêu Khó", bonus: 100 },
+                extreme: { name: "Cực Khó", bonus: 500 }
+            };
 
-        function LOAD_USER() {
-            const KEY = localStorage.getItem('CURRENT_COLORGAME_USER');
-            if (KEY) {
-                const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
-                CURRENT_USER = USERS[KEY];
+            const timezones = {
+                vn: 'Asia/Ho_Chi_Minh',
+                us: 'America/New_York',
+                gb: 'Europe/London',
+                jp: 'Asia/Tokyo',
+                kr: 'Asia/Seoul',
+                fr: 'Europe/Paris',
+                de: 'Europe/Berlin',
+                it: 'Europe/Rome',
+                cn: 'Asia/Shanghai',
+                es: 'Europe/Madrid',
+                ru: 'Europe/Moscow',
+                th: 'Asia/Bangkok',
+                id: 'Asia/Jakarta'
+            };
+            let currentTimezone = timezones.vn;
+
+            const ttsLangs = {
+                vi: 'vi-VN',
+                en: 'en-US',
+                ja: 'ja-JP',
+                ko: 'ko-KR',
+                fr: 'fr-FR',
+                zh: 'zh-CN',
+                es: 'es-ES',
+                de: 'de-DE',
+                it: 'it-IT',
+                ru: 'ru-RU',
+                th: 'th-TH',
+                id: 'id-ID'
+            };
+
+            const questionSets = {
+                en: {
+                    easy: [
+                        { q: "Hello nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Apple là quả gì?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 },
+                        { q: "Dog là con gì?", options: ["Mèo", "Chó", "Gà", "Vịt"], a: 1 },
+                        { q: "Thank you nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Làm ơn"], a: 2 },
+                        { q: "Water là gì?", options: ["Sữa", "Nước", "Cà phê", "Trà"], a: 1 },
+                        { q: "Book là gì?", options: ["Bút", "Sách", "Bàn", "Ghế"], a: 1 },
+                        { q: "Sun là mặt gì?", options: ["Trăng", "Mặt trời", "Sao", "Mây"], a: 1 },
+                        { q: "Good morning nghĩa là?", options: ["Chào buổi tối", "Chào buổi sáng", "Chào buổi trưa", "Tạm biệt"], a: 1 },
+                        { q: "Family nghĩa là?", options: ["Bạn bè", "Gia đình", "Trường học", "Công việc"], a: 1 },
+                        { q: "Happy nghĩa là?", options: ["Buồn", "Vui vẻ", "Giận", "Sợ"], a: 1 },
+                        { q: "Good bye nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Sorry nghĩa là?", options: ["Cảm ơn", "Xin lỗi", "Xin chào", "Tạm biệt"], a: 1 },
+                        { q: "Please nghĩa là?", options: ["Xin lỗi", "Làm ơn", "Cảm ơn", "Xin chào"], a: 1 },
+                        { q: "Cat là con gì?", options: ["Chó", "Mèo", "Gà", "Vịt"], a: 1 },
+                        { q: "Banana là quả gì?", options: ["Táo", "Chuối", "Cam", "Xoài"], a: 1 }
+                    ],
+                    normal: [
+                        { q: "Capital of France is?", options: ["London", "Berlin", "Paris", "Madrid"], a: 2 },
+                        { q: "Yesterday nghĩa là?", options: ["Hôm qua", "Hôm nay", "Ngày mai", "Tuần tới"], a: 0 },
+                        { q: "Beautiful nghĩa là?", options: ["Xấu xí", "Đẹp", "To", "Nhỏ"], a: 1 },
+                        { q: "Big nghĩa là?", options: ["Nhỏ", "To", "Dài", "Ngắn"], a: 1 },
+                        { q: "Small nghĩa là?", options: ["To", "Nhỏ", "Dài", "Ngắn"], a: 1 },
+                        { q: "Long nghĩa là?", options: ["Ngắn", "Dài", "To", "Nhỏ"], a: 1 },
+                        { q: "Short nghĩa là?", options: ["Dài", "Ngắn", "To", "Nhỏ"], a: 1 },
+                        { q: "Tall nghĩa là?", options: ["Thấp", "Cao", "Béo", "Gầy"], a: 1 },
+                        { q: "Short (height) nghĩa là?", options: ["Cao", "Thấp", "Béo", "Gầy"], a: 1 },
+                        { q: "Fat nghĩa là?", options: ["Gầy", "Béo", "Cao", "Thấp"], a: 1 },
+                        { q: "Thin nghĩa là?", options: ["Béo", "Gầy", "Cao", "Thấp"], a: 1 },
+                        { q: "Hot nghĩa là?", options: ["Lạnh", "Nóng", "Mát", "Ấm"], a: 1 },
+                        { q: "Cold nghĩa là?", options: ["Nóng", "Lạnh", "Mát", "Ấm"], a: 1 },
+                        { q: "Warm nghĩa là?", options: ["Lạnh", "Ấm", "Nóng", "Mát"], a: 1 },
+                        { q: "Cool nghĩa là?", options: ["Nóng", "Mát", "Ấm", "Lạnh"], a: 1 }
+                    ],
+                    hard: [
+                        { q: "Past tense of 'go' is?", options: ["Goed", "Went", "Gone", "Going"], a: 1 },
+                        { q: "Environment nghĩa là?", options: ["Thời tiết", "Môi trường", "Không gian", "Không khí"], a: 1 },
+                        { q: "Technology nghĩa là?", options: ["Khoa học", "Công nghệ", "Lịch sử", "Nghệ thuật"], a: 1 },
+                        { q: "Science nghĩa là?", options: ["Công nghệ", "Khoa học", "Nghệ thuật", "Lịch sử"], a: 1 },
+                        { q: "History nghĩa là?", options: ["Khoa học", "Lịch sử", "Công nghệ", "Nghệ thuật"], a: 1 },
+                        { q: "Art nghĩa là?", options: ["Lịch sử", "Nghệ thuật", "Khoa học", "Công nghệ"], a: 1 },
+                        { q: "Music nghĩa là?", options: ["Sách", "Âm nhạc", "Phim", "Tranh"], a: 1 },
+                        { q: "Movie nghĩa là?", options: ["Âm nhạc", "Phim", "Sách", "Tranh"], a: 1 },
+                        { q: "Book nghĩa là?", options: ["Phim", "Sách", "Âm nhạc", "Tranh"], a: 1 },
+                        { q: "Painting nghĩa là?", options: ["Sách", "Tranh", "Phim", "Âm nhạc"], a: 1 },
+                        { q: "Future tense of 'go' is?", options: ["Went", "Will go", "Gone", "Going"], a: 1 },
+                        { q: "Photosynthesis is?", options: ["Quang hợp", "Hô hấp", "Bốc hơi", "Ngưng tụ"], a: 0 },
+                        { q: "Einstein famous for?", options: ["Theory of Relativity", "Gravity", "Electricity", "Magnetism"], a: 0 },
+                        { q: "Shakespeare wrote?", options: ["Romeo and Juliet", "Harry Potter", "Lord of the Rings", "Game of Thrones"], a: 0 },
+                        { q: "Pacific Ocean is?", options: ["Smallest", "Largest", "Coldest", "Warmest"], a: 1 },
+                        { q: "Mount Everest is in?", options: ["Africa", "Asia", "Europe", "America"], a: 1 },
+                        { q: "DNA stands for?", options: ["Deoxyribonucleic Acid", "Deoxyribose Nucleic Acid", "Deoxy Nucleotide Acid", "Deoxyribonucleotide Acid"], a: 0 },
+                        { q: "Heart pumps?", options: ["Water", "Blood", "Air", "Food"], a: 1 },
+                        { q: "Earth's satellite is?", options: ["Sun", "Moon", "Mars", "Venus"], a: 1 },
+                        { q: "Solar system has how many planets?", options: ["7", "8", "9", "10"], a: 1 },
+                        { q: "Pythagoras theorem is for?", options: ["Triangle", "Circle", "Square", "Rectangle"], a: 0 },
+                        { q: "PI value is?", options: ["3.14", "2.718", "1.618", "9.8"], a: 0 },
+                        { q: "Gravity on Earth is?", options: ["9.8 m/s²", "3.14 m/s²", "2.718 m/s²", "1.618 m/s²"], a: 0 },
+                        { q: "Light speed is?", options: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"], a: 0 },
+                        { q: "Water boiling point is?", options: ["0°C", "100°C", "32°C", "212°C"], a: 1 },
+                        { q: "Freezing point of water is?", options: ["0°C", "100°C", "32°C", "212°C"], a: 0 },
+                        { q: "Human body has how many bones?", options: ["206", "106", "306", "406"], a: 0 },
+                        { q: "Largest organ in body is?", options: ["Heart", "Liver", "Skin", "Lung"], a: 2 },
+                        { q: "Capital of USA is?", options: ["New York", "Washington D.C.", "Los Angeles", "Chicago"], a: 1 },
+                        { q: "Capital of France is?", options: ["Berlin", "Paris", "Madrid", "Rome"], a: 1 },
+                        { q: "Largest continent is?", options: ["Africa", "Asia", "Europe", "America"], a: 1 },
+                        { q: "Smallest continent is?", options: ["Australia", "Europe", "Africa", "Antarctica"], a: 0 },
+                        { q: "Longest river is?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], a: 1 },
+                        { q: "Largest desert is?", options: ["Sahara", "Gobi", "Kalahari", "Antarctic"], a: 3 },
+                        { q: "First man on moon is?", options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "Alan Shepard"], a: 0 },
+                        { q: "World War II ended in?", options: ["1945", "1918", "1939", "1965"], a: 0 },
+                        { q: "Inventor of telephone is?", options: ["Edison", "Bell", "Tesla", "Marconi"], a: 1 },
+                        { q: "Inventor of light bulb is?", options: ["Bell", "Edison", "Tesla", "Marconi"], a: 1 },
+                        { q: "E = mc² is from?", options: ["Newton", "Einstein", "Hawking", "Galileo"], a: 1 },
+                        { q: "Periodic table has how many elements?", options: ["100", "118", "92", "150"], a: 1 },
+                        { q: "Atomic number of hydrogen is?", options: ["1", "2", "8", "6"], a: 0 },
+                        { q: "Oxygen atomic number is?", options: ["6", "8", "7", "1"], a: 1 },
+                        { q: "Carbon atomic number is?", options: ["6", "8", "7", "1"], a: 0 },
+                        { q: "Nitrogen atomic number is?", options: ["6", "8", "7", "1"], a: 2 },
+                        { q: "Largest planet is?", options: ["Earth", "Mars", "Jupiter", "Saturn"], a: 2 },
+                        { q: "Smallest planet is?", options: ["Mercury", "Venus", "Earth", "Mars"], a: 0 },
+                        { q: "Earth's moon is called?", options: ["Luna", "Moon", "Phobos", "Deimos"], a: 1 },
+                        { q: "Sun is a?", options: ["Planet", "Star", "Moon", "Comet"], a: 1 },
+                        { q: "Milky Way is a?", options: ["Star", "Galaxy", "Planet", "Comet"], a: 1 },
+                        { q: "Black hole is?", options: ["Star", "Hole in space", "Planet", "Comet"], a: 1 },
+                        { q: "Big Bang is?", options: ["Explosion", "Theory of universe origin", "Star birth", "Planet formation"], a: 1 },
+                        { q: "Evolution theory by?", options: ["Einstein", "Darwin", "Newton", "Galileo"], a: 1 }
+                    ],
+                    superhard: [
+                        // Bạn có thể thêm sau
+                    ],
+                    extreme: [
+                        // Bạn có thể thêm sau
+                    ]
+                },
+                vi: {
+                    easy: [
+                        { q: "Hello nghĩa là gì trong tiếng Việt?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Apple là quả gì trong tiếng Việt?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 },
+                        { q: "Dog là con gì trong tiếng Việt?", options: ["Mèo", "Chó", "Gà", "Vịt"], a: 1 },
+                        { q: "Thank you nghĩa là gì trong tiếng Việt?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 }
+                    ]
+                }
+            };
+
+            let currentQuestions = questionSets[currentLearnLang][currentMode] || questionSets.en.easy;
+
+            function updateClock() {
+                const options = { timeZone: currentTimezone, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const now = new Date().toLocaleTimeString('vi-VN', options);
+                document.getElementById('clock').textContent = now;
             }
-        }
+            setInterval(updateClock, 1000);
+            updateClock();
 
-        function LOGOUT() {
-            localStorage.removeItem('CURRENT_COLORGAME_USER');
-            CURRENT_USER = null;
-            location.reload();
-        }
-
-        LOAD_USER();
-
-        const params = new URLSearchParams(window.location.search);
-        const player = params.get('player') ? Number(params.get('player')) : null;
-
-        const COLORS = [
-            {name: 'ĐỎ', hex: '#FF0000'},
-            {name: 'CAM', hex: '#FFA500'},
-            {name: 'VÀNG', hex: '#FFFF00'},
-            {name: 'XANH LÁ', hex: '#00FF00'},
-            {name: 'XANH DƯƠNG', hex: '#0000FF'},
-            {name: 'TÍM', hex: '#800080'},
-            {name: 'HỒNG', hex: '#FFC0CB'},
-            {name: 'NÂU', hex: '#A52A2A'},
-            {name: 'ĐEN', hex: '#000000'},
-            {name: 'TRẮNG', hex: '#FFFFFF'},
-            {name: 'XÁM', hex: '#808080'},
-            {name: 'XANH NGỌC', hex: '#00FFFF'},
-            {name: 'HỒNG PHẤN', hex: '#FF69B4'},
-            {name: 'VÀNG KIM', hex: '#FFD700'},
-            {name: 'NAVY', hex: '#000080'},
-            {name: 'ĐỎ RƯỢU', hex: '#8B0000'},
-            {name: 'OLIVE', hex: '#808000'},
-            {name: 'TEAL', hex: '#008080'},
-            {name: 'VIOLET', hex: '#EE82EE'},
-            {name: 'CORAL', hex: '#FF7F50'},
-        ];
-
-        const SOUNDS = {
-            correct: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_4e79e3c6d3.mp3?filename=success-1-6297.mp3',
-            wrong: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_8c8b6d1f3f.mp3?filename=wrong-answer-129254.mp3',
-            victory: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_3d7c5a3a3e.mp3?filename=fanfare-6302.mp3',
-            buy: 'https://cdn.pixabay.com/download/audio/2022/05/13/audio_8c3e3d3e4f.mp3?filename=cash-register-172293.mp3',
-            warning: 'https://cdn.pixabay.com/download/audio/2023/08/22/audio_9d8e3b3e4f.mp3?filename=alarm-clock-64535.mp3',
-            fail: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_8c8b6d1f3f.mp3?filename=wrong-answer-129254.mp3'
-        };
-
-        function playSound(type) {
-            const audio = new Audio(SOUNDS[type] || SOUNDS.correct);
-            audio.volume = 0.6;
-            audio.play().catch(() => {});
-        }
-
-        const STATE_KEY = 'COLORGAME_STATE';
-
-        function getGameState() {
-            const s = localStorage.getItem(STATE_KEY);
-            return s ? JSON.parse(s) : null;
-        }
-
-        function setGameState(state) {
-            if (state) {
-                localStorage.setItem(STATE_KEY, JSON.stringify(state));
-            } else {
-                localStorage.removeItem(STATE_KEY);
+            function updateScore() {
+                const elements = document.querySelectorAll('#score, #current-score, #shop-score');
+                elements.forEach(el => el.textContent = score);
             }
-        }
 
-        function getUserScore() {
-            return CURRENT_USER ? CURRENT_USER.SCORE || 0 : 0;
-        }
-
-        function getUserInventory() {
-            return CURRENT_USER ? CURRENT_USER.INVENTORY || [] : [];
-        }
-
-        function saveUserData(score, inventory) {
-            if (CURRENT_USER) {
-                CURRENT_USER.SCORE = score;
-                CURRENT_USER.INVENTORY = inventory;
-                const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
-                USERS[localStorage.getItem('CURRENT_COLORGAME_USER')] = CURRENT_USER;
-                localStorage.setItem(USER_KEY, JSON.stringify(USERS));
+            // ĐĂNG NHẬP / ĐĂNG KÝ + BẢO VỆ HỌC
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = savedUser;
+                isLoggedIn = true;
+                document.getElementById('username-display').textContent = currentUser;
+                document.getElementById('logout-btn').classList.remove('hidden');
+                document.getElementById('auth-btn').textContent = '👤 ' + currentUser;
             }
-        }
 
-        function getTextColor(hex) {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            const luma = 0.299 * r + 0.587 * g + 0.114 * b;
-            return luma > 186 ? '#000000' : '#FFFFFF';
-        }
-
-        function createButton(text, onclick) {
-            const btn = document.createElement('BUTTON');
-            btn.textContent = text;
-            btn.classList.add('BTN');
-            btn.onclick = onclick;
-            return btn;
-        }
-
-        function createFooter(parent) {
-            const footer = document.createElement('FOOTER');
-            const lines = [
-                'MADE IN VN 🇻🇳',
-                'MADE BY : NGUYỄN CHÍ DỰ ♥️🇻🇳',
-                'GMAIL HỖ TRỢ : Herogoodboymc2024@gmail.com'
-            ];
-            lines.forEach(line => {
-                const p = document.createElement('P');
-                p.textContent = line;
-                footer.appendChild(p);
+            document.getElementById('auth-btn').addEventListener('click', () => {
+                document.getElementById('auth-modal').classList.remove('hidden');
             });
-            const reportBtn = createButton('BÁO CÁO LỖI', () => {
-                document.getElementById('BUG-MODAL').style.display = 'block';
+            document.getElementById('close-auth').addEventListener('click', () => {
+                document.getElementById('auth-modal').classList.add('hidden');
             });
-            footer.appendChild(reportBtn);
-            parent.appendChild(footer);
-        }
 
-        const shopItems = [
-            {id: 'reveal', name: 'MẮT NHÌN XUYÊN THẤU', desc: 'NHÌN THẤY MÀU ĐÚNG TRONG 10 GIÂY', price: 100000},
-            {id: 'hint3', name: 'GỢI Ý 3 MÀU SAI', desc: 'LOẠI BỎ 3 MÀU SAI KHỎI BẢNG', price: 50000},
-            {id: 'extraTime', name: 'THỜI GIAN THÊM', desc: '+3 PHÚT ĐẾM NGƯỢC', price: 40000},
-            {id: 'halfWrong', name: 'GIẢM NỬA SAI', desc: 'GIẢM 1/2 SỐ LẦN SAI ĐÃ CÓ', price: 35000},
-            {id: 'doublePoint', name: 'NHÂN ĐÔI ĐIỂM', desc: 'ĐOÁN ĐÚNG LẦN NÀY +200 ĐIỂM', price: 80000},
-        ];
+            document.getElementById('register-btn').addEventListener('click', () => {
+                const username = document.getElementById('auth-username').value.trim();
+                const password = document.getElementById('auth-password').value;
+                if (!username || !password) {
+                    alert('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu nha!');
+                    return;
+                }
+                if (localStorage.getItem(username)) {
+                    alert('Tên đăng nhập đã tồn tại rồi, thử tên khác nha!');
+                    return;
+                }
+                localStorage.setItem(username, password);
+                alert('Đăng ký thành công! Giờ bạn có thể đăng nhập nha 🎉');
+                document.getElementById('auth-username').value = '';
+                document.getElementById('auth-password').value = '';
+            });
 
-        if (!player) {
-            const container = document.createElement('DIV');
-            container.id = 'CONTAINER';
-            document.body.appendChild(container);
-
-            const header = document.createElement('HEADER');
-            const title = document.createElement('H1');
-            title.textContent = 'TRÒ CHƠI ĐỐ MÀU';
-            header.appendChild(title);
-
-            const subtitle = document.createElement('P');
-            subtitle.textContent = 'CHÚC CÁC BẠN CHƠI VUI VẺ CÓ LỖI KÉO XUỐNG DƯỚI CHÂN TRANG BẤM VÀO NÚT BÁO CÁO NHA :)';
-            subtitle.classList.add('SUBTITLE');
-            header.appendChild(subtitle);
-            container.appendChild(header);
-
-            const main = document.createElement('DIV');
-            main.classList.add('HOME-MAIN');
-
-            const scoreText = CURRENT_USER ? `ĐIỂM CỦA ${CURRENT_USER.NAME}: ${CURRENT_USER.SCORE.toLocaleString()}` : 'ĐIỂM HIỆN TẠI: 0';
-            const scoreInfo = document.createElement('P');
-            scoreInfo.textContent = scoreText;
-            scoreInfo.style.fontWeight = 'BOLD';
-            scoreInfo.style.color = '#FFFF00';
-            scoreInfo.style.fontSize = '2.2EM';
-            scoreInfo.style.marginBottom = '30PX';
-            main.appendChild(scoreInfo);
-
-            const info = document.createElement('P');
-            info.textContent = 'PLAYER 1 LÀ BOT - BẠN LÀ NGƯỜI ĐOÁN MÀU!';
-            info.style.fontWeight = 'BOLD';
-            info.style.color = '#FFFF00';
-            info.style.fontSize = '2EM';
-            main.appendChild(info);
-
-            const startBtn = createButton('BẮT ĐẦU CHƠI VỚI BOT', () => {
-                if (CURRENT_USER) {
-                    location.href = '?player=2';
+            document.getElementById('login-btn').addEventListener('click', () => {
+                const username = document.getElementById('auth-username').value.trim();
+                const password = document.getElementById('auth-password').value;
+                if (!username || !password) {
+                    alert('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu nha!');
+                    return;
+                }
+                const savedPass = localStorage.getItem(username);
+                if (savedPass && savedPass === password) {
+                    isLoggedIn = true;
+                    currentUser = username;
+                    localStorage.setItem('currentUser', username);
+                    document.getElementById('username-display').textContent = username;
+                    document.getElementById('logout-btn').classList.remove('hidden');
+                    document.getElementById('auth-btn').textContent = '👤 ' + username;
+                    document.getElementById('auth-modal').classList.add('hidden');
+                    alert('Đăng nhập thành công! Chào ' + username + ' ❤️');
                 } else {
-                    document.getElementById('AUTH-MODAL').style.display = 'block';
+                    alert('Tên đăng nhập hoặc mật khẩu sai rồi huhu');
                 }
             });
-            startBtn.classList.add('LARGE');
-            main.appendChild(startBtn);
 
-            if (CURRENT_USER) {
-                const logoutBtn = createButton('ĐĂNG XUẤT', LOGOUT);
-                logoutBtn.style.background = '#FF4444';
-                main.appendChild(logoutBtn);
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                if (confirm('Bạn muốn đăng xuất chứ?')) {
+                    isLoggedIn = false;
+                    currentUser = null;
+                    localStorage.removeItem('currentUser');
+                    document.getElementById('username-display').textContent = 'Khách';
+                    document.getElementById('logout-btn').classList.add('hidden');
+                    document.getElementById('auth-btn').textContent = '🔐 Đăng Nhập / Đăng Ký';
+                    alert('Đăng xuất thành công!');
+                }
+            });
+
+            document.getElementById('start-btn').addEventListener('click', () => {
+                if (!isLoggedIn) {
+                    alert('Vui lòng đăng nhập hoặc đăng ký để học nha bạn! ❤️');
+                    document.getElementById('auth-modal').classList.remove('hidden');
+                    return;
+                }
+                if (confirm('Bạn đã sẵn sàng học chưa? 💪')) {
+                    document.getElementById('start-screen').classList.add('hidden');
+                    document.getElementById('quiz-screen').classList.remove('hidden');
+                    currentQuestion = 0;
+                    loadQuestion();
+                }
+            });
+
+            function loadQuestion() {
+                if (currentQuestion >= currentQuestions.length) {
+                    document.getElementById('question').textContent = 'Hoàn thành tất cả! 🎊';
+                    document.getElementById('options').innerHTML = '';
+                    document.getElementById('result').textContent = `Bạn đạt ${score} điểm! Giỏi lắm!`;
+                    return;
+                }
+                const q = currentQuestions[currentQuestion];
+                document.getElementById('question').textContent = q.q;
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('result').textContent = '';
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.textContent = opt;
+                    btn.classList.add('option-btn');
+                    btn.addEventListener('click', () => checkAnswer(i));
+                    document.getElementById('options').appendChild(btn);
+                });
             }
 
-            container.appendChild(main);
-            createFooter(container);
-
-            // AUTH MODAL
-            const authModal = document.createElement('DIV');
-            authModal.id = 'AUTH-MODAL';
-            authModal.innerHTML = `
-                <H2>ĐĂNG NHẬP / ĐĂNG KÝ (BẮT BUỘC ĐỂ CHƠI)</H2>
-                <BUTTON class="BTN" onclick="SHOW_LOGIN()">ĐĂNG NHẬP</BUTTON>
-                <BUTTON class="BTN" onclick="SHOW_REGISTER()">ĐĂNG KÝ</BUTTON>
-                <DIV id="LOGIN-FORM" style="display:none;">
-                    <INPUT id="LOGIN-KEY" placeholder="GMAIL HOẶC TÊN">
-                    <INPUT id="LOGIN-PASS" type="password" placeholder="MẬT KHẨU">
-                    <BUTTON class="BTN" onclick="DO_LOGIN()">ĐĂNG NHẬP</BUTTON>
-                </DIV>
-                <DIV id="REGISTER-FORM" style="display:none;">
-                    <INPUT id="REG-NAME" placeholder="TÊN CỦA BẠN">
-                    <INPUT id="REG-GMAIL" placeholder="GMAIL CỦA BẠN">
-                    <INPUT id="REG-PASS" type="password" placeholder="MẬT KHẨU">
-                    <BUTTON class="BTN" onclick="DO_REGISTER()">ĐĂNG KÝ</BUTTON>
-                </DIV>
-                <BUTTON class="BTN" onclick="document.getElementById('AUTH-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
-            `;
-            document.body.appendChild(authModal);
-
-            window.SHOW_LOGIN = function() {
-                document.getElementById('LOGIN-FORM').style.display = 'block';
-                document.getElementById('REGISTER-FORM').style.display = 'none';
-            };
-
-            window.SHOW_REGISTER = function() {
-                document.getElementById('REGISTER-FORM').style.display = 'block';
-                document.getElementById('LOGIN-FORM').style.display = 'none';
-            };
-
-            window.DO_LOGIN = function() {
-                const KEY = document.getElementById('LOGIN-KEY').value.trim();
-                const PASS = document.getElementById('LOGIN-PASS').value;
-                const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
-                if (USERS[KEY] && USERS[KEY].PASS === PASS) {
-                    localStorage.setItem('CURRENT_COLORGAME_USER', KEY);
-                    location.href = '?player=2';
+            function checkAnswer(selected) {
+                const q = currentQuestions[currentQuestion];
+                const bonus = modes[currentMode].bonus;
+                if (selected === q.a) {
+                    score += bonus;
+                    document.getElementById('result').textContent = `Đúng rồi! +${bonus} điểm 🎉`;
                 } else {
-                    alert('SAI THÔNG TIN ĐĂNG NHẬP!');
+                    document.getElementById('result').textContent = `Sai rồi! Đáp án: ${q.options[q.a]}`;
                 }
-            };
+                updateScore();
+                currentQuestion++;
+                setTimeout(loadQuestion, 2000);
+            }
 
-            window.DO_REGISTER = function() {
-                const NAME = document.getElementById('REG-NAME').value.trim();
-                const GMAIL = document.getElementById('REG-GMAIL').value.trim();
-                const PASS = document.getElementById('REG-PASS').value;
-                if (NAME && GMAIL && PASS) {
-                    const USERS = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
-                    if (USERS[GMAIL]) {
-                        alert('GMAIL ĐÃ ĐƯỢC ĐĂNG KÝ!');
-                        return;
+            document.getElementById('skip-btn').addEventListener('click', () => {
+                if (score >= 30) {
+                    if (confirm('Skip câu này tốn 30 điểm, bạn đồng ý chứ?')) {
+                        score -= 30;
+                        updateScore();
+                        currentQuestion++;
+                        loadQuestion();
                     }
-                    USERS[GMAIL] = {
-                        NAME: NAME,
-                        PASS: PASS,
-                        SCORE: 0,
-                        INVENTORY: []
-                    };
-                    localStorage.setItem(USER_KEY, JSON.stringify(USERS));
-                    localStorage.setItem('CURRENT_COLORGAME_USER', GMAIL);
-                    location.href = '?player=2';
                 } else {
-                    alert('VUI LÒNG NHẬP ĐẦY ĐỦ!');
-                }
-            };
-
-            // BUG MODAL
-            const bugModal = document.createElement('DIV');
-            bugModal.id = 'BUG-MODAL';
-            bugModal.innerHTML = `
-                <H2>BÁO CÁO LỖI</H2>
-                <INPUT placeholder="TÊN CỦA BẠN (BẮT BUỘC)">
-                <INPUT placeholder="GMAIL CỦA BẠN (BẮT BUỘC)">
-                <TEXTAREA placeholder="MÔ TẢ LỖI (BẮT BUỘC)" rows="6"></TEXTAREA>
-                <BUTTON class="BTN" onclick="alert('CẢM ƠN BẠN ĐÃ BÁO CÁO! MÌNH SẼ SỬA NGAY NHA 😊'); document.getElementById('BUG-MODAL').style.display = 'none';">GỬI BÁO CÁO</BUTTON>
-                <BUTTON class="BTN" onclick="document.getElementById('BUG-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
-            `;
-            document.body.appendChild(bugModal);
-
-            // INFO MODAL
-            const infoModal = document.createElement('DIV');
-            infoModal.id = 'INFO-MODAL';
-            infoModal.innerHTML = `
-                <H2>ℹ️ THÔNG TIN & UPDATE</H2>
-                <P>
-                    <strong>CẬP NHẬT MỚI NHẤT:</strong><br><br>
-                    • Bot đặt màu bí mật chỉ trong <strong>30 GIÂY</strong> (cố định).<br>
-                    • Đoán đúng +<strong>100 ĐIỂM</strong> (nhân đôi thành 200 nếu dùng skill).<br>
-                    • Đoán sai / Từ bỏ -<strong>50 ĐIỂM</strong> (chỉ trừ khi còn điểm, không âm).<br>
-                    • Khi chọn màu sẽ có popup "ĐANG KIỂM TRA MÀU" trong 3 giây.<br>
-                    • <strong>THÊM GỢI Ý</strong>: Bấm nút "GỢI Ý" để loại bỏ 3 màu sai (miễn phí 1 lần/lượt).<br>
-                    • Nút "CHƠI LẠI VỚI BOT" có xác nhận tránh bấm nhầm.<br>
-                    • Bấm "BẮT ĐẦU CHƠI VỚI BOT" ở trang chủ là vào chơi luôn (không xác nhận).<br>
-                    • Không còn timer đếm ngược khi đoán, chỉ hiện cảnh báo khi sắp hết giờ.<br>
-                    • Giao diện tối ưu cho mọi thiết bị (PC, Android, iOS).<br>
-                    • <strong>BẮT BUỘC ĐĂNG NHẬP / ĐĂNG KÝ ĐỂ CHƠI VÀ LƯU ĐIỂM!</strong><br><br>
-                    CHƠI VUI VẺ NHÉ! 🎉
-                </P>
-                <BUTTON class="BTN" onclick="document.getElementById('INFO-MODAL').style.display = 'none';">ĐÓNG</BUTTON>
-            `;
-            document.body.appendChild(infoModal);
-        } else if (player === 2) {
-            if (!CURRENT_USER) {
-                alert('BẠN PHẢI ĐĂNG NHẬP / ĐĂNG KÝ ĐỂ CHƠI!');
-                location.href = location.pathname;
-                return;
-            }
-
-            document.body.innerHTML = '';
-            const container = document.createElement('DIV');
-            container.id = 'CONTAINER';
-            document.body.appendChild(container);
-
-            const header = document.createElement('DIV');
-            header.classList.add('GAME-HEADER');
-            const title = document.createElement('H1');
-            title.textContent = 'TRÒ CHƠI ĐỐ MÀU - BẠN VS BOT';
-            header.appendChild(title);
-
-            const shopBtn = createButton('CỬA HÀNG SKILL', () => showShop());
-            shopBtn.classList.add('SHOP-BTN');
-            header.appendChild(shopBtn);
-
-            const backBtn = createButton('TRỞ VỀ TRANG CHỦ', () => {
-                if (confirm('THOÁT KHỎI TRÒ CHƠI?')) {
-                    location.href = location.pathname;
+                    alert('Không đủ điểm để skip nha!');
                 }
             });
-            header.appendChild(backBtn);
 
-            const resetBtn = createButton('RESET ĐIỂM', () => {
-                if (confirm('RESET ĐIỂM CỦA BẠN VỀ 0? (KHÔNG THỂ HOÀN TÁC)')) {
-                    saveUserData(0, []);
-                    updateScores();
-                    alert('ĐIỂM ĐÃ ĐƯỢC RESET VỀ 0!');
+            document.getElementById('quit-btn').addEventListener('click', () => {
+                if (score >= 10) {
+                    if (confirm('Bạn đồng ý trừ 10 điểm để từ bỏ chứ?')) {
+                        score -= 10;
+                        updateScore();
+                        document.getElementById('quiz-screen').classList.add('hidden');
+                        document.getElementById('start-screen').classList.remove('hidden');
+                    }
+                } else {
+                    alert('Không đủ điểm để từ bỏ nha! Hãy cố gắng thêm chút nữa 💪');
                 }
             });
-            header.appendChild(resetBtn);
 
-            const infoBtn = createButton('ℹ️ THÔNG TIN & UPDATE', () => document.getElementById('INFO-MODAL').style.display = 'block');
-            header.appendChild(infoBtn);
-
-            container.appendChild(header);
-
-            const scoreBoard = document.createElement('DIV');
-            scoreBoard.id = 'SCORE-BOARD';
-            const playerScore = document.createElement('DIV');
-            playerScore.id = 'PLAYER-SCORE';
-            scoreBoard.appendChild(playerScore);
-            container.appendChild(scoreBoard);
-
-            const mainView = document.createElement('DIV');
-            mainView.id = 'MAIN-VIEW';
-            container.appendChild(mainView);
-
-            const overlay = document.createElement('DIV');
-            overlay.id = 'OVERLAY';
-            const waitText = document.createElement('DIV');
-            waitText.textContent = 'BOT ĐANG ĐẶT MÀU BÍ MẬT...';
-            waitText.classList.add('BLINK');
-            const waitTimer = document.createElement('DIV');
-            waitTimer.id = 'WAIT-TIMER';
-            overlay.appendChild(waitText);
-            overlay.appendChild(waitTimer);
-            document.body.appendChild(overlay);
-
-            const checkOverlay = document.createElement('DIV');
-            checkOverlay.id = 'CHECK-OVERLAY';
-            checkOverlay.style.display = 'none';
-            const checkText = document.createElement('DIV');
-            checkText.textContent = '⏰ ĐANG KIỂM TRA MÀU VUI LÒNG ĐỢI ⏰';
-            checkText.style.fontSize = 'clamp(2em, 6vw, 3.5em)';
-            checkText.style.fontWeight = 'bold';
-            checkText.style.color = '#FFD700';
-            checkText.style.textShadow = '0 0 20px #000';
-            checkOverlay.appendChild(checkText);
-            document.body.appendChild(checkOverlay);
-
-            const warningMsg = document.createElement('DIV');
-            warningMsg.id = 'WARNING-MSG';
-            warningMsg.textContent = '🚨 NHANH LÊN THỜI GIAN SẮP HẾT, HẾT LÀ BẠN THUA ĐÓ! 🚨';
-            warningMsg.style.display = 'none';
-            document.body.appendChild(warningMsg);
-
-            const timeUpMsg = document.createElement('DIV');
-            timeUpMsg.id = 'TIME-UP-MSG';
-            timeUpMsg.textContent = 'THỜI GIAN HẾT!';
-            timeUpMsg.style.display = 'none';
-            document.body.appendChild(timeUpMsg);
-
-            const shopModal = document.createElement('DIV');
-            shopModal.id = 'SHOP-MODAL';
-            document.body.appendChild(shopModal);
-
-            const inventoryBar = document.createElement('DIV');
-            inventoryBar.id = 'INVENTORY-BAR';
-            inventoryBar.style.display = 'none';
-            document.body.appendChild(inventoryBar);
-
-            createFooter(container);
-
-            let hasWarned = false;
-            let hintUsed = false;
-
-            function updateScores() {
-                document.getElementById('PLAYER-SCORE').textContent = `ĐIỂM CỦA ${CURRENT_USER.NAME}: ${getUserScore().toLocaleString()}`;
-            }
-
-            function showShop() {
-                shopModal.innerHTML = '';
-                shopModal.style.display = 'block';
-
-                const title = document.createElement('H2');
-                title.textContent = 'CỬA HÀNG SKILL';
-                shopModal.appendChild(title);
-
-                const currentPoint = document.createElement('P');
-                currentPoint.textContent = `ĐIỂM HIỆN TẠI: ${getUserScore().toLocaleString()}`;
-                currentPoint.style.fontSize = '1.8EM';
-                currentPoint.style.color = '#FFFF00';
-                shopModal.appendChild(currentPoint);
-
-                shopItems.forEach(item => {
-                    const card = document.createElement('DIV');
-                    card.classList.add('SHOP-ITEM');
-
-                    const name = document.createElement('H3');
-                    name.textContent = item.name;
-                    card.appendChild(name);
-
-                    const desc = document.createElement('P');
-                    desc.textContent = item.desc;
-                    card.appendChild(desc);
-
-                    const price = document.createElement('P');
-                    price.textContent = `GIÁ: ${item.price.toLocaleString()} ĐIỂM`;
-                    price.style.color = '#FF4444';
-                    price.style.fontWeight = 'BOLD';
-                    card.appendChild(price);
-
-                    const buyBtn = createButton('MUA NGAY', () => {
-                        if (getUserScore() < item.price) {
-                            playSound('fail');
-                            alert('KHÔNG ĐỦ ĐIỂM!');
-                            return;
-                        }
-                        if (confirm(`MUA ${item.name} VỚI ${item.price.toLocaleString()} ĐIỂM?`)) {
-                            playSound('buy');
-                            const newScore = getUserScore() - item.price;
-                            const newInventory = [...getUserInventory(), item.id];
-                            saveUserData(newScore, newInventory);
-                            alert('MUA THÀNH CÔNG!');
-                            shopModal.style.display = 'none';
-                            updateView();
-                        }
-                    });
-                    card.appendChild(buyBtn);
-
-                    shopModal.appendChild(card);
-                });
-
-                const closeBtn = createButton('ĐÓNG CỬA HÀNG', () => shopModal.style.display = 'none');
-                shopModal.appendChild(closeBtn);
-            }
-
-            function showInventory() {
-                inventoryBar.innerHTML = '';
-                inventoryBar.style.display = 'flex';
-
-                const title = document.createElement('P');
-                title.textContent = 'TÚI ĐỒ SKILL:';
-                title.style.marginRight = '10PX';
-                inventoryBar.appendChild(title);
-
-                shopItems.forEach(item => {
-                    if (getUserInventory().includes(item.id)) {
-                        const useBtn = createButton(item.name, () => {
-                            alert(`ĐÃ KÍCH HOẠT ${item.name}!`);
-                            updateView();
-                        });
-                        useBtn.classList.add('INVENTORY-BTN');
-                        inventoryBar.appendChild(useBtn);
-                    }
-                });
-            }
-
-            function createPalette(state) {
-                const wrapper = document.createElement('DIV');
-                wrapper.classList.add('COLOR-WRAPPER');
-
-                let availableColors = COLORS.slice();
-
-                availableColors.forEach(c => {
-                    const btn = document.createElement('BUTTON');
-                    btn.classList.add('COLOR-BTN');
-                    btn.style.backgroundColor = c.hex;
-                    btn.style.color = getTextColor(c.hex);
-                    btn.textContent = c.name;
-
-                    btn.onclick = () => {
-                        document.getElementById('CHECK-OVERLAY').style.display = 'flex';
-
-                        setTimeout(() => {
-                            document.getElementById('CHECK-OVERLAY').style.display = 'none';
-
-                            if (c.hex === state.secretColor) {
-                                playSound('correct');
-                                playSound('victory');
-                                let bonus = 100;
-                                const newScore = getUserScore() + bonus;
-                                saveUserData(newScore, getUserInventory());
-                                showResult(true, bonus);
-                            } else {
-                                playSound('wrong');
-                                const penalty = 50;
-                                const newScore = getUserScore() > 0 ? Math.max(0, getUserScore() - penalty) : 0;
-                                saveUserData(newScore, getUserInventory());
-                                if (getUserScore() > 0) {
-                                    alert(`SAI RỒI!!! -${penalty} ĐIỂM 😭`);
-                                } else {
-                                    alert('SAI RỒI!!! KHÔNG BỊ TRỪ 😅');
-                                }
-                                const newState = {...state};
-                                newState.wrongGuesses += 1;
-                                setGameState(newState);
-                                updateView();
-                            }
-                        }, 3000);
-                    };
-                    wrapper.appendChild(btn);
-                });
-                return wrapper;
-            }
-
-            function showResult(correct, bonus = 100) {
-                mainView.innerHTML = '';
-                const msg = document.createElement('H2');
-                msg.textContent = correct ? `CHÚC MỪNG! +${bonus} ĐIỂM 🎉🎉` : 'HẾT GIỜ HOẶC SAI QUÁ 3 LẦN - BẠN THUA RỒI!';
-                msg.style.color = correct ? '#00FF00' : '#FF4444';
-                mainView.appendChild(msg);
-
-                const nextBtn = createButton('CHƠI LẠI VỚI BOT', () => {
-                    if (confirm('BẠN MUỐN CHƠI LẠI VỚI BOT THẬT CHỨ? (ĐIỂM VÀ TÚI ĐỒ GIỮ NGUYÊN)')) {
-                        botSetColorAndWait();
-                    }
-                });
-                nextBtn.classList.add('LARGE');
-                mainView.appendChild(nextBtn);
-            }
-
-            function botSetColorAndWait() {
-                const secret = COLORS[Math.floor(Math.random() * COLORS.length)].hex;
-                const waitDuration = 30000;
-                const newState = {
-                    secretColor: secret,
-                    state: 'WAITING',
-                    timerStart: Date.now(),
-                    timerDuration: waitDuration,
-                    wrongGuesses: 0
-                };
-                setGameState(newState);
-                hintUsed = false;
-                updateView();
-            }
-
-            function updateView() {
-                updateScores();
-                const state = getGameState();
-                mainView.innerHTML = '';
-                overlay.style.display = 'none';
-                document.getElementById('CHECK-OVERLAY').style.display = 'none';
-                warningMsg.style.display = 'none';
-                timeUpMsg.style.display = 'none';
-                inventoryBar.style.display = 'none';
-                hasWarned = false;
-
-                showInventory();
-
-                if (state && state.state === 'WAITING') {
-                    overlay.style.display = 'flex';
-                } else if (state && (state.state === 'GUESSING' || state.wrongGuesses >= 3)) {
-                    if (state.wrongGuesses >= 3) {
-                        showResult(false);
-                        return;
-                    }
-
-                    const ready = document.createElement('H2');
-                    ready.textContent = 'BẠN ĐÃ SẴN SÀNG ĐOÁN MÀU CHƯA?';
-                    mainView.appendChild(ready);
-                    const h = document.createElement('H2');
-                    h.textContent = 'ĐOÁN ĐI NÀO!!!';
-                    mainView.appendChild(h);
-
-                    if (!hintUsed) {
-                        const hintBtn = createButton('GỢI Ý (LOẠI 3 MÀU SAI)', () => {
-                            if (hintUsed) {
-                                alert('BẠN ĐÃ DÙNG GỢI Ý RỒI!');
-                                return;
-                            }
-                            hintUsed = true;
-                            updateView();
-                            alert('ĐÃ LOẠI BỎ 3 MÀU SAI! CHỌN LẠI ĐI!');
-                        });
-                        hintBtn.style.background = 'linear-gradient(#FFD700, #FFA500)';
-                        mainView.appendChild(hintBtn);
-                    }
-
-                    mainView.appendChild(createPalette(state));
-
-                    const surrender = createButton('TỪ BỎ (-50 ĐIỂM)', () => {
-                        if (getUserScore() <= 0) {
-                            alert('BẠN KHÔNG CÓ ĐIỂM NÊN KHÔNG BỊ TRỪ KHI TỪ BỎ 😅');
-                            showResult(false);
-                            return;
-                        }
-                        if (confirm('TỪ BỎ THẬT À? -50 ĐIỂM')) {
-                            const newScore = Math.max(0, getUserScore() - 50);
-                            saveUserData(newScore, getUserInventory());
-                            showResult(false);
-                        }
-                    });
-                    surrender.style.background = '#FF4444';
-                    mainView.appendChild(surrender);
+            document.getElementById('restart-btn').addEventListener('click', () => {
+                if (confirm('Bạn có muốn chơi lại? Điểm của bạn sẽ bị xóa đấy!')) {
+                    score = 0;
+                    currentQuestion = 0;
+                    updateScore();
+                    loadQuestion();
                 }
-            }
+            });
 
-            setInterval(() => {
-                const state = getGameState();
-                if (!state || !state.state) return;
+            document.getElementById('reset-score-btn').addEventListener('click', () => {
+                if (confirm('Bạn chắc muốn reset điểm về 0 chứ?')) {
+                    score = 0;
+                    updateScore();
+                }
+            });
 
-                if (state.state === 'WAITING') {
-                    const elapsed = Date.now() - state.timerStart;
-                    const remaining = state.timerDuration - elapsed;
-                    if (remaining <= 0) {
-                        const guessDuration = Math.floor(Math.random() * 540000) + 60000;
-                        const newState = {...state};
-                        newState.state = 'GUESSING';
-                        newState.guessTimerStart = Date.now();
-                        newState.guessTimerDuration = guessDuration;
-                        setGameState(newState);
-                        updateView();
+            document.getElementById('back-menu-btn').addEventListener('click', () => {
+                if (confirm('Bạn muốn trở về menu chính? (Điểm hiện tại sẽ giữ nguyên)')) {
+                    document.getElementById('quiz-screen').classList.add('hidden');
+                    document.getElementById('start-screen').classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('speak-btn').addEventListener('click', () => {
+                const text = document.getElementById('question').textContent;
+                if (text && 'speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = ttsLangs[currentLang] || 'vi-VN';
+                    utterance.rate = 0.9;
+                    speechSynthesis.cancel();
+                    speechSynthesis.speak(utterance);
+                }
+            });
+
+            document.getElementById('lang-btn').addEventListener('click', () => {
+                document.getElementById('lang-modal').classList.remove('hidden');
+            });
+            document.getElementById('close-lang').addEventListener('click', () => {
+                document.getElementById('lang-modal').classList.add('hidden');
+            });
+            document.querySelectorAll('[data-lang]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const newLang = btn.dataset.lang;
+                    if (newLang !== currentLang) {
+                        currentLang = newLang;
+                        alert('Đã đổi ngôn ngữ phát âm sang ' + btn.textContent.trim() + '!');
+                    }
+                    document.getElementById('lang-modal').classList.add('hidden');
+                });
+            });
+
+            document.getElementById('mode-btn').addEventListener('click', () => {
+                const list = ['easy', 'normal', 'hard', 'superhard', 'extreme'];
+                const names = { easy: 'Dễ', normal: 'Bình Thường', hard: 'Khó', superhard: 'Siêu Khó', extreme: 'Cực Khó' };
+                const idx = list.indexOf(currentMode);
+                let next = list[(idx + 1) % list.length];
+                if (next === 'extreme' && !confirm('⚠️ CỰC KHÓ ⚠️\nChỉ dành cho thánh tiếng Anh!\nBạn có dám thử không? 😈')) return;
+                currentMode = next;
+                document.getElementById('mode-btn').textContent = `⚡ Mode: ${names[next]}`;
+                currentQuestions = questionSets[currentLearnLang][next] || questionSets[currentLearnLang].easy || questionSets.en.easy;
+                currentQuestion = 0;
+                loadQuestion();
+            });
+
+            document.getElementById('shop-btn').addEventListener('click', () => {
+                document.getElementById('start-screen').classList.add('hidden');
+                document.getElementById('quiz-screen').classList.add('hidden');
+                document.getElementById('shop-screen').classList.remove('hidden');
+                updateScore();
+            });
+            document.getElementById('back-shop').addEventListener('click', () => {
+                document.getElementById('shop-screen').classList.add('hidden');
+                document.getElementById('start-screen').classList.remove('hidden');
+            });
+
+            document.querySelectorAll('.shop-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const country = item.dataset.country;
+                    const price = parseInt(item.dataset.price);
+                    if (unlockedFlags.includes(country)) {
+                        currentTimezone = timezones[country] || timezones.vn;
+                        updateClock();
+                        alert('Đã áp dụng quốc kỳ ' + country.toUpperCase() + '!');
+                    } else if (score >= price) {
+                        if (confirm(`Mua quốc kỳ ${country.toUpperCase()} với ${price} điểm?`)) {
+                            score -= price;
+                            unlockedFlags.push(country);
+                            updateScore();
+                            currentTimezone = timezones[country] || timezones.vn;
+                            updateClock();
+                            alert('Mua thành công! Bạn có thể vào Đổi Ngôn Ngữ Học để chọn ngôn ngữ mới nha! 🎉');
+                        }
                     } else {
-                        const m = String(Math.floor(remaining / 60000)).padStart(2, '0');
-                        const s = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
-                        const timerEl = document.getElementById('WAIT-TIMER');
-                        if (timerEl) timerEl.textContent = m + ':' + s;
+                        alert('Không đủ điểm nha!');
                     }
-                } else if (state.state === 'GUESSING') {
-                    const elapsed = Date.now() - state.guessTimerStart;
-                    const remaining = Math.max(0, state.guessTimerDuration - elapsed);
-                    const totalSeconds = Math.floor(remaining / 1000);
+                });
+            });
 
-                    if (totalSeconds <= 10 && totalSeconds > 5 && !hasWarned) {
-                        warningMsg.style.display = 'block';
-                        playSound('warning');
-                        hasWarned = true;
-                    } else if (totalSeconds <= 5) {
-                        warningMsg.style.color = '#FF0000';
-                        warningMsg.style.animation = 'BLINK 0.4s infinite';
-                    }
+            document.getElementById('status-btn').addEventListener('click', () => {
+                document.getElementById('status-info').classList.toggle('hidden');
+            });
 
-                    if (remaining <= 0) {
-                        timeUpMsg.style.display = 'block';
-                        playSound('wrong');
-                        setTimeout(() => {
-                            showResult(false);
-                        }, 2000);
-                    }
+            document.getElementById('report-btn').addEventListener('click', () => {
+                document.getElementById('report-form').classList.remove('hidden');
+            });
+            document.getElementById('cancel-report').addEventListener('click', () => {
+                document.getElementById('report-form').classList.add('hidden');
+            });
+            document.getElementById('send-report').addEventListener('click', () => {
+                const email = document.getElementById('report-email').value.trim();
+                const message = document.getElementById('report-message').value.trim();
+                if (!email || !message) {
+                    alert('Vui lòng điền đầy đủ Gmail và tin nhắn nha!');
+                    return;
                 }
-            }, 500);
+                const subject = encodeURIComponent('Report Bug từ ' + email);
+                const body = encodeURIComponent('Người báo: ' + email + '\n\nNội dung lỗi:\n' + message);
+                window.location.href = `mailto:Herogoodboymc2024@gmail.com?subject=\( {subject}&body= \){body}`;
+                alert('CẢM ƠN BẠN ĐÃ GỬI BÁO CÁO ĐẾN MÌNH, VUI LÒNG CHỜ MÌNH TRONG VÒNG 24H NẾU MÌNH BẬN THÌ CÓ THỂ HƠN');
+                document.getElementById('report-form').classList.add('hidden');
+                document.getElementById('report-email').value = '';
+                document.getElementById('report-message').value = '';
+            });
 
-            botSetColorAndWait();
-        }
+            document.getElementById('suggest-btn').addEventListener('click', () => {
+                document.getElementById('suggest-form').classList.remove('hidden');
+            });
+            document.getElementById('cancel-suggest').addEventListener('click', () => {
+                document.getElementById('suggest-form').classList.add('hidden');
+            });
+            document.getElementById('send-suggest').addEventListener('click', () => {
+                const email = document.getElementById('suggest-email').value.trim();
+                const word = document.getElementById('suggest-word').value.trim();
+                if (!email || !word) {
+                    alert('Vui lòng điền đầy đủ Gmail và từ muốn thêm nha!');
+                    return;
+                }
+                const subject = encodeURIComponent('Gợi Ý Từ Học từ ' + email);
+                const body = encodeURIComponent('Người gợi ý: ' + email + '\n\nTừ/câu muốn thêm:\n' + word);
+                window.location.href = `mailto:Herogoodboymc2024@gmail.com?subject=\( {subject}&body= \){body}`;
+                alert('CẢM ƠN BẠN ĐÃ GỬI Ý, MÌNH SẼ CẬP NHẬT SỚM NHẤT CHO BẠN NHÉ, NẾU TRỄ CÓ THỂ DO MÌNH BẬN HOẶC KHÔNG CÓ THỜI GIAN NHÉ');
+                document.getElementById('suggest-form').classList.add('hidden');
+                document.getElementById('suggest-email').value = '';
+                document.getElementById('suggest-word').value = '';
+            });
+
+            // Đổi Ngôn Ngữ Học - KIỂM TRA MUA QUỐC GIA
+            document.getElementById('lang-learn-btn').addEventListener('click', () => {
+                document.getElementById('lang-learn-modal').classList.remove('hidden');
+            });
+            document.getElementById('close-learn-lang').addEventListener('click', () => {
+                document.getElementById('lang-learn-modal').classList.add('hidden');
+            });
+            document.querySelectorAll('[data-learn-lang]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const newLang = btn.dataset.learnLang;
+                    const country = btn.dataset.country;
+                    if (unlockedFlags.includes(country) || newLang === 'en' || newLang === 'vi') {
+                        if (newLang !== currentLearnLang) {
+                            if (confirm('Bạn chấp nhận đổi sang ngôn ngữ khác? Bạn đồng ý chứ?')) {
+                                currentLearnLang = newLang;
+                                currentQuestions = questionSets[currentLearnLang][currentMode] || questionSets.en.easy;
+                                currentQuestion = 0;
+                                loadQuestion();
+                                alert('Đã đổi ngôn ngữ học thành công!');
+                            }
+                        }
+                    } else {
+                        alert('Quốc gia này hiện tại bạn chưa mua để mở khóa nó, vui lòng vào mua ở shop nhé bạn!');
+                    }
+                    document.getElementById('lang-learn-modal').classList.add('hidden');
+                });
+            });
+
+            updateScore();
+        };
     </script>
 </body>
 </html>
