@@ -11,23 +11,44 @@
         <p class="subtitle">ĐƯỢC LÀM BỞI NGUYỄN CHÍ DỰ ♥️🇻🇳, CÓ LỖI KÉO XUỐNG DƯỚI CHÂN TRANG BẤM VÀO NÚT REPORT BUGS VÀ GỢI Ý THÊM TRUYỆN KHÁC</p>
     </header>
 
-    <div id="login-btn">ĐĂNG NHẬP/ĐĂNG KÝ</div>
+    <!-- TRANG CHỦ: NÚT ĐĂNG NHẬP/ĐĂNG KÝ -->
+    <div id="home" class="home">
+        <h2>CHÀO MỪNG BẠN ĐẾN VỚI WEBSITE ĐỌC TRUYỆN DORAEMON!</h2>
+        <button id="login-btn">ĐĂNG NHẬP / ĐĂNG KÝ</button>
+        <p>(BẤM VÀO ĐỂ VÀO ĐỌC TRUYỆN NHÉ ♥️)</p>
+    </div>
 
-    <div id="modal" class="modal">
+    <!-- MODAL RIÊNG CHO ĐĂNG NHẬP/ĐĂNG KÝ -->
+    <div id="login-modal" class="modal">
         <div class="modal-content">
-            <span class="close">×</span>
-            <form id="reg-form">
+            <span class="close-login">&times;</span>
+            <h3>ĐĂNG NHẬP / ĐĂNG KÝ</h3>
+            <form id="login-form">
                 <label for="username">TÊN NGƯỜI DÙNG:</label>
-                <input type="text" id="username" name="username"><br>
+                <input type="text" id="username" required><br>
                 <label for="email">EMAIL:</label>
-                <input type="email" id="email" name="email"><br>
-                <label for="password">MẬT KHẨU:</label>
-                <input type="password" id="password" name="password"><br>
-                <button type="submit">ĐĂNG KÝ</button>
+                <input type="email" id="email" required><br>
+                <label for="password">MẬT KHẬU:</label>
+                <input type="password" id="password" required><br>
+                <button type="submit">GỬI VÀ VÀO ĐỌC TRUYỆN</button>
             </form>
         </div>
     </div>
 
+    <!-- MODAL RIÊNG CHO REPORT BUGS -->
+    <div id="report-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-report">&times;</span>
+            <h3>REPORT BUGS HOẶC GỢI Ý THÊM TRUYỆN</h3>
+            <form id="report-form">
+                <label for="report-message">NỘI DUNG:</label><br>
+                <textarea id="report-message" rows="6" required></textarea><br>
+                <button type="submit">GỬI</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRANG CHÍNH ĐỌC TRUYỆN (ẨN BAN ĐẦU) -->
     <div id="main" class="main" style="display: none;">
         <h2>TRUYỆN TRANH DORAEMON - CHƯƠNG MẪU (10 TRANG)</h2>
         <div id="page-info">TRANG <span id="current-page">1</span> / 10</div>
@@ -40,7 +61,13 @@
         </div>
     </div>
 
-    <audio id="sound" src="https://www.orangefreesounds.com/wp-content/uploads/2018/07/Page-turn-sound-effect.mp3"></audio>
+    <!-- ÂM THANH LẬT TRANG -->
+    <audio id="page-sound" src="https://www.orangefreesounds.com/wp-content/uploads/2018/07/Page-turn-sound-effect.mp3"></audio>
+
+    <!-- NHẠC NỀN DORAEMON (LOOP, ÂM LƯỢNG NHỎ) -->
+    <audio id="bg-music" loop autoplay volume="0.3">
+        <source src="https://www.televisiontunes.com/uploads/audio/Doraemon.mp3" type="audio/mpeg">
+    </audio>
 
     <footer>
         <p>MADE IN VN 🇻🇳</p>
@@ -49,63 +76,76 @@
     </footer>
 
     <script>
-        var modal = document.getElementById("modal");
-        var btn = document.getElementById("login-btn");
-        var span = document.getElementsByClassName("close")[0];
-        btn.onclick = function() {
-            modal.style.display = "block";
+        // MODAL ĐĂNG NHẬP
+        var loginModal = document.getElementById("login-modal");
+        var loginBtn = document.getElementById("login-btn");
+        var closeLogin = document.getElementsByClassName("close-login")[0];
+
+        loginBtn.onclick = function() {
+            loginModal.style.display = "block";
         }
-        span.onclick = function() {
-            modal.style.display = "none";
+        closeLogin.onclick = function() {
+            loginModal.style.display = "none";
         }
+
+        // MODAL REPORT
+        var reportModal = document.getElementById("report-modal");
+        var reportBtn = document.getElementById("report-btn");
+        var closeReport = document.getElementsByClassName("close-report")[0];
+
+        reportBtn.onclick = function() {
+            reportModal.style.display = "block";
+        }
+        closeReport.onclick = function() {
+            reportModal.style.display = "none";
+        }
+
+        // ĐÓNG MODAL KHI BẤM NGOÀI
         window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+            if (event.target == loginModal) {
+                loginModal.style.display = "none";
+            }
+            if (event.target == reportModal) {
+                reportModal.style.display = "none";
             }
         }
 
-        var form = document.getElementById("reg-form");
-        form.onsubmit = function(e) {
+        // XỬ LÝ ĐĂNG NHẬP/ĐĂNG KÝ
+        document.getElementById("login-form").onsubmit = function(e) {
             e.preventDefault();
             var username = document.getElementById("username").value;
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
-            var message = "ĐĂNG KÝ MỚI";
-            var body = `TÊN: ${username}%0AEMAIL: ${email}%0AMẬT KHẨU: ${password}%0ANỘI DUNG: ${message}`;
-            window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG KÝ / REPORT / GỢI Ý TRANG DORAEMON&body=" + body;
-            modal.style.display = "none";
-            document.getElementById("login-btn").style.display = "none";
+            var body = `TÊN: ${username}%0AEMAIL: ${email}%0AMẬT KHẨU: ${password}%0ANỘI DUNG: ĐĂNG KÝ/ĐĂNG NHẬP MỚI`;
+            window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG KÝ TRANG DORAEMON&body=" + body;
+            loginModal.style.display = "none";
+            document.getElementById("home").style.display = "none";
             document.getElementById("main").style.display = "block";
             initComic();
+            document.getElementById("bg-music").play();
         }
 
-        document.getElementById("report-btn").onclick = function() {
-            modal.style.display = "block";
-            document.getElementById("reg-form").innerHTML = `
-                <label for="message">NỘI DUNG REPORT BUG HOẶC GỢI Ý THÊM TRUYỆN:</label><br>
-                <textarea id="message" rows="6" style="width:100%;"></textarea><br>
-                <button type="submit">GỬI</button>
-            `;
-            form.onsubmit = function(e) {
-                e.preventDefault();
-                var message = document.getElementById("message").value;
-                var body = `NỘI DUNG REPORT/GỢI Ý: ${message}`;
-                window.location = "mailto:herogoodboymc2024@gmail.com?subject=REPORT BUG HOẶC GỢI Ý TRANG DORAEMON&body=" + body;
-                modal.style.display = "none";
-            }
+        // XỬ LÝ REPORT BUGS
+        document.getElementById("report-form").onsubmit = function(e) {
+            e.preventDefault();
+            var message = document.getElementById("report-message").value;
+            var body = `NỘI DUNG REPORT/GỢI Ý: ${message}`;
+            window.location = "mailto:herogoodboymc2024@gmail.com?subject=REPORT BUG HOẶC GỢI Ý TRANG DORAEMON&body=" + body;
+            reportModal.style.display = "none";
         }
 
+        // DANH SÁCH 10 TRANG
         var images = [
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEig1zgoPk8dhsW5NEv77M4mZKL9-3y7tkOiq5Zl8xbK6KCChor0fw5WULBp0OtkNEi9EuQ6KU6LvQHTYWdUfnai9APQSayz3cJLBuzPg3CP-bBBqtSXMQtR4pvvos5jQQ4ROC9ZfwacvHU/s1600/Doraemon+v04+c61+-+001.jpg", // TRANG 1
-            "https://static.wikia.nocookie.net/doraemon/images/c/c4/DoraemonisLeavingpage1and2.jpg/revision/latest?cb=20180111235748", // TRANG 2
-            "https://www.chinese-forums.com/uploads/monthly_08_2010/post-38695-049169200%201281914939.jpg", // TRANG 3 (MÀU)
-            "https://i.etsystatic.com/44116499/r/il/ef6563/6018331472/il_fullxfull.6018331472_pt26.jpg", // TRANG 4 (MÀU)
-            "https://i.etsystatic.com/44116499/r/il/e0ade5/6066396005/il_fullxfull.6066396005_5boq.jpg", // TRANG 5 (MÀU)
-            "https://static.wikia.nocookie.net/doraemon/images/b/b4/Doraemon-721642.jpg/revision/latest?cb=20130830105605&path-prefix=en", // TRANG 6
-            "https://morningroo.com/wp-content/uploads/2023/09/doraemon.png", // TRANG 7
-            "https://www.hit-japan.com/book23/181107248.JPG", // TRANG 8
-            "https://i.ebayimg.com/images/g/BogAAOSwKQNfcF5g/s-l400.jpg", // TRANG 9 (MÀU)
-            "https://preview.redd.it/all-six-volumes-of-doraemon-color-works-manga-spanish-v0-tx5dsxod1ccf1.jpg?width=1080&crop=smart&auto=webp&s=ebb91ffde58f66d9cc76cd2aeab758cfd0f2837a" // TRANG 10 (BÌA MÀU)
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEig1zgoPk8dhsW5NEv77M4mZKL9-3y7tkOiq5Zl8xbK6KCChor0fw5WULBp0OtkNEi9EuQ6KU6LvQHTYWdUfnai9APQSayz3cJLBuzPg3CP-bBBqtSXMQtR4pvvos5jQQ4ROC9ZfwacvHU/s1600/Doraemon+v04+c61+-+001.jpg",
+            "https://static.wikia.nocookie.net/doraemon/images/c/c4/DoraemonisLeavingpage1and2.jpg/revision/latest?cb=20180111235748",
+            "https://www.chinese-forums.com/uploads/monthly_08_2010/post-38695-049169200%201281914939.jpg",
+            "https://i.etsystatic.com/44116499/r/il/ef6563/6018331472/il_fullxfull.6018331472_pt26.jpg",
+            "https://i.etsystatic.com/44116499/r/il/e0ade5/6066396005/il_fullxfull.6066396005_5boq.jpg",
+            "https://static.wikia.nocookie.net/doraemon/images/b/b4/Doraemon-721642.jpg/revision/latest?cb=20130830105605&path-prefix=en",
+            "https://morningroo.com/wp-content/uploads/2023/09/doraemon.png",
+            "https://www.hit-japan.com/book23/181107248.JPG",
+            "https://i.ebayimg.com/images/g/BogAAOSwKQNfcF5g/s-l400.jpg",
+            "https://preview.redd.it/all-six-volumes-of-doraemon-color-works-manga-spanish-v0-tx5dsxod1ccf1.jpg?width=1080&crop=smart&auto=webp&s=ebb91ffde58f66d9cc76cd2aeab758cfd0f2837a"
         ];
 
         var current = 0;
@@ -123,14 +163,14 @@
             current = (current > 0) ? current - 1 : images.length - 1;
             document.getElementById("comic-img").src = images[current];
             updatePageInfo();
-            document.getElementById("sound").play();
+            document.getElementById("page-sound").play();
         }
 
         document.getElementById("next").onclick = function() {
             current = (current < images.length - 1) ? current + 1 : 0;
             document.getElementById("comic-img").src = images[current];
             updatePageInfo();
-            document.getElementById("sound").play();
+            document.getElementById("page-sound").play();
         }
     </script>
 </body>
