@@ -33,7 +33,7 @@
                 <input type="email" id="reg-email" required><br>
                 <label for="reg-pass">MẬT KHẨU CỦA BẠN:</label>
                 <input type="password" id="reg-pass" required><br>
-                <button type="submit">ĐĂNG KÝ VÀ VÀO ĐỌC TRUYỆN</button>
+                <button type="submit">ĐĂNG KÝ THÀNH CÔNG!</button>
             </form>
         </div>
     </div>
@@ -48,7 +48,7 @@
                 <input type="text" id="login-name" required><br>
                 <label for="login-pass">MẬT KHẨU CỦA BẠN:</label>
                 <input type="password" id="login-pass" required><br>
-                <button type="submit">ĐĂNG NHẬP VÀ VÀO ĐỌC TRUYỆN</button>
+                <button type="submit">ĐĂNG NHẬP THÀNH CÔNG!</button>
             </form>
         </div>
     </div>
@@ -68,8 +68,8 @@
 
     <!-- TRANG ĐỌC TRUYỆN -->
     <div id="main" class="main" style="display: none;">
-        <h2>TRUYỆN TRANH DORAEMON TIẾNG VIỆT - CHƯƠNG MẪU (10 TRANG)</h2>
-        <div id="page-info">TRANG <span id="current-page">1</span> / 10</div>
+        <h2>TRUYỆN TRANH DORAEMON TIẾNG VIỆT - MẪU NHIỀU TRANG ĐẸP (20 TRANG)</h2>
+        <div id="page-info">TRANG <span id="current-page">1</span> / 20</div>
         <div id="comic">
             <img id="comic-img" src="" alt="TRANG TRUYỆN DORAEMON TIẾNG VIỆT">
         </div>
@@ -82,9 +82,9 @@
     <!-- ÂM THANH LẬT TRANG -->
     <audio id="page-sound" src="https://www.orangefreesounds.com/wp-content/uploads/2018/07/Page-turn-sound-effect.mp3"></audio>
 
-    <!-- NHẠC NỀN DORAEMON -->
+    <!-- NHẠC NỀN: DORAEMON NO UTA (BẢN TIẾNG VIỆT - LỜI VIỆT BỞI HUYỀN CHI) -->
     <audio id="bg-music" loop>
-        <source src="https://www.televisiontunes.com/uploads/audio/Doraemon.mp3" type="audio/mpeg">
+        <source src="https://www.televisiontunes.com/uploads/audio/Doraemon_%28Vietnamese%29.mp3" type="audio/mpeg">
     </audio>
 
     <footer>
@@ -122,7 +122,7 @@
             if (event.target == reportModal) reportModal.style.display = "none";
         }
 
-        // XỬ LÝ ĐĂNG KÝ VÀ ĐĂNG NHẬP (GỬI GMAIL RIÊNG BIỆT)
+        // XỬ LÝ ĐĂNG KÝ VÀ ĐĂNG NHẬP (HIỆN THÔNG BÁO RỒI GỬI GMAIL HỖ TRỢ)
         document.getElementById("register-form").onsubmit = function(e) {
             e.preventDefault();
             var name = document.getElementById("reg-name").value;
@@ -130,6 +130,7 @@
             var pass = document.getElementById("reg-pass").value;
             var body = `ĐĂNG KÝ MỚI%0ATÊN: ${name}%0AGMAIL: ${email}%0AMẬT KHẨU: ${pass}`;
             window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG KÝ TÀI KHOẢN MỚI&body=" + body;
+            alert("ĐĂNG KÝ THÀNH CÔNG! BẠN ĐÃ ĐƯỢC VÀO ĐỌC TRUYỆN ♥️");
             enterMain();
         }
 
@@ -139,6 +140,7 @@
             var pass = document.getElementById("login-pass").value;
             var body = `ĐĂNG NHẬP%0ATÊN ĐĂNG NHẬP: ${name}%0AMẬT KHẨU: ${pass}`;
             window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG NHẬP TÀI KHOẢN&body=" + body;
+            alert("ĐĂNG NHẬP THÀNH CÔNG! CHÀO MỪNG BẠN VÀO ĐỌC TRUYỆN ♥️");
             enterMain();
         }
 
@@ -151,27 +153,36 @@
             document.getElementById("bg-music").play();
         }
 
-        // XỬ LÝ REPORT (GỬI GMAIL RIÊNG)
+        // XỬ LÝ REPORT (CHUYỂN THẲNG ĐẾN GMAIL)
         document.getElementById("report-form").onsubmit = function(e) {
             e.preventDefault();
             var message = document.getElementById("report-message").value;
             var body = `REPORT BUG HOẶC GỢI Ý: ${message}`;
             window.location = "mailto:herogoodboymc2024@gmail.com?subject=REPORT BUG HOẶC GỢI Ý&body=" + body;
-            reportModal.style.display = "none";
         }
 
-        // 10 TRANG MẪU DORAEMON (TÌM ĐƯỢC MỘT SỐ TRANG TIẾNG VIỆT HOẶC GẦN GIỐNG)
+        // 20 TRANG DORAEMON TIẾNG VIỆT
         var images = [
-            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18351/113032/Doraemon_vol._2_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_Manga_12__73602.1582709863.JPG?c=2", // BÌA TẬP 2 TIẾNG VIỆT
-            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18352/113049/Doraemon_vol._3_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_manga_12__55308.1582716519.JPG?c=2", // TRANG TRONG TẬP 3
-            "https://i.ebayimg.com/images/g/EHAAAOSw~TpkqFqg/s-l1200.jpg", // TRANG TIẾNG VIỆT
-            "https://static.wikia.nocookie.net/doraemon/images/c/c4/DoraemonisLeavingpage1and2.jpg/revision/latest", // TRANG CÂU CHUYỆN
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEig1zgoPk8dhsW5NEv77M4mZKL9-3y7tkOiq5Zl8xbK6KCChor0fw5WULBp0OtkNEi9EuQ6KU6LvQHTYWdUfnai9APQSayz3cJLBuzPg3CP-bBBqtSXMQtR4pvvos5jQQ4ROC9ZfwacvHU/s1600/Doraemon+v04+c61+-+001.jpg",
-            "https://www.chinese-forums.com/uploads/monthly_08_2010/post-38695-049169200%201281914939.jpg",
-            "https://i.etsystatic.com/44116499/r/il/ef6563/6018331472/il_fullxfull.6018331472_pt26.jpg",
-            "https://morningroo.com/wp-content/uploads/2023/09/doraemon.png",
-            "https://i.ebayimg.com/images/g/BogAAOSwKQNfcF5g/s-l400.jpg",
-            "https://preview.redd.it/all-six-volumes-of-doraemon-color-works-manga-spanish-v0-tx5dsxod1ccf1.jpg?width=1080&crop=smart&auto=webp&s=ebb91ffde58f66d9cc76cd2aeab758cfd0f2837a"
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcKjJTCPw8odIygwNq61dv2lqhzADo910BzRbIjEd5zbCsdVYMZO2dQPG6lf1PLTJHSpTrt_7Fbl2MkbvCYnFfO_QKkstZvdcShOLmuXty4E2IuPYycNTTii-HcRG4mPSywEsB7MUShKET/w1300-rw/Doremon011_03_01.jpg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiALfiF97MSmI-H_vrd5L8KZHi3eNBqoMQVyoNu6dN7nMQDY12Doy8KlZQGEbhTS1chZG2lickR4yWnl7WhR3d6KrOPKRBfeZ-wd4EB7tsd4ix2V1Xk3qjozWKUGCywIZ9nhzSPsJW_vtGIxH18MTOzGOqc3OeZRDSFKKdRwkvzbaRQfp7Yu3-IyMxaD6U/w1300-rw/Mon_v01_p025_02.jpg",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgWNAsu06EJPNs4E5_-KGZxrJaqIv5b06sVnzPrdcyBML24MieznubccgJm4kWj83ubUwI4Hjma1rp2FAmUZ7kN6M1SM1ALPZ93NkDq_dyZiQGyhV-Tbk3yTp4M8lCE3LO7gro200LtBPf0/s1600-rw/01_019_01.jpg",
+            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18352/113048/Doraemon_vol._3_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_manga_11__96235.1582716519.JPG?c=2",
+            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18350/113014/Doraemon_vol._1_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_8__31376.1582708318.JPG?c=2",
+            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18350/113012/Doraemon_vol._1_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_6__68386.1582708318.JPG?c=2",
+            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18352/113046/Doraemon_vol._3_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_manga_9__04126.1582716518.JPG?c=2",
+            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18350/113018/Doraemon_vol._1_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_12__97388.1582708318.JPG?c=2",
+            "https://i.ebayimg.com/images/g/EHAAAOSw~TpkqFqg/s-l400.jpg",
+            "https://i.ebayimg.com/images/g/NTYAAOSw5JxkqG0E/s-l1200.jpg",
+            "https://nihonbook.vn/wp-content/uploads/2021/09/TRUYEN-DOREAMON-TRON-BO-NI.jpg",
+            "https://upload.wikimedia.org/wikipedia/vi/c/c6/Doremon.jpg",
+            "https://blog.quatructuyen.com/wp-content/uploads/Tranh-che-20-11-+9.jpg",
+            "https://giadinh.mediacdn.vn/zoom/740_463/Images/Uploaded/Share/2011/06/30/doremonSP.jpg",
+            "https://giadinh.mediacdn.vn/Images/Uploaded/Share/2011/06/30/doremon1.jpg",
+            "https://lalabookshop.com/wp-content/uploads/2021/05/175359244-4288164114536383-7080338645461055576-n.jpeg",
+            "http://trungtamtiengnhat.org/images/2019/04/12/hoc-tieng-nhat-qua-truyen-doremon.jpg",
+            "https://upload.wikimedia.org/wikipedia/vi/9/97/Doremon2011.jpg",
+            "https://down-vn.img.susercontent.com/file/vn-11134208-7qukw-lfqjicuqlbpg97",
+            "http://file.hstatic.net/200000343865/article/trien-lam-doraemon-12-8045-172-7734-6020-1726634374_e41d130b88b241c9a7e83d094fd739fb_1024x1024.jpg"
         ];
 
         var current = 0;
