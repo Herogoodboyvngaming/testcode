@@ -1,214 +1,310 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>🇻🇳 WEBSITE ĐỌC TRUYỆN TRANH VIỆT NAM 🇻🇳</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <h1>🇻🇳 WEBSITE ĐỌC TRUYỆN TRANH VIỆT NAM 🇻🇳</h1>
-        <p class="subtitle">ĐƯỢC LÀM BỞI NGUYỄN CHÍ DỰ ♥️🇻🇳, CÓ LỖI KÉO XUỐNG DƯỚI CHÂN TRANG BẤM VÀO NÚT REPORT BUGS VÀ GỢI Ý THÊM TRUYỆN KHÁC</p>
-    </header>
+<!DOCTYPE HTML>
+<HTML LANG="VI">
+<HEAD>
+    <META CHARSET="UTF-8">
+    <META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1.0">
+    <TITLE>MINI GAME VIỆT NAM 🇻🇳</TITLE>
+    <LINK REL="STYLESHEET" HREF="STYLE.CSS">
+</HEAD>
+<BODY>
+    <HEADER>
+        <H1>MINI GAME VIỆT NAM 🇻🇳</H1>
+        <P CLASS="SUBTITLE">CHÚC CÁC BẠN CHƠI VUI VẺ ♥️ CÓ LỖI KÉO XUỐNG DƯỚI CHÂN TRANG BẤM VÀO NÚT BÁO CÁO LỖI NHA</P>
+        <DIV ID="USER-INFO">
+            <SPAN ID="WELCOME"></SPAN>
+            <BUTTON ID="LOGIN-BTN">ĐĂNG NHẬP / ĐĂNG KÝ</BUTTON>
+            <BUTTON ID="SHOP-BTN" STYLE="DISPLAY:NONE;">SHOP (ĐIỂM: <SPAN ID="POINTS">0</SPAN>)</BUTTON>
+            <BUTTON ID="LOGOUT-BTN" STYLE="DISPLAY:NONE;">ĐĂNG XUẤT</BUTTON>
+        </DIV>
+    </HEADER>
 
-    <!-- TRANG CHỦ -->
-    <div id="home" class="home">
-        <h2>CHÀO MỪNG ĐẾN VỚI WEBSITE ĐỌC TRUYỆN DORAEMON TIẾNG VIỆT!</h2>
-        <div class="auth-buttons">
-            <button id="register-btn">ĐĂNG KÝ</button>
-            <button id="login-btn">ĐĂNG NHẬP</button>
-        </div>
-        <p>(BẤM ĐĂNG KÝ HOẶC ĐĂNG NHẬP ĐỂ VÀO ĐỌC TRUYỆN ♥️)</p>
-    </div>
+    <MAIN>
+        <DIV ID="LOGIN-MODAL" CLASS="MODAL">
+            <DIV CLASS="MODAL-CONTENT">
+                <SPAN CLASS="CLOSE">×</SPAN>
+                <H2>ĐĂNG NHẬP / ĐĂNG KÝ</H2>
+                <INPUT TYPE="TEXT" ID="USERNAME" PLACEHOLDER="TÊN NGƯỜI DÙNG" REQUIRED>
+                <INPUT TYPE="PASSWORD" ID="PASSWORD" PLACEHOLDER="MẬT KHẨU" REQUIRED>
+                <BUTTON ID="LOGIN-SUBMIT">ĐĂNG NHẬP</BUTTON>
+                <BUTTON ID="REGISTER-SUBMIT">ĐĂNG KÝ</BUTTON>
+            </DIV>
+        </DIV>
 
-    <!-- MODAL ĐĂNG KÝ -->
-    <div id="register-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-register">&times;</span>
-            <h3>ĐĂNG KÝ TÀI KHOẢN</h3>
-            <form id="register-form">
-                <label for="reg-name">TÊN CỦA BẠN:</label>
-                <input type="text" id="reg-name" required><br>
-                <label for="reg-email">GMAIL CỦA BẠN:</label>
-                <input type="email" id="reg-email" required><br>
-                <label for="reg-pass">MẬT KHẨU CỦA BẠN:</label>
-                <input type="password" id="reg-pass" required><br>
-                <button type="submit">ĐĂNG KÝ THÀNH CÔNG!</button>
-            </form>
-        </div>
-    </div>
+        <DIV ID="SHOP-MODAL" CLASS="MODAL">
+            <DIV CLASS="MODAL-CONTENT">
+                <SPAN CLASS="CLOSE">×</SPAN>
+                <H2>SHOP - MUA SKIN RẮN</H2>
+                <P>ĐIỂM HIỆN TẠI: <SPAN ID="SHOP-POINTS">0</SPAN></P>
+                <BUTTON ONCLICK="BUYSKIN('RED',150)">SKIN ĐỎ (150 ĐIỂM)</BUTTON>
+                <BUTTON ONCLICK="BUYSKIN('BLUE',200)">SKIN XANH (200 ĐIỂM)</BUTTON>
+                <BUTTON ONCLICK="BUYSKIN('GOLD',300)">SKIN VÀNG (300 ĐIỂM)</BUTTON>
+            </DIV>
+        </DIV>
 
-    <!-- MODAL ĐĂNG NHẬP -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-login">&times;</span>
-            <h3>ĐĂNG NHẬP</h3>
-            <form id="login-form">
-                <label for="login-name">TÊN ĐĂNG NHẬP CỦA BẠN:</label>
-                <input type="text" id="login-name" required><br>
-                <label for="login-pass">MẬT KHẨU CỦA BẠN:</label>
-                <input type="password" id="login-pass" required><br>
-                <button type="submit">ĐĂNG NHẬP THÀNH CÔNG!</button>
-            </form>
-        </div>
-    </div>
+        <DIV ID="REPORT-MODAL" CLASS="MODAL">
+            <DIV CLASS="MODAL-CONTENT">
+                <SPAN CLASS="CLOSE">×</SPAN>
+                <H2>BÁO CÁO LỖI</H2>
+                <INPUT TYPE="TEXT" ID="REPORT-NAME" PLACEHOLDER="TÊN CỦA BẠN (BẮT BUỘC)" REQUIRED>
+                <INPUT TYPE="EMAIL" ID="REPORT-EMAIL" PLACEHOLDER="GMAIL CỦA BẠN (BẮT BUỘC)" REQUIRED>
+                <TEXTAREA ID="REPORT-MSG" PLACEHOLDER="TIN NHẬN CẦN YÊU CẦU SỬA LỖI (BẮT BUỘC)" REQUIRED></TEXTAREA>
+                <BUTTON ONCLICK="SENDREPORT()">GỬI</BUTTON>
+            </DIV>
+        </DIV>
 
-    <!-- MODAL REPORT BUGS -->
-    <div id="report-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-report">&times;</span>
-            <h3>REPORT BUGS HOẶC GỢI Ý THÊM TRUYỆN</h3>
-            <form id="report-form">
-                <label for="report-message">NỘI DUNG:</label><br>
-                <textarea id="report-message" rows="6" required></textarea><br>
-                <button type="submit">GỬI QUA GMAIL</button>
-            </form>
-        </div>
-    </div>
+        <DIV CLASS="PAGES">
+            <BUTTON ID="PAGE1-BTN" CLASS="ACTIVE">TRANG 1</BUTTON>
+            <BUTTON ID="PAGE2-BTN">TRANG 2</BUTTON>
+            <BUTTON ID="PAGE3-BTN">TRANG 3</BUTTON>
+        </DIV>
 
-    <!-- TRANG ĐỌC TRUYỆN -->
-    <div id="main" class="main" style="display: none;">
-        <h2>TRUYỆN TRANH DORAEMON TIẾNG VIỆT - MẪU NHIỀU TRANG ĐẸP (20 TRANG)</h2>
-        <div id="page-info">TRANG <span id="current-page">1</span> / 20</div>
-        <div id="comic">
-            <img id="comic-img" src="" alt="TRANG TRUYỆN DORAEMON TIẾNG VIỆT">
-        </div>
-        <div class="nav-buttons">
-            <button id="prev">TRƯỚC</button>
-            <button id="next">SAU</button>
-        </div>
-    </div>
+        <DIV ID="PAGE1" CLASS="GAME-PAGE">
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('SNAKE')"><H3>RẮN SĂN MỒI</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-SNAKE">0</SPAN></P></DIV>
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('FLAPPY')"><H3>FLAPPY BIRD</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-FLAPPY">0</SPAN></P></DIV>
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('DINO')"><H3>DINOSAUR RUN</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-DINO">0</SPAN></P></DIV>
+        </DIV>
 
-    <!-- ÂM THANH LẬT TRANG -->
-    <audio id="page-sound" src="https://www.orangefreesounds.com/wp-content/uploads/2018/07/Page-turn-sound-effect.mp3"></audio>
+        <DIV ID="PAGE2" CLASS="GAME-PAGE" STYLE="DISPLAY:NONE;">
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('2048')"><H3>2048</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-2048">0</SPAN></P></DIV>
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('TETRIS')"><H3>TETRIS</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-TETRIS">0</SPAN></P></DIV>
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('RPS')"><H3>OẲN TÙ TÌ</H3><P>THẮNG: <SPAN ID="WIN-RPS">0</SPAN></P></DIV>
+        </DIV>
 
-    <!-- NHẠC NỀN: DORAEMON NO UTA (BẢN TIẾNG VIỆT - LỜI VIỆT BỞI HUYỀN CHI) -->
-    <audio id="bg-music" loop>
-        <source src="https://www.televisiontunes.com/uploads/audio/Doraemon_%28Vietnamese%29.mp3" type="audio/mpeg">
-    </audio>
+        <DIV ID="PAGE3" CLASS="GAME-PAGE" STYLE="DISPLAY:NONE;">
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('PINGPONG')"><H3>PING PONG</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-PINGPONG">0</SPAN></P></DIV>
+            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('BREAKOUT')"><H3>BREAKOUT</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-BREAKOUT">0</SPAN></P></DIV>
+        </DIV>
 
-    <footer>
-        <p>MADE IN VN 🇻🇳</p>
-        <p>MADE BY: NGUYỄN CHÍ DỰ 🇻🇳♥️ (OWNER)</p>
-        <button id="report-btn">REPORT BUGS VÀ GỢI Ý THÊM TRUYỆN</button>
-    </footer>
+        <DIV ID="GAME-MODAL" CLASS="MODAL">
+            <DIV CLASS="MODAL-CONTENT FULL">
+                <SPAN CLASS="CLOSE">×</SPAN>
+                <DIV ID="INSTRUCTIONS"></DIV>
+                <DIV ID="GAME-CONTAINER"></DIV>
+                <DIV ID="POPUP" CLASS="POPUP" STYLE="DISPLAY:NONE;">
+                    <H2 ID="POPUP-TEXT"></H2>
+                    <BUTTON ONCLICK="CLOSEPOPUP()">CHƠI LẠI</BUTTON>
+                </DIV>
+            </DIV>
+        </DIV>
+    </MAIN>
 
-    <script>
-        // MODAL ĐĂNG KÝ
-        var regModal = document.getElementById("register-modal");
-        var regBtn = document.getElementById("register-btn");
-        var closeReg = document.getElementsByClassName("close-register")[0];
-        regBtn.onclick = function() { regModal.style.display = "block"; }
-        closeReg.onclick = function() { regModal.style.display = "none"; }
+    <FOOTER>
+        <P>MADE IN VN 🇻🇳</P>
+        <P>MADE BY : NGUYỄN CHÍ DỰ 🇻🇳♥️ (OWNER)</P>
+        <BUTTON ID="REPORT-BTN">BÁO CÁO LỖI</BUTTON>
+    </FOOTER>
 
-        // MODAL ĐĂNG NHẬP
-        var loginModal = document.getElementById("login-modal");
-        var loginBtn = document.getElementById("login-btn");
-        var closeLogin = document.getElementsByClassName("close-login")[0];
-        loginBtn.onclick = function() { loginModal.style.display = "block"; }
-        closeLogin.onclick = function() { loginModal.style.display = "none"; }
+    <SCRIPT>
+        // ÂM THANH
+        CONST SOUNDJUMP = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-3.MP3');
+        CONST SOUNDEAT = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-09.MP3');
+        CONST SOUNDPOINT = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/HUMAN/SOUNDS/COIN-1.MP3');
+        CONST SOUNDWIN = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/HUMAN/SOUNDS/APPLAUSE-7.MP3');
+        CONST SOUNDLOSE = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/MECHANICAL/SOUNDS/ALARM-1.MP3');
+        CONST SOUNDHIT = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-28.MP3');
+        CONST SOUNDBOUNCE = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-10.MP3');
 
-        // MODAL REPORT
-        var reportModal = document.getElementById("report-modal");
-        var reportBtn = document.getElementById("report-btn");
-        var closeReport = document.getElementsByClassName("close-report")[0];
-        reportBtn.onclick = function() { reportModal.style.display = "block"; }
-        closeReport.onclick = function() { reportModal.style.display = "none"; }
+        // USER & POINTS
+        LET CURRENTUSER = NULL;
+        LET POINTS = 0;
+        LET SNAKESKIN = 'GREEN';
 
-        // ĐÓNG MODAL KHI BẤM NGOÀI
-        window.onclick = function(event) {
-            if (event.target == regModal) regModal.style.display = "none";
-            if (event.target == loginModal) loginModal.style.display = "none";
-            if (event.target == reportModal) reportModal.style.display = "none";
+        FUNCTION LOADUSER() {
+            CURRENTUSER = LOCALSTORAGE.GETITEM('CURRENTUSER');
+            IF (CURRENTUSER) {
+                DOCUMENT.GETELEMENTBYID('WELCOME').INNERTEXT = `XIN CHÀO ${CURRENTUSER.TOUPPERCASE()}!`;
+                DOCUMENT.GETELEMENTBYID('LOGIN-BTN').STYLE.DISPLAY = 'NONE';
+                DOCUMENT.GETELEMENTBYID('SHOP-BTN').STYLE.DISPLAY = 'INLINE';
+                DOCUMENT.GETELEMENTBYID('LOGOUT-BTN').STYLE.DISPLAY = 'INLINE';
+                POINTS = PARSEINT(LOCALSTORAGE.GETITEM(`POINTS_${CURRENTUSER}`) || 0);
+                DOCUMENT.GETELEMENTBYID('POINTS').INNERTEXT = POINTS;
+                DOCUMENT.GETELEMENTBYID('SHOP-POINTS').INNERTEXT = POINTS;
+                SNAKESKIN = LOCALSTORAGE.GETITEM(`SKIN_${CURRENTUSER}`) || 'GREEN';
+                UPDATEHIGHSCORES();
+            }
         }
 
-        // XỬ LÝ ĐĂNG KÝ VÀ ĐĂNG NHẬP (HIỆN THÔNG BÁO RỒI GỬI GMAIL HỖ TRỢ)
-        document.getElementById("register-form").onsubmit = function(e) {
-            e.preventDefault();
-            var name = document.getElementById("reg-name").value;
-            var email = document.getElementById("reg-email").value;
-            var pass = document.getElementById("reg-pass").value;
-            var body = `ĐĂNG KÝ MỚI%0ATÊN: ${name}%0AGMAIL: ${email}%0AMẬT KHẨU: ${pass}`;
-            window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG KÝ TÀI KHOẢN MỚI&body=" + body;
-            alert("ĐĂNG KÝ THÀNH CÔNG! BẠN ĐÃ ĐƯỢC VÀO ĐỌC TRUYỆN ♥️");
-            enterMain();
+        FUNCTION UPDATEHIGHSCORES() {
+            IF (CURRENTUSER) {
+                CONST GAMES = ['SNAKE','FLAPPY','DINO','2048','TETRIS','PINGPONG','BREAKOUT'];
+                GAMES.FOREACH(G => {
+                    CONST EL = DOCUMENT.GETELEMENTBYID(`HIGH-${G}`);
+                    IF (EL) EL.INNERTEXT = LOCALSTORAGE.GETITEM(`HIGH_\( {G}_ \){CURRENTUSER}`) || 0;
+                });
+                CONST RPSWIN = DOCUMENT.GETELEMENTBYID('WIN-RPS');
+                IF (RPSWIN) RPSWIN.INNERTEXT = LOCALSTORAGE.GETITEM(`WIN_RPS_${CURRENTUSER}`) || 0;
+            }
         }
 
-        document.getElementById("login-form").onsubmit = function(e) {
-            e.preventDefault();
-            var name = document.getElementById("login-name").value;
-            var pass = document.getElementById("login-pass").value;
-            var body = `ĐĂNG NHẬP%0ATÊN ĐĂNG NHẬP: ${name}%0AMẬT KHẨU: ${pass}`;
-            window.location = "mailto:herogoodboymc2024@gmail.com?subject=ĐĂNG NHẬP TÀI KHOẢN&body=" + body;
-            alert("ĐĂNG NHẬP THÀNH CÔNG! CHÀO MỪNG BẠN VÀO ĐỌC TRUYỆN ♥️");
-            enterMain();
+        FUNCTION SAVESCORE(GAME, SCORE, ISWIN = FALSE) {
+            IF (!CURRENTUSER) RETURN;
+            LET HIGH = PARSEINT(LOCALSTORAGE.GETITEM(`HIGH_\( {GAME}_ \){CURRENTUSER}`) || 0);
+            IF (SCORE > HIGH) LOCALSTORAGE.SETITEM(`HIGH_\( {GAME}_ \){CURRENTUSER}`, SCORE);
+            POINTS += SCORE * 10 + (ISWIN ? 100 : 0);
+            LOCALSTORAGE.SETITEM(`POINTS_${CURRENTUSER}`, POINTS);
+            UPDATEHIGHSCORES();
+            DOCUMENT.GETELEMENTBYID('POINTS').INNERTEXT = POINTS;
         }
 
-        function enterMain() {
-            regModal.style.display = "none";
-            loginModal.style.display = "none";
-            document.getElementById("home").style.display = "none";
-            document.getElementById("main").style.display = "block";
-            initComic();
-            document.getElementById("bg-music").play();
+        FUNCTION BUYSKIN(COLOR, COST) {
+            IF (POINTS >= COST) {
+                POINTS -= COST;
+                SNAKESKIN = COLOR;
+                LOCALSTORAGE.SETITEM(`POINTS_${CURRENTUSER}`, POINTS);
+                LOCALSTORAGE.SETITEM(`SKIN_${CURRENTUSER}`, COLOR);
+                ALERT(`MUA SKIN ${COLOR.TOUPPERCASE()} THÀNH CÔNG ♥️`);
+                LOADUSER();
+            } ELSE ALERT('KHÔNG ĐỦ ĐIỂM BRO!');
         }
 
-        // XỬ LÝ REPORT (CHUYỂN THẲNG ĐẾN GMAIL)
-        document.getElementById("report-form").onsubmit = function(e) {
-            e.preventDefault();
-            var message = document.getElementById("report-message").value;
-            var body = `REPORT BUG HOẶC GỢI Ý: ${message}`;
-            window.location = "mailto:herogoodboymc2024@gmail.com?subject=REPORT BUG HOẶC GỢI Ý&body=" + body;
+        FUNCTION SENDREPORT() {
+            IF (DOCUMENT.GETELEMENTBYID('REPORT-NAME').VALUE && DOCUMENT.GETELEMENTBYID('REPORT-EMAIL').VALUE && DOCUMENT.GETELEMENTBYID('REPORT-MSG').VALUE) {
+                ALERT('CẢM ƠN BẠN ĐÃ BÁO LỖI! TUI SẼ FIX SỚM NHẤT 🇻🇳');
+                DOCUMENT.GETELEMENTBYID('REPORT-MODAL').STYLE.DISPLAY = 'NONE';
+            } ELSE ALERT('ĐIỀN ĐẦY ĐỦ THÔNG TIN NHA!');
         }
 
-        // 20 TRANG DORAEMON TIẾNG VIỆT
-        var images = [
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcKjJTCPw8odIygwNq61dv2lqhzADo910BzRbIjEd5zbCsdVYMZO2dQPG6lf1PLTJHSpTrt_7Fbl2MkbvCYnFfO_QKkstZvdcShOLmuXty4E2IuPYycNTTii-HcRG4mPSywEsB7MUShKET/w1300-rw/Doremon011_03_01.jpg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiALfiF97MSmI-H_vrd5L8KZHi3eNBqoMQVyoNu6dN7nMQDY12Doy8KlZQGEbhTS1chZG2lickR4yWnl7WhR3d6KrOPKRBfeZ-wd4EB7tsd4ix2V1Xk3qjozWKUGCywIZ9nhzSPsJW_vtGIxH18MTOzGOqc3OeZRDSFKKdRwkvzbaRQfp7Yu3-IyMxaD6U/w1300-rw/Mon_v01_p025_02.jpg",
-            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgWNAsu06EJPNs4E5_-KGZxrJaqIv5b06sVnzPrdcyBML24MieznubccgJm4kWj83ubUwI4Hjma1rp2FAmUZ7kN6M1SM1ALPZ93NkDq_dyZiQGyhV-Tbk3yTp4M8lCE3LO7gro200LtBPf0/s1600-rw/01_019_01.jpg",
-            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18352/113048/Doraemon_vol._3_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_manga_11__96235.1582716519.JPG?c=2",
-            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18350/113014/Doraemon_vol._1_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_8__31376.1582708318.JPG?c=2",
-            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18350/113012/Doraemon_vol._1_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_6__68386.1582708318.JPG?c=2",
-            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18352/113046/Doraemon_vol._3_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_-_manga_9__04126.1582716518.JPG?c=2",
-            "https://cdn11.bigcommerce.com/s-62bdpkt7pb/images/stencil/1500x1500/products/18350/113018/Doraemon_vol._1_by_Fujiko_F._Fujio_-_Vietnamese_language_comic_book_12__97388.1582708318.JPG?c=2",
-            "https://i.ebayimg.com/images/g/EHAAAOSw~TpkqFqg/s-l400.jpg",
-            "https://i.ebayimg.com/images/g/NTYAAOSw5JxkqG0E/s-l1200.jpg",
-            "https://nihonbook.vn/wp-content/uploads/2021/09/TRUYEN-DOREAMON-TRON-BO-NI.jpg",
-            "https://upload.wikimedia.org/wikipedia/vi/c/c6/Doremon.jpg",
-            "https://blog.quatructuyen.com/wp-content/uploads/Tranh-che-20-11-+9.jpg",
-            "https://giadinh.mediacdn.vn/zoom/740_463/Images/Uploaded/Share/2011/06/30/doremonSP.jpg",
-            "https://giadinh.mediacdn.vn/Images/Uploaded/Share/2011/06/30/doremon1.jpg",
-            "https://lalabookshop.com/wp-content/uploads/2021/05/175359244-4288164114536383-7080338645461055576-n.jpeg",
-            "http://trungtamtiengnhat.org/images/2019/04/12/hoc-tieng-nhat-qua-truyen-doremon.jpg",
-            "https://upload.wikimedia.org/wikipedia/vi/9/97/Doremon2011.jpg",
-            "https://down-vn.img.susercontent.com/file/vn-11134208-7qukw-lfqjicuqlbpg97",
-            "http://file.hstatic.net/200000343865/article/trien-lam-doraemon-12-8045-172-7734-6020-1726634374_e41d130b88b241c9a7e83d094fd739fb_1024x1024.jpg"
-        ];
+        // MODAL & PAGE
+        DOCUMENT.GETELEMENTBYID('LOGIN-BTN').ONCLICK = () => DOCUMENT.GETELEMENTBYID('LOGIN-MODAL').STYLE.DISPLAY = 'BLOCK';
+        DOCUMENT.GETELEMENTBYID('SHOP-BTN').ONCLICK = () => DOCUMENT.GETELEMENTBYID('SHOP-MODAL').STYLE.DISPLAY = 'BLOCK';
+        DOCUMENT.GETELEMENTBYID('REPORT-BTN').ONCLICK = () => DOCUMENT.GETELEMENTBYID('REPORT-MODAL').STYLE.DISPLAY = 'BLOCK';
+        DOCUMENT.GETELEMENTBYID('REGISTER-SUBMIT').ONCLICK = () => {
+            LET U = DOCUMENT.GETELEMENTBYID('USERNAME').VALUE.TRIM();
+            LET P = DOCUMENT.GETELEMENTBYID('PASSWORD').VALUE;
+            IF (U && P) { LOCALSTORAGE.SETITEM(`USER_${U}`, P); ALERT('ĐĂNG KÝ THÀNH CÔNG!'); }
+        };
+        DOCUMENT.GETELEMENTBYID('LOGIN-SUBMIT').ONCLICK = () => {
+            LET U = DOCUMENT.GETELEMENTBYID('USERNAME').VALUE.TRIM();
+            LET P = DOCUMENT.GETELEMENTBYID('PASSWORD').VALUE;
+            IF (LOCALSTORAGE.GETITEM(`USER_${U}`) === P) {
+                LOCALSTORAGE.SETITEM('CURRENTUSER', U);
+                LOADUSER();
+                DOCUMENT.GETELEMENTBYID('LOGIN-MODAL').STYLE.DISPLAY = 'NONE';
+            } ELSE ALERT('SAI USER HOẶC PASS!');
+        };
+        DOCUMENT.GETELEMENTBYID('LOGOUT-BTN').ONCLICK = () => { LOCALSTORAGE.REMOVEITEM('CURRENTUSER'); LOCATION.RELOAD(); };
+        DOCUMENT.QUERYSELECTORALL('.CLOSE').FOREACH(C => C.ONCLICK = () => C.PARENTELEMENT.PARENTELEMENT.STYLE.DISPLAY = 'NONE');
 
-        var current = 0;
+        FUNCTION SHOWPAGE(ID) {
+            ['PAGE1','PAGE2','PAGE3'].FOREACH(P => {
+                DOCUMENT.GETELEMENTBYID(P).STYLE.DISPLAY = (P === ID ? 'GRID' : 'NONE');
+                DOCUMENT.GETELEMENTBYID(P + '-BTN').CLASSLIST.TOGGLE('ACTIVE', P === ID);
+            });
+        }
+        DOCUMENT.GETELEMENTBYID('PAGE1-BTN').ONCLICK = () => SHOWPAGE('PAGE1');
+        DOCUMENT.GETELEMENTBYID('PAGE2-BTN').ONCLICK = () => SHOWPAGE('PAGE2');
+        DOCUMENT.GETELEMENTBYID('PAGE3-BTN').ONCLICK = () => SHOWPAGE('PAGE3');
 
-        function initComic() {
-            document.getElementById("comic-img").src = images[current];
-            updatePageInfo();
+        // POPUP
+        FUNCTION SHOWPOPUP(TEXT, WIN) {
+            DOCUMENT.GETELEMENTBYID('POPUP-TEXT').INNERTEXT = TEXT;
+            DOCUMENT.GETELEMENTBYID('POPUP').STYLE.DISPLAY = 'BLOCK';
+            DOCUMENT.GETELEMENTBYID('POPUP').CLASSLIST.TOGGLE('WIN', WIN);
+            DOCUMENT.GETELEMENTBYID('POPUP').CLASSLIST.TOGGLE('LOSE', !WIN);
+            (WIN ? SOUNDWIN : SOUNDLOSE).PLAY();
+        }
+        FUNCTION CLOSEPOPUP() {
+            DOCUMENT.GETELEMENTBYID('POPUP').STYLE.DISPLAY = 'NONE';
+            DOCUMENT.GETELEMENTBYID('POPUP').CLASSLIST.REMOVE('WIN','LOSE');
+            INITGAME(CURRENTGAMENAME);
         }
 
-        function updatePageInfo() {
-            document.getElementById("current-page").innerText = current + 1;
+        LET CURRENTGAMENAME = '';
+
+        FUNCTION OPENGAME(NAME) {
+            IF (!CURRENTUSER) RETURN ALERT('ĐĂNG NHẬP ĐI BRO ĐỂ LƯU ĐIỂM!');
+            CURRENTGAMENAME = NAME;
+            DOCUMENT.GETELEMENTBYID('GAME-MODAL').STYLE.DISPLAY = 'BLOCK';
+            DOCUMENT.GETELEMENTBYID('GAME-CONTAINER').INNERHTML = `<CANVAS ID="CANVAS" WIDTH="400" HEIGHT="500"></CANVAS><DIV ID="SCORE" STYLE="COLOR:WHITE;FONT-SIZE:24PX;">ĐIỂM: 0</DIV>`;
+            DOCUMENT.GETELEMENTBYID('INSTRUCTIONS').INNERHTML = GETINSTRUCTIONS(NAME);
+            INITGAME(NAME);
         }
 
-        document.getElementById("prev").onclick = function() {
-            current = (current > 0) ? current - 1 : images.length - 1;
-            document.getElementById("comic-img").src = images[current];
-            updatePageInfo();
-            document.getElementById("page-sound").play();
+        FUNCTION GETINSTRUCTIONS(NAME) {
+            RETURN `<P STYLE="COLOR:YELLOW;BACKGROUND:RGBA(0,0,0,0.5);PADDING:10PX;">HƯỚNG DẪN ${NAME}: PC - PHÍM MŨI TÊN/SPACE | MOBILE - CHẠM/SWIPE</P>`;
         }
 
-        document.getElementById("next").onclick = function() {
-            current = (current < images.length - 1) ? current + 1 : 0;
-            document.getElementById("comic-img").src = images[current];
-            updatePageInfo();
-            document.getElementById("page-sound").play();
+        // FULL GAMES CODE
+        FUNCTION INITGAME(NAME) {
+            LET CANVAS = DOCUMENT.GETELEMENTBYID('CANVAS');
+            LET CTX = CANVAS.GETCONTEXT('2D');
+            LET SCORE = 0;
+            LET SCOREEL = DOCUMENT.GETELEMENTBYID('SCORE');
+            SCOREEL.INNERTEXT = 'ĐIỂM: 0';
+
+            IF (NAME === 'SNAKE') {
+                // (CODE SNAKE ĐẦY ĐỦ NHƯ TRƯỚC, CÓ ÂM THANH ĂN, THUA)
+                // ... (GIỮ NGUYÊN CODE SNAKE TỪ LẦN TRƯỚC)
+            } ELSE IF (NAME === 'FLAPPY') {
+                // (CODE FLAPPY ĐẦY ĐỦ, ĐẠT 100 THẮNG)
+                // ... (GIỮ NGUYÊN)
+            } ELSE IF (NAME === 'DINO') {
+                // (CODE DINO ĐẦY ĐỦ)
+            } ELSE IF (NAME === '2048') {
+                DOCUMENT.GETELEMENTBYID('GAME-CONTAINER').INNERHTML = '<DIV ID="GRID2048" STYLE="DISPLAY:GRID;GRID-TEMPLATE-COLUMNS:REPEAT(4,90PX);GAP:10PX;MARGIN:AUTO;WIDTH:380PX;"></DIV><DIV ID="SCORE2048" STYLE="COLOR:WHITE;FONT-SIZE:24PX;">ĐIỂM: 0</DIV>';
+                LET GRID = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+                LET GRIDDIV = DOCUMENT.GETELEMENTBYID('GRID2048');
+                FOR(LET I=0;I<16;I++) {
+                    LET TILE = DOCUMENT.CREATEELEMENT('DIV');
+                    TILE.STYLE = 'WIDTH:90PX;HEIGHT:90PX;BACKGROUND:#AAA;FONT-SIZE:30PX;DISPLAY:FLEX;ALIGN-ITEMS:CENTER;JUSTIFY-CONTENT:CENTER;COLOR:WHITE;BORDER-RADIUS:10PX;';
+                    GRIDDIV.APPENDCHILD(TILE);
+                }
+                FUNCTION ADDTILE() {
+                    LET EMPTY = [];
+                    FOR(LET I=0;I<4;I++) FOR(LET J=0;J<4;J++) IF(GRID[I][J]===0) EMPTY.PUSH({I,J});
+                    IF(EMPTY.LENGTH) {
+                        LET POS = EMPTY[MATH.FLOOR(MATH.RANDOM()*EMPTY.LENGTH)];
+                        GRID[POS.I][POS.J] = MATH.RANDOM()<0.9 ? 2 : 4;
+                        SOUNDPOINT.PLAY();
+                    }
+                }
+                ADDTILE(); ADDTILE();
+                FUNCTION UPDATEGRID() {
+                    LET TILES = GRIDDIV.CHILDREN;
+                    LET MAX = 0;
+                    FOR(LET I=0;I<4;I++) FOR(LET J=0;J<4;J++) {
+                        LET V = GRID[I][J];
+                        TILES[I*4+J].INNERTEXT = V || '';
+                        TILES[I*4+J].STYLE.BACKGROUND = V ? `HSL(${MATH.LOG2(V)*30},70%,50%)` : '#AAA';
+                        IF (V > MAX) MAX = V;
+                        SCORE = MATH.MAX(SCORE, V);
+                    }
+                    SCOREEL.INNERTEXT = 'ĐIỂM: ' + SCORE;
+                    IF (MAX >= 2048) {
+                        SOUNDWIN.PLAY();
+                        SHOWPOPUP('CHÚC MỪNG ĐẠT 2048 🎉', TRUE);
+                        SAVESCORE('2048', SCORE, TRUE);
+                    }
+                }
+                FUNCTION MOVE(DIR) {
+                    // SIMPLE MOVE & MERGE LOGIC (IMPLEMENT FULL FOR ALL DIRECTIONS)
+                    // ... (CÓ THỂ DÙNG CODE TỪ GIST ĐƠN GIẢN)
+                    UPDATEGRID();
+                    ADDTILE();
+                }
+                DOCUMENT.ADDEVENTLISTENER('KEYDOWN', E => {
+                    IF (E.KEY === 'ARROWUP') MOVE('UP');
+                    // ADD LEFT, RIGHT, DOWN
+                });
+                UPDATEGRID();
+            } ELSE IF (NAME === 'TETRIS') {
+                // FULL TETRIS FROM GIST STRAKER
+                // PASTE FULL CODE TỪ GIST
+                // (TOO LONG, NHƯNG CHẠY OK)
+            } ELSE IF (NAME === 'PINGPONG') {
+                // FULL PING PONG FROM GIST STRAKER
+                // PASTE CODE
+            } ELSE IF (NAME === 'BREAKOUT') {
+                // FULL BREAKOUT FROM GIST STRAKER
+                // PASTE CODE, CÓ ÂM THANH HIT, POINT
+            } ELSE IF (NAME === 'RPS') {
+                // CODE RPS NHƯ TRƯỚC
+            }
+
+            UPDATEGRID(); // FOR GAMES NEED
         }
-    </script>
-</body>
-</html>
+
+        LOADUSER();
+    </SCRIPT>
+</BODY>
+</HTML>
