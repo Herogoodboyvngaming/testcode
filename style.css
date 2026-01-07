@@ -1,168 +1,284 @@
-body {
-    background-color: #e6f7ff;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background-image: linear-gradient(to bottom, #a0d8ef, #ffffff);
+BODY {
+    FONT-FAMILY: 'SEGOE UI', ARIAL, SANS-SERIF;
+    BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, #FF0000, #FFFF00 50%, #FF0000);
+    COLOR: WHITE;
+    MARGIN: 0;
+    PADDING: 0;
+    MIN-HEIGHT: 100VH;
+    DISPLAY: FLEX;
+    FLEX-DIRECTION: COLUMN;
 }
 
-header {
-    background-color: #ff6b6b;
-    color: white;
-    padding: 20px;
-    margin-bottom: 20px;
+HEADER {
+    BACKGROUND: RGBA(0,0,0,0.6);
+    PADDING: 20PX;
+    TEXT-ALIGN: CENTER;
+    BOX-SHADOW: 0 4PX 10PX RGBA(0,0,0,0.5);
 }
 
-h1 {
-    font-size: 32px;
-    margin: 0;
+H1 {
+    FONT-SIZE: 3.5EM;
+    MARGIN: 0;
+    TEXT-SHADOW: 3PX 3PX 6PX BLACK;
 }
 
-.subtitle {
-    font-size: 18px;
-    font-style: italic;
-    margin: 10px 0;
+.SUBTITLE {
+    FONT-SIZE: 1.3EM;
+    MARGIN: 15PX 0;
+    FONT-STYLE: ITALIC;
 }
 
-.home {
-    margin: 50px;
+#USER-INFO {
+    MARGIN-TOP: 15PX;
 }
 
-.home h2 {
-    font-size: 28px;
-    color: #ff6b6b;
+#USER-INFO BUTTON {
+    BACKGROUND: #FFD700;
+    COLOR: BLACK;
+    FONT-WEIGHT: BOLD;
+    BORDER: NONE;
+    PADDING: 10PX 20PX;
+    MARGIN: 5PX;
+    BORDER-RADIUS: 10PX;
+    CURSOR: POINTER;
+    FONT-SIZE: 1EM;
 }
 
-.auth-buttons button {
-    background-color: #ff4757;
-    color: white;
-    padding: 20px 40px;
-    font-size: 24px;
-    margin: 20px;
-    cursor: pointer;
-    border-radius: 15px;
-    border: none;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+MAIN {
+    FLEX: 1;
+    PADDING: 20PX;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
-    padding-top: 60px;
+.PAGES {
+    TEXT-ALIGN: CENTER;
+    MARGIN-BOTTOM: 20PX;
 }
 
-.modal-content {
-    background-color: #fff;
-    margin: 5% auto;
-    padding: 30px;
-    border-radius: 15px;
-    width: 80%;
-    max-width: 400px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+.PAGES BUTTON {
+    BACKGROUND: RGBA(255,255,255,0.2);
+    COLOR: WHITE;
+    BORDER: 2PX SOLID WHITE;
+    PADDING: 10PX 20PX;
+    MARGIN: 0 10PX;
+    BORDER-RADIUS: 10PX;
+    CURSOR: POINTER;
+    FONT-SIZE: 1.2EM;
 }
 
-.modal-content h3 {
-    color: #ff6b6b;
+.PAGES BUTTON.ACTIVE {
+    BACKGROUND: #FFD700;
+    COLOR: BLACK;
+    FONT-WEIGHT: BOLD;
 }
 
-.close-register, .close-login, .close-report {
-    color: #aaa;
-    float: right;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
+.GAME-PAGE {
+    DISPLAY: GRID;
+    GRID-TEMPLATE-COLUMNS: REPEAT(AUTO-FIT, MINMAX(250PX, 1FR));
+    GAP: 20PX;
+    MAX-WIDTH: 1200PX;
+    MARGIN: 0 AUTO;
 }
 
-.close-register:hover, .close-login:hover, .close-report:hover {
-    color: #000;
+.GAME-CARD {
+    BACKGROUND: RGBA(0,0,0,0.5);
+    PADDING: 25PX;
+    BORDER-RADIUS: 20PX;
+    TEXT-ALIGN: CENTER;
+    CURSOR: POINTER;
+    TRANSITION: ALL 0.3S EASE;
+    BOX-SHADOW: 0 5PX 15PX RGBA(0,0,0,0.4);
 }
 
-form label {
-    display: block;
-    margin: 15px 0 5px;
-    text-align: left;
-    font-weight: bold;
+.GAME-CARD:HOVER {
+    TRANSFORM: TRANSLATEY(-15PX) SCALE(1.05);
+    BACKGROUND: RGBA(255,215,0,0.4);
+    BOX-SHADOW: 0 15PX 30PX GOLD;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+.GAME-CARD H3 {
+    FONT-SIZE: 2EM;
+    MARGIN: 10PX 0;
 }
 
-button[type="submit"] {
-    background-color: #2ed573;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 18px;
+.GAME-CARD P {
+    FONT-SIZE: 1.3EM;
+    MARGIN: 10PX 0;
 }
 
-#main {
-    margin: 30px;
+.MODAL {
+    DISPLAY: NONE;
+    POSITION: FIXED;
+    TOP: 0;
+    LEFT: 0;
+    WIDTH: 100%;
+    HEIGHT: 100%;
+    BACKGROUND: RGBA(0,0,0,0.85);
+    JUSTIFY-CONTENT: CENTER;
+    ALIGN-ITEMS: CENTER;
+    Z-INDEX: 1000;
 }
 
-#page-info {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 20px;
-    color: #ff6b6b;
+.MODAL-CONTENT {
+    BACKGROUND: WHITE;
+    COLOR: BLACK;
+    PADDING: 30PX;
+    BORDER-RADIUS: 20PX;
+    WIDTH: 90%;
+    MAX-WIDTH: 500PX;
+    POSITION: RELATIVE;
+    BOX-SHADOW: 0 10PX 30PX RGBA(0,0,0,0.7);
+    ANIMATION: MODALOPEN 0.4S EASE;
 }
 
-#comic img {
-    max-width: 90%;
-    height: auto;
-    border: 4px solid #ff6b6b;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    background: white;
-    padding: 10px;
+.FULL {
+    MAX-WIDTH: 90%;
+    MAX-HEIGHT: 90%;
+    PADDING: 20PX;
 }
 
-.nav-buttons button {
-    background-color: #1e90ff;
-    color: white;
-    padding: 15px 30px;
-    margin: 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 18px;
+.CLOSE {
+    POSITION: ABSOLUTE;
+    TOP: 15PX;
+    RIGHT: 25PX;
+    FONT-SIZE: 40PX;
+    COLOR: #AAA;
+    CURSOR: POINTER;
 }
 
-.nav-buttons button:hover {
-    background-color: #0d47a1;
+.CLOSE:HOVER {
+    COLOR: RED;
 }
 
-footer {
-    background-color: #2f3542;
-    color: white;
-    padding: 20px;
-    margin-top: 50px;
-    font-size: 18px;
+.MODAL-CONTENT INPUT,
+.MODAL-CONTENT TEXTAREA {
+    WIDTH: 100%;
+    PADDING: 12PX;
+    MARGIN: 10PX 0;
+    BORDER: 2PX SOLID #DDD;
+    BORDER-RADIUS: 10PX;
+    FONT-SIZE: 1EM;
 }
 
-#report-btn {
-    background-color: #ffa502;
-    color: white;
-    padding: 12px 25px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
+.MODAL-CONTENT BUTTON {
+    BACKGROUND: #FF0000;
+    COLOR: WHITE;
+    FONT-WEIGHT: BOLD;
+    BORDER: NONE;
+    PADDING: 12PX 25PX;
+    MARGIN: 10PX 5PX;
+    BORDER-RADIUS: 10PX;
+    CURSOR: POINTER;
+    FONT-SIZE: 1.1EM;
+}
+
+#INSTRUCTIONS {
+    BACKGROUND: RGBA(0,0,0,0.7);
+    PADDING: 15PX;
+    BORDER-RADIUS: 10PX;
+    MARGIN: 10PX 0;
+    FONT-SIZE: 1.2EM;
+    TEXT-ALIGN: CENTER;
+}
+
+#GAME-CONTAINER {
+    DISPLAY: FLEX;
+    FLEX-DIRECTION: COLUMN;
+    ALIGN-ITEMS: CENTER;
+}
+
+CANVAS {
+    BACKGROUND: #000;
+    BORDER: 5PX SOLID #FFD700;
+    BORDER-RADIUS: 15PX;
+    MAX-WIDTH: 100%;
+    HEIGHT: AUTO;
+}
+
+#SCORE {
+    MARGIN-TOP: 10PX;
+    FONT-SIZE: 1.8EM;
+    TEXT-SHADOW: 2PX 2PX 4PX BLACK;
+}
+
+.POPUP {
+    POSITION: ABSOLUTE;
+    TOP: 50%;
+    LEFT: 50%;
+    TRANSFORM: TRANSLATE(-50%, -50%);
+    BACKGROUND: WHITE;
+    COLOR: BLACK;
+    PADDING: 40PX;
+    BORDER-RADIUS: 25PX;
+    TEXT-ALIGN: CENTER;
+    BOX-SHADOW: 0 0 40PX RGBA(0,0,0,0.8);
+    ANIMATION: POP 0.6S EASE;
+    Z-INDEX: 10;
+    MIN-WIDTH: 300PX;
+}
+
+.POPUP.WIN {
+    BACKGROUND: #FFD700;
+    COLOR: BLACK;
+    BOX-SHADOW: 0 0 50PX GOLD;
+}
+
+.POPUP.LOSE {
+    BACKGROUND: #FF4444;
+    COLOR: WHITE;
+    BOX-SHADOW: 0 0 50PX RED;
+}
+
+.POPUP H2 {
+    FONT-SIZE: 2.5EM;
+    MARGIN: 0 0 20PX 0;
+}
+
+.POPUP BUTTON {
+    BACKGROUND: BLACK;
+    COLOR: WHITE;
+    PADDING: 15PX 30PX;
+    FONT-SIZE: 1.3EM;
+    BORDER-RADIUS: 15PX;
+}
+
+FOOTER {
+    BACKGROUND: RGBA(0,0,0,0.7);
+    PADDING: 20PX;
+    TEXT-ALIGN: CENTER;
+    FONT-SIZE: 1.2EM;
+}
+
+FOOTER P {
+    MARGIN: 10PX 0;
+}
+
+#REPORT-BTN {
+    BACKGROUND: #FF0000;
+    COLOR: WHITE;
+    BORDER: NONE;
+    PADDING: 12PX 25PX;
+    BORDER-RADIUS: 10PX;
+    CURSOR: POINTER;
+    FONT-SIZE: 1.1EM;
+    MARGIN-TOP: 10PX;
+}
+
+@KEYFRAMES MODALOPEN {
+    FROM { OPACITY: 0; TRANSFORM: SCALE(0.8); }
+    TO { OPACITY: 1; TRANSFORM: SCALE(1); }
+}
+
+@KEYFRAMES POP {
+    FROM { OPACITY: 0; TRANSFORM: TRANSLATE(-50%, -50%) SCALE(0.5); }
+    TO { OPACITY: 1; TRANSFORM: TRANSLATE(-50%, -50%) SCALE(1); }
+}
+
+/* RESPONSIVE CHO MOBILE */
+@MEDIA (MAX-WIDTH: 768PX) {
+    H1 { FONT-SIZE: 2.5EM; }
+    .SUBTITLE { FONT-SIZE: 1.1EM; }
+    .GAME-CARD H3 { FONT-SIZE: 1.6EM; }
+    .GAME-CARD P { FONT-SIZE: 1.1EM; }
+    CANVAS { WIDTH: 100% !IMPORTANT; }
+    .POPUP H2 { FONT-SIZE: 2EM; }
 }
