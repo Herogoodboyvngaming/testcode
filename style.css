@@ -1,4 +1,4 @@
-/* style.css - PHIÊN BẢN HOÀN HẢO NHẤT, ĐẸP LUNG LINH, KHÔNG LỖI TRÊN MOBILE/PC */
+/* style.css - PHIÊN BẢN ĐẸP HOÀN HẢO, ĐÃ ĐƯỢC CẬP NHẬT ĐỂ PHÙ HỢP VỚI CODE MỚI NHẤT */
 
 * {
     box-sizing: border-box;
@@ -31,17 +31,24 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .login-info {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 18px;
 }
 
 .login-info button {
     padding: 8px 15px;
     font-size: 16px;
+    background: #9b59b6;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
 }
 
 .header {
@@ -402,4 +409,6 @@ canvas {
     .subtitle { font-size: 20px; }
     .menu button { font-size: 16px; padding: 14px 24px; min-width: 150px; }
     .game-container { padding: 25px 15px; }
+    .score-board { flex-direction: column; gap: 10px; }
+    .login-info { flex-wrap: wrap; justify-content: center; }
 }
