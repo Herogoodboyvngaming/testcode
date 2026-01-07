@@ -371,8 +371,8 @@
         function confirmAbandon() {
             if (confirm('BẠN ĐỒNG Ý TỪ BỎ? SẼ BỊ TRỪ 10 ĐIỂM!')) {
                 playerCoins = Math.max(0, playerCoins - 10);
-                localStorage.setItem('playerCoins', playerCoins);
                 document.getElementById('playerCoins').innerText = playerCoins;
+                saveCoins();
                 showMainScreen();
             }
         }
@@ -402,11 +402,8 @@
             document.getElementById('gameModal').style.display = 'flex';
             document.getElementById('fireworks').innerHTML = '';
             document.getElementById('rain').innerHTML = '';
-            if (isVictory) {
-                createFireworks();
-            } else if (isLose) {
-                createRain();
-            }
+            if (isVictory) createFireworks();
+            else if (isLose) createRain();
             playSound(isVictory ? 'victorySound' : 'gameOverSound');
         }
 
@@ -453,7 +450,7 @@
         }
         window.addEventListener('resize', adjustCanvasSize);
 
-        // RẮN SĂN MỒI
+        // RẮN SĂN MỒI - ĐẦY ĐỦ HÀM
         let snakeCanvas, snakeCtx, snakeScore = 0;
         let snake = [{x: 200, y: 200}];
         let dx = 10, dy = 0;
@@ -540,7 +537,12 @@
             pendingDirection = dir;
         }
 
-        // CỜ CARO
+        function pauseSnake() {
+            if (!gameStarted) return;
+            alert('TẠM DỪNG - NHẤN OK ĐỂ TIẾP TỤC');
+        }
+
+        // CỜ CARO - ĐẦY ĐỦ HÀM
         let tttBoard = Array(9).fill(null);
 
         function playTTT(index) {
@@ -604,7 +606,12 @@
             document.getElementById('tttStatus').innerText = '';
         }
 
-        // FLAPPY BIRD
+        function pauseTictactoe() {
+            if (!gameStarted) return;
+            alert('TẠM DỪNG - NHẤN OK ĐỂ TIẾP TỤC');
+        }
+
+        // FLAPPY BIRD - ĐẦY ĐỦ HÀM
         let flappyCanvas, flappyCtx, birdY = 250, birdVelocity = 0, pipes = [], flappyScore = 0;
         let gravity = 0.5, jump = -10;
 
@@ -670,7 +677,17 @@
         flappyCanvas.addEventListener('click', () => { birdVelocity = jump; playSound('jumpSound'); });
         flappyCanvas.addEventListener('touchstart', e => { e.preventDefault(); birdVelocity = jump; playSound('jumpSound'); });
 
-        // PIKACHU
+        function pauseFlappy() {
+            if (!gameStarted) return;
+            flappyPaused = !flappyPaused;
+            if (flappyPaused) {
+                cancelAnimationFrame(flappyAnimationId);
+            } else {
+                flappyAnimationId = requestAnimationFrame(updateFlappy);
+            }
+        }
+
+        // PIKACHU - ĐẦY ĐỦ HÀM
         const emojis = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
         let pikachuCards = [...emojis, ...emojis];
         let selected = [];
@@ -721,7 +738,12 @@
             }
         }
 
-        // DINO GAME
+        function pausePikachu() {
+            if (!gameStarted) return;
+            alert('TẠM DỪNG - NHẤN OK ĐỂ TIẾP TỤC');
+        }
+
+        // DINO GAME - ĐẦY ĐỦ HÀM
         let dinoCanvas, dinoCtx, dinoX = 50, dinoY = 150, dinoVelocity = 0, obstacles = [], dinoScore = 0;
         let dinoRunning = false;
         let endingShown = false;
@@ -773,7 +795,7 @@
         dinoCanvas.addEventListener('click', () => { if (dinoRunning) dinoVelocity = -12; });
         dinoCanvas.addEventListener('touchstart', e => { e.preventDefault(); if (dinoRunning) dinoVelocity = -12; });
 
-        // KHINH KHÍ CẦU - CẬP NHẬT ĐÚNG YÊU CẦU
+        // KHINH KHÍ CẦU - ĐẦY ĐỦ HÀM VÀ ĐÚNG YÊU CẦU
         let balloonCanvas, balloonCtx, balloonX = 200, balloonY = 300, balloonVelocityY = 0, balloonVelocityX = 0;
         let stars = [], clouds = [], balloonScore = 0;
         let balloonRunning = false;
@@ -811,7 +833,6 @@
                 return;
             }
 
-            // VẼ KHINH KHÍ CẦU
             balloonCtx.fillStyle = '#E91E63';
             balloonCtx.beginPath();
             balloonCtx.arc(balloonX, balloonY, 50, 0, Math.PI * 2);
@@ -819,7 +840,6 @@
             balloonCtx.fillStyle = '#FF9800';
             balloonCtx.fillRect(balloonX - 25, balloonY + 50, 50, 60);
 
-            // TẠO NGÔI SAO VÀ MÂY
             if (Math.random() < 0.02) stars.push({x: 400, y: Math.random() * (balloonCanvas.height - 100) + 50});
             if (Math.random() < 0.015) clouds.push({x: 400, y: Math.random() * (balloonCanvas.height - 100) + 50});
 
@@ -880,7 +900,7 @@
         });
         balloonCanvas.addEventListener('touchend', () => isHolding = false);
 
-        // SHOP, LOGIN, MODAL GIỮ NGUYÊN NHƯ TRƯỚC
+        // SHOP, LOGIN, MODAL, INFO, BUG, SUGGEST - ĐẦY ĐỦ HÀM
 
         function showInfo() {
             document.getElementById('infoModal').style.display = 'flex';
