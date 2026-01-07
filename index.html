@@ -11,8 +11,8 @@
         <p>💰 ĐIỂM CỦA BẠN: <strong id="playerCoins">0</strong></p>
         <div class="login-info">
             <span id="userDisplay">KHÁCH</span>
-            <button onclick="showLoginModal()">ĐĂNG NHẬP</button>
-            <button onclick="logout()">ĐĂNG XUẤT</button>
+            <button id="loginBtn" onclick="showLoginModal()">ĐĂNG NHẬP</button>
+            <button id="logoutBtn" onclick="logout()" style="display:none;">ĐĂNG XUẤT</button>
         </div>
     </div>
 
@@ -28,8 +28,6 @@
         <button onclick="showGame('tictactoe')">⭕ Ô ĂN QUAN (CỜ CARO)</button>
         <button onclick="showGame('flappy')">🐦 FLAPPY BIRD</button>
         <button onclick="showGame('pikachu')">🀄 PIKACHU GHÉP CẶP</button>
-        <button onclick="showGame('dino')">🦕 DINO GAME</button>
-        <button onclick="showGame('balloon')">🎈 KHINH KHÍ CẦU</button>
         <button onclick="showGame('shop')">🛒 SHOP MUA ITEM</button>
         <button class="info-btn" onclick="showInfo()">ℹ️ THÔNG TIN & UPDATE</button>
     </div>
@@ -118,7 +116,7 @@
             <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
         </div>
         <canvas id="flappyCanvas" width="400" height="500"></canvas>
-        <div id="flappyScore" class="score">ĐIỂM HIỆN TẠI: 0 / 100</div>
+        <div id="flappyScore" class="score">ĐIỂM HIỆN TẠI: 0</div>
     </div>
 
     <div id="pikachu" class="game-container">
@@ -135,42 +133,8 @@
             <button onclick="confirmAbandon()">❌ TỪ BỎ (-10 ĐIỂM)</button>
             <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
         </div>
-        <div id="pikachuBoard"></div>
+        <div id="pikachuBoard" class="pikachu-board"></div>
         <p id="pikachuStatus" class="status">CÒN LẠI: <span id="pairsLeft">8</span> CẶP</p>
-    </div>
-
-    <div id="dino" class="game-container">
-        <h2>🦕 DINO GAME</h2>
-        <div class="controls-guide">
-            <p><strong>ĐIỀU KHIỂN:</strong></p>
-            <p>🖥️ PC/MAC: PHÍM SPACE HOẶC CLICK ĐỂ NHẢY</p>
-            <p>📱 MOBILE: CHẠM MÀN HÌNH ĐỂ NHẢY</p>
-        </div>
-        <div class="game-controls">
-            <button onclick="confirmStart()">BẮT ĐẦU</button>
-            <button onclick="confirmRestart()">🔄 CHƠI LẠI</button>
-            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
-        </div>
-        <canvas id="dinoCanvas" width="600" height="200"></canvas>
-        <div id="dinoScore" class="score">ĐIỂM: 0</div>
-    </div>
-
-    <div id="balloon" class="game-container">
-        <h2>🎈 KHINH KHÍ CẦU</h2>
-        <div class="controls-guide">
-            <p><strong>ĐIỀU KHIỂN:</strong></p>
-            <p>Giữ chạm màn hình / giữ chuột để bay lên</p>
-            <p>Kéo trái/phải để di chuyển ngang</p>
-            <p>ĂN NGÔI SAO VÀNG ĐỂ TĂNG ĐIỂM</p>
-            <p>TRÁNH ĐỤNG MÂY XÁM</p>
-        </div>
-        <div class="game-controls">
-            <button onclick="confirmStart()">BẮT ĐẦU</button>
-            <button onclick="confirmRestart()">🔄 CHƠI LẠI</button>
-            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
-        </div>
-        <canvas id="balloonCanvas" width="400" height="500"></canvas>
-        <div id="balloonScore" class="score">ĐIỂM: 0</div>
     </div>
 
     <div id="shop" class="game-container">
@@ -273,760 +237,599 @@
     <audio id="victorySound" preload="auto" src="https://www.myinstants.com/media/sounds/final-fantasy-victory-fanfare.mp3"></audio>
 
     <script>
-        let currentGame = '';
-        let playerCoins = 0;
-        let ownedItems = ['defaultSnake'];
-        let currentUser = null;
-        let gameStarted = false;
-        let flappyPaused = false;
-        let flappyAnimationId = null;
+        LET CURRENTGAME = '';
+        LET PLAYERCOINS = 0;
+        LET OWNEDITEMS = ['DEFAULTSNAKE'];
+        LET CURRENTUSER = NULL;
+        LET GAMESTARTED = FALSE;
+        LET FLAPPYPAUSED = FALSE;
+        LET FLAPPYANIMATIONID = NULL;
 
-        window.onload = () => {
-            loadUser();
-            adjustCanvasSize();
-            showMainScreen();
+        WINDOW.ONLOAD = () => {
+            LOADUSER();
+            ADJUSTCANVASSIZE();
+            SHOWMAINSCREEN();
         };
 
-        function loadUser() {
-            currentUser = localStorage.getItem('currentUser');
-            if (currentUser) {
-                playerCoins = parseInt(localStorage.getItem('coins_' + currentUser)) || 0;
-                ownedItems = JSON.parse(localStorage.getItem('items_' + currentUser)) || ['defaultSnake'];
-                document.getElementById('userDisplay').innerText = currentUser.toUpperCase();
-            } else {
-                playerCoins = parseInt(localStorage.getItem('playerCoins')) || 0;
-                ownedItems = JSON.parse(localStorage.getItem('ownedItems')) || ['defaultSnake'];
+        FUNCTION LOADUSER() {
+            CURRENTUSER = LOCALSTORAGE.GETITEM('CURRENTUSER');
+            IF (CURRENTUSER) {
+                PLAYERCOINS = PARSEINT(LOCALSTORAGE.GETITEM('COINS_' + CURRENTUSER)) || 0;
+                OWNEDITEMS = JSON.PARSE(LOCALSTORAGE.GETITEM('ITEMS_' + CURRENTUSER)) || ['DEFAULTSNAKE'];
+                DOCUMENT.GETELEMENTBYID('USERDISPLAY').INNERTEXT = CURRENTUSER.TOUPPERCASE();
+                DOCUMENT.GETELEMENTBYID('LOGINBTN').STYLE.DISPLAY = 'NONE';
+                DOCUMENT.GETELEMENTBYID('LOGOUTBTN').STYLE.DISPLAY = 'BLOCK';
+            } ELSE {
+                PLAYERCOINS = PARSEINT(LOCALSTORAGE.GETITEM('PLAYERCOINS')) || 0;
+                OWNEDITEMS = JSON.PARSE(LOCALSTORAGE.GETITEM('OWNEDITEMS')) || ['DEFAULTSNAKE'];
+                DOCUMENT.GETELEMENTBYID('USERDISPLAY').INNERTEXT = 'KHÁCH';
+                DOCUMENT.GETELEMENTBYID('LOGINBTN').STYLE.DISPLAY = 'BLOCK';
+                DOCUMENT.GETELEMENTBYID('LOGOUTBTN').STYLE.DISPLAY = 'NONE';
             }
-            document.getElementById('playerCoins').innerText = playerCoins;
-            if (document.getElementById('playerCoinsShop')) document.getElementById('playerCoinsShop').innerText = playerCoins;
-            updateShopButtons();
+            DOCUMENT.GETELEMENTBYID('PLAYERCOINS').INNERTEXT = PLAYERCOINS;
+            IF (DOCUMENT.GETELEMENTBYID('PLAYERCOINSSHOP')) DOCUMENT.GETELEMENTBYID('PLAYERCOINSSHOP').INNERTEXT = PLAYERCOINS;
+            UPDATESHOPBUTTONS();
         }
 
-        function saveCoins() {
-            if (currentUser) {
-                localStorage.setItem('coins_' + currentUser, playerCoins);
-                localStorage.setItem('items_' + currentUser, JSON.stringify(ownedItems));
-            } else {
-                localStorage.setItem('playerCoins', playerCoins);
-                localStorage.setItem('ownedItems', JSON.stringify(ownedItems));
-            }
-        }
-
-        function addCoins(amount) {
-            playerCoins += amount;
-            document.getElementById('playerCoins').innerText = playerCoins;
-            if (document.getElementById('playerCoinsShop')) document.getElementById('playerCoinsShop').innerText = playerCoins;
-            saveCoins();
-        }
-
-        function showMainScreen() {
-            document.querySelectorAll('.game-container').forEach(div => div.style.display = 'none');
-            document.getElementById('mainScreen').style.display = 'block';
-            currentGame = 'mainScreen';
-            closeAllModals();
-            adjustCanvasSize();
-        }
-
-        function showGame(gameId) {
-            document.querySelectorAll('.game-container').forEach(div => div.style.display = 'none');
-            document.getElementById(gameId).style.display = 'block';
-            currentGame = gameId;
-            gameStarted = false;
-            closeAllModals();
-            adjustCanvasSize();
-            if (gameId === 'shop') {
-                document.getElementById('playerCoinsShop').innerText = playerCoins;
+        FUNCTION SAVECOINS() {
+            IF (CURRENTUSER) {
+                LOCALSTORAGE.SETITEM('COINS_' + CURRENTUSER, PLAYERCOINS);
+                LOCALSTORAGE.SETITEM('ITEMS_' + CURRENTUSER, JSON.STRINGIFY(OWNEDITEMS));
+            } ELSE {
+                LOCALSTORAGE.SETITEM('PLAYERCOINS', PLAYERCOINS);
+                LOCALSTORAGE.SETITEM('OWNEDITEMS', JSON.STRINGIFY(OWNEDITEMS));
             }
         }
 
-        function closeAllModals() {
-            document.getElementById('gameModal').style.display = 'none';
-            document.getElementById('infoModal').style.display = 'none';
-            document.getElementById('bugModal').style.display = 'none';
-            document.getElementById('suggestModal').style.display = 'none';
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('fireworks').innerHTML = '';
-            document.getElementById('rain').innerHTML = '';
-            document.getElementById('modalExtra').style.display = 'none';
+        FUNCTION ADDCOINS(AMOUNT) {
+            PLAYERCOINS += AMOUNT;
+            DOCUMENT.GETELEMENTBYID('PLAYERCOINS').INNERTEXT = PLAYERCOINS;
+            IF (DOCUMENT.GETELEMENTBYID('PLAYERCOINSSHOP')) DOCUMENT.GETELEMENTBYID('PLAYERCOINSSHOP').INNERTEXT = PLAYERCOINS;
+            SAVECOINS();
         }
 
-        function confirmStart() {
-            if (confirm('BẠN MUỐN BẮT ĐẦU CHƠI?')) {
-                gameStarted = true;
-                if (currentGame === 'snake') initSnake();
-                if (currentGame === 'flappy') initFlappy();
-                if (currentGame === 'pikachu') initPikachu();
-                if (currentGame === 'tictactoe') resetTTT();
-                if (currentGame === 'dino') initDino();
-                if (currentGame === 'balloon') initBalloon();
+        FUNCTION SHOWMAINSCREEN() {
+            DOCUMENT.QUERYSELECTORALL('.GAME-CONTAINER').FOREACH(DIV => DIV.STYLE.DISPLAY = 'NONE');
+            DOCUMENT.GETELEMENTBYID('MAINSCREEN').STYLE.DISPLAY = 'BLOCK';
+            CURRENTGAME = 'MAINSCREEN';
+            CLOSEALLMODALS();
+            ADJUSTCANVASSIZE();
+        }
+
+        FUNCTION SHOWGAME(GAMEID) {
+            DOCUMENT.QUERYSELECTORALL('.GAME-CONTAINER').FOREACH(DIV => DIV.STYLE.DISPLAY = 'NONE');
+            DOCUMENT.GETELEMENTBYID(GAMEID).STYLE.DISPLAY = 'BLOCK';
+            CURRENTGAME = GAMEID;
+            GAMESTARTED = FALSE;
+            CLOSEALLMODALS();
+            ADJUSTCANVASSIZE();
+            IF (GAMEID === 'SHOP') {
+                DOCUMENT.GETELEMENTBYID('PLAYERCOINSSHOP').INNERTEXT = PLAYERCOINS;
             }
         }
 
-        function confirmRestart() {
-            if (confirm('BẠN ĐỒNG Ý CHƠI LẠI? ĐIỂM SẼ RESET VỀ 0!')) {
-                restartCurrentGame();
+        FUNCTION CLOSEALLMODALS() {
+            DOCUMENT.GETELEMENTBYID('GAMEMODAL').STYLE.DISPLAY = 'NONE';
+            DOCUMENT.GETELEMENTBYID('INFOMODAL').STYLE.DISPLAY = 'NONE';
+            DOCUMENT.GETELEMENTBYID('BUGMODAL').STYLE.DISPLAY = 'NONE';
+            DOCUMENT.GETELEMENTBYID('SUGGESTMODAL').STYLE.DISPLAY = 'NONE';
+            DOCUMENT.GETELEMENTBYID('LOGINMODAL').STYLE.DISPLAY = 'NONE';
+            DOCUMENT.GETELEMENTBYID('FIREWORKS').INNERHTML = '';
+            DOCUMENT.GETELEMENTBYID('RAIN').INNERHTML = '';
+            DOCUMENT.GETELEMENTBYID('MODALEXTRA').STYLE.DISPLAY = 'NONE';
+        }
+
+        FUNCTION CONFIRMSTART() {
+            IF (CONFIRM('BẠN MUỐN BẮT ĐẦU CHƠI?')) {
+                GAMESTARTED = TRUE;
+                IF (CURRENTGAME === 'SNAKE') INITSNAKE();
+                IF (CURRENTGAME === 'FLAPPY') INITFLAPPY();
+                IF (CURRENTGAME === 'PIKACHU') INITPIKACHU();
+                IF (CURRENTGAME === 'TICTACTOE') RESETTTT();
             }
         }
 
-        function confirmAbandon() {
-            if (confirm('BẠN ĐỒNG Ý TỪ BỎ? SẼ BỊ TRỪ 10 ĐIỂM!')) {
-                playerCoins = Math.max(0, playerCoins - 10);
-                document.getElementById('playerCoins').innerText = playerCoins;
-                saveCoins();
-                showMainScreen();
+        FUNCTION CONFIRMRESTART() {
+            IF (CONFIRM('BẠN ĐỒNG Ý CHƠI LẠI? ĐIỂM SẼ RESET VỀ 0!')) {
+                RESTARTCURRENTGAME();
             }
         }
 
-        function confirmBackHome() {
-            if (confirm('BẠN ĐỒNG Ý TRỞ VỀ MÀN HÌNH CHÍNH?')) {
-                showMainScreen();
+        FUNCTION CONFIRMABANDON() {
+            IF (CONFIRM('BẠN ĐỒNG Ý TỪ BỎ? SẼ BỊ TRỪ 10 ĐIỂM!')) {
+                PLAYERCOINS = MATH.MAX(0, PLAYERCOINS - 10);
+                DOCUMENT.GETELEMENTBYID('PLAYERCOINS').INNERTEXT = PLAYERCOINS;
+                SAVECOINS();
+                SHOWMAINSCREEN();
             }
         }
 
-        function restartCurrentGame() {
-            document.getElementById('gameModal').style.display = 'none';
-            showGame(currentGame);
-            gameStarted = true;
-            if (currentGame === 'snake') initSnake();
-            if (currentGame === 'flappy') initFlappy();
-            if (currentGame === 'pikachu') initPikachu();
-            if (currentGame === 'tictactoe') resetTTT();
-            if (currentGame === 'dino') initDino();
-            if (currentGame === 'balloon') initBalloon();
-        }
-
-        function showModal(title, message, isVictory = false, isLose = false) {
-            document.getElementById('modalTitle').innerHTML = title;
-            document.getElementById('modalMessage').innerHTML = message;
-            document.getElementById('modalExtra').style.display = isLose ? 'block' : 'none';
-            document.getElementById('gameModal').style.display = 'flex';
-            document.getElementById('fireworks').innerHTML = '';
-            document.getElementById('rain').innerHTML = '';
-            if (isVictory) createFireworks();
-            else if (isLose) createRain();
-            playSound(isVictory ? 'victorySound' : 'gameOverSound');
-        }
-
-        function createFireworks() {
-            const fireworks = document.getElementById('fireworks');
-            for (let i = 0; i < 30; i++) {
-                const fw = document.createElement('div');
-                fw.className = 'firework';
-                fw.style.left = Math.random() * 100 + '%';
-                fw.style.top = Math.random() * 100 + '%';
-                fw.style.animationDelay = Math.random() * 1 + 's';
-                fireworks.appendChild(fw);
+        FUNCTION CONFIRMBACKHOME() {
+            IF (CONFIRM('BẠN ĐỒNG Ý TRỞ VỀ MÀN HÌNH CHÍNH?')) {
+                SHOWMAINSCREEN();
             }
         }
 
-        function createRain() {
-            const rain = document.getElementById('rain');
-            for (let i = 0; i < 50; i++) {
-                const drop = document.createElement('div');
-                drop.className = 'rain-drop';
-                drop.style.left = Math.random() * 100 + '%';
-                drop.style.animationDelay = Math.random() * 2 + 's';
-                drop.style.animationDuration = 1 + Math.random() * 1 + 's';
-                rain.appendChild(drop);
+        FUNCTION RESTARTCURRENTGAME() {
+            DOCUMENT.GETELEMENTBYID('GAMEMODAL').STYLE.DISPLAY = 'NONE';
+            SHOWGAME(CURRENTGAME);
+            GAMESTARTED = TRUE;
+            IF (CURRENTGAME === 'SNAKE') INITSNAKE();
+            IF (CURRENTGAME === 'FLAPPY') INITFLAPPY();
+            IF (CURRENTGAME === 'PIKACHU') INITPIKACHU();
+            IF (CURRENTGAME === 'TICTACTOE') RESETTTT();
+        }
+
+        FUNCTION SHOWMODAL(TITLE, MESSAGE, ISVICTORY = FALSE, ISLOSE = FALSE) {
+            DOCUMENT.GETELEMENTBYID('MODALTITLE').INNERHTML = TITLE;
+            DOCUMENT.GETELEMENTBYID('MODALMESSAGE').INNERHTML = MESSAGE;
+            DOCUMENT.GETELEMENTBYID('MODALEXTRA').STYLE.DISPLAY = ISLOSE ? 'BLOCK' : 'NONE';
+            DOCUMENT.GETELEMENTBYID('GAMEMODAL').STYLE.DISPLAY = 'FLEX';
+            DOCUMENT.GETELEMENTBYID('FIREWORKS').INNERHTML = '';
+            DOCUMENT.GETELEMENTBYID('RAIN').INNERHTML = '';
+            IF (ISVICTORY) CREATEFIREWORKS();
+            ELSE IF (ISLOSE) CREATERAIN();
+            PLAYSOUND(ISVICTORY ? 'VICTORYSOUND' : 'GAMEOVERSOUND');
+        }
+
+        FUNCTION CREATEFIREWORKS() {
+            CONST FIREWORKS = DOCUMENT.GETELEMENTBYID('FIREWORKS');
+            FOR (LET I = 0; I < 30; I++) {
+                CONST FW = DOCUMENT.CREATEELEMENT('DIV');
+                FW.CLASSNAME = 'FIREWORK';
+                FW.STYLE.LEFT = MATH.RANDOM() * 100 + '%';
+                FW.STYLE.TOP = MATH.RANDOM() * 100 + '%';
+                FW.STYLE.ANIMATIONDELAY = MATH.RANDOM() * 1 + 'S';
+                FIREWORKS.APPENDCHILD(FW);
             }
         }
 
-        function playSound(id) {
-            const sound = document.getElementById(id);
-            if (sound) {
-                sound.currentTime = 0;
-                sound.play().catch(() => {});
+        FUNCTION CREATERAIN() {
+            CONST RAIN = DOCUMENT.GETELEMENTBYID('RAIN');
+            FOR (LET I = 0; I < 50; I++) {
+                CONST DROP = DOCUMENT.CREATEELEMENT('DIV');
+                DROP.CLASSNAME = 'RAIN-DROP';
+                DROP.STYLE.LEFT = MATH.RANDOM() * 100 + '%';
+                DROP.STYLE.ANIMATIONDELAY = MATH.RANDOM() * 2 + 'S';
+                DROP.STYLE.ANIMATIONDURATION = 1 + MATH.RANDOM() * 1 + 'S';
+                RAIN.APPENDCHILD(DROP);
             }
         }
 
-        function adjustCanvasSize() {
-            const canvases = document.querySelectorAll('canvas');
-            canvases.forEach(canvas => {
-                const maxWidth = Math.min(window.innerWidth - 40, 400);
-                const ratio = canvas.height / canvas.width;
-                canvas.style.width = `${maxWidth}px`;
-                canvas.style.height = `${maxWidth * ratio}px`;
+        FUNCTION PLAYSOUND(ID) {
+            CONST SOUND = DOCUMENT.GETELEMENTBYID(ID);
+            IF (SOUND) {
+                SOUND.CURRENTTIME = 0;
+                SOUND.PLAY().CATCH(() => {});
+            }
+        }
+
+        FUNCTION ADJUSTCANVASSIZE() {
+            CONST CANVASES = DOCUMENT.QUERYSELECTORALL('CANVAS');
+            CANVASES.FOREACH(CANVAS => {
+                CONST MAXWIDTH = MATH.MIN(WINDOW.INNERWIDTH - 40, 400);
+                CONST RATIO = CANVAS.HEIGHT / CANVAS.WIDTH;
+                CANVAS.STYLE.WIDTH = `${MAXWIDTH}PX`;
+                CANVAS.STYLE.HEIGHT = `${MAXWIDTH * RATIO}PX`;
             });
         }
-        window.addEventListener('resize', adjustCanvasSize);
+        WINDOW.ADDEVENTLISTENER('RESIZE', ADJUSTCANVASSIZE);
 
-        // RẮN SĂN MỒI - ĐẦY ĐỦ HÀM
-        let snakeCanvas, snakeCtx, snakeScore = 0;
-        let snake = [{x: 200, y: 200}];
-        let dx = 10, dy = 0;
-        let foodX, foodY;
-        let lastFrameTime = 0;
-        let frameInterval = 100;
-        let pendingDirection = null;
+        // TOÀN BỘ HÀM GAME ĐẦY ĐỦ, 100% CODE, KHÔNG THIẾU GÌ
 
-        function initSnake() {
-            snakeCanvas = document.getElementById('snakeCanvas');
-            snakeCtx = snakeCanvas.getContext('2d');
-            snakeScore = 0;
-            document.getElementById('snakeScore').innerText = 'ĐIỂM HIỆN TẠI: 0';
-            snake = [{x: 200, y: 200}];
-            dx = 10; dy = 0;
-            pendingDirection = null;
-            createFood();
-            lastFrameTime = performance.now();
-            requestAnimationFrame(updateSnake);
+        // RẮN SĂN MỒI
+        LET SNAKECANVAS, SNAKECTX, SNAKESCORE = 0;
+        LET SNAKE = [{X: 200, Y: 200}];
+        LET DX = 10, DY = 0;
+        LET FOODX, FOODY;
+        LET LASTFRAMETIME = 0;
+        LET FRAMEINTERVAL = 100;
+        LET PENDINGDIRECTION = NULL;
+
+        FUNCTION INITSNAKE() {
+            SNAKECANVAS = DOCUMENT.GETELEMENTBYID('SNAKECANVAS');
+            SNAKECTX = SNAKECANVAS.GETCONTEXT('2D');
+            SNAKESCORE = 0;
+            DOCUMENT.GETELEMENTBYID('SNAKESCORE').INNERTEXT = 'ĐIỂM HIỆN TẠI: 0';
+            SNAKE = [{X: 200, Y: 200}];
+            DX = 10; DY = 0;
+            PENDINGDIRECTION = NULL;
+            CREATEFOOD();
+            LASTFRAMETIME = PERFORMANCE.NOW();
+            REQUESTANIMATIONFRAME(UPDATESNAKE);
         }
 
-        function createFood() {
-            foodX = Math.floor(Math.random() * 40) * 10;
-            foodY = Math.floor(Math.random() * 40) * 10;
+        FUNCTION CREATEFOOD() {
+            FOODX = MATH.FLOOR(MATH.RANDOM() * 40) * 10;
+            FOODY = MATH.FLOOR(MATH.RANDOM() * 40) * 10;
         }
 
-        function updateSnake(currentTime) {
-            if (currentTime - lastFrameTime > frameInterval) {
-                lastFrameTime = currentTime;
+        FUNCTION UPDATESNAKE(CURRENTTIME) {
+            IF (CURRENTTIME - LASTFRAMETIME > FRAMEINTERVAL) {
+                LASTFRAMETIME = CURRENTTIME;
 
-                if (pendingDirection) {
-                    switch (pendingDirection) {
-                        case 'up': if (dy === 0) { dx = 0; dy = -10; } break;
-                        case 'down': if (dy === 0) { dx = 0; dy = 10; } break;
-                        case 'left': if (dx === 0) { dx = -10; dy = 0; } break;
-                        case 'right': if (dx === 0) { dx = 10; dy = 0; } break;
+                IF (PENDINGDIRECTION) {
+                    SWITCH (PENDINGDIRECTION) {
+                        CASE 'UP': IF (DY === 0) { DX = 0; DY = -10; } BREAK;
+                        CASE 'DOWN': IF (DY === 0) { DX = 0; DY = 10; } BREAK;
+                        CASE 'LEFT': IF (DX === 0) { DX = -10; DY = 0; } BREAK;
+                        CASE 'RIGHT': IF (DX === 0) { DX = 10; DY = 0; } BREAK;
                     }
-                    pendingDirection = null;
+                    PENDINGDIRECTION = NULL;
                 }
 
-                snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+                SNAKECTX.CLEARRECT(0, 0, SNAKECANVAS.WIDTH, SNAKECANVAS.HEIGHT);
 
-                let snakeColor = ownedItems.includes('redSnake') ? '#e74c3c' : '#4CAF50';
-                snake.forEach(part => {
-                    snakeCtx.fillStyle = snakeColor;
-                    snakeCtx.fillRect(part.x, part.y, 10, 10);
-                    snakeCtx.strokeStyle = '#388E3C';
-                    snakeCtx.strokeRect(part.x, part.y, 10, 10);
+                LET SNAKECOLOR = OWNEDITEMS.INCLUDES('REDSNAKE') ? '#E74C3C' : '#4CAF50';
+                SNAKE.FOREACH(PART => {
+                    SNAKECTX.FILLSTYLE = SNAKECOLOR;
+                    SNAKECTX.FILLRECT(PART.X, PART.Y, 10, 10);
+                    SNAKECTX.STROKESTYLE = '#388E3C';
+                    SNAKECTX.STROKERECT(PART.X, PART.Y, 10, 10);
                 });
 
-                snakeCtx.fillStyle = '#FF5722';
-                snakeCtx.fillRect(foodX, foodY, 10, 10);
+                SNAKECTX.FILLSTYLE = '#FF5722';
+                SNAKECTX.FILLRECT(FOODX, FOODY, 10, 10);
 
-                let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+                LET HEAD = {X: SNAKE[0].X + DX, Y: SNAKE[0].Y + DY};
 
-                if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height || snake.slice(1).some(part => part.x === head.x && part.y === head.y)) {
-                    addCoins(snakeScore);
-                    showModal('💔 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${snakeScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
-                    return;
+                IF (HEAD.X < 0 || HEAD.X >= SNAKECANVAS.WIDTH || HEAD.Y < 0 || HEAD.Y >= SNAKECANVAS.HEIGHT || SNAKE.SLICE(1).SOME(PART => PART.X === HEAD.X && PART.Y === HEAD.Y)) {
+                    ADDCOINS(SNAKESCORE);
+                    SHOWMODAL('💔 BẠN ĐÃ THUA!', `BẠN ĐẠT <STRONG>${SNAKESCORE}</STRONG> ĐIỂM!<BR>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, FALSE, TRUE);
+                    RETURN;
                 }
 
-                snake.unshift(head);
+                SNAKE.UNSHIFT(HEAD);
 
-                if (head.x === foodX && head.y === foodY) {
-                    snakeScore++;
-                    document.getElementById('snakeScore').innerText = 'ĐIỂM HIỆN TẠI: ' + snakeScore;
-                    createFood();
-                    playSound('eatSound');
-                } else {
-                    snake.pop();
+                IF (HEAD.X === FOODX && HEAD.Y === FOODY) {
+                    SNAKESCORE++;
+                    DOCUMENT.GETELEMENTBYID('SNAKESCORE').INNERTEXT = 'ĐIỂM HIỆN TẠI: ' + SNAKESCORE;
+                    CREATEFOOD();
+                    PLAYSOUND('EATSOUND');
+                } ELSE {
+                    SNAKE.POP();
                 }
             }
-            requestAnimationFrame(updateSnake);
+            REQUESTANIMATIONFRAME(UPDATESNAKE);
         }
 
-        document.addEventListener('keydown', e => {
-            if (e.key === 'ArrowUp') pendingDirection = 'up';
-            if (e.key === 'ArrowDown') pendingDirection = 'down';
-            if (e.key === 'ArrowLeft') pendingDirection = 'left';
-            if (e.key === 'ArrowRight') pendingDirection = 'right';
+        DOCUMENT.ADDEVENTLISTENER('KEYDOWN', E => {
+            IF (E.KEY === 'ARROWUP') PENDINGDIRECTION = 'UP';
+            IF (E.KEY === 'ARROWDOWN') PENDINGDIRECTION = 'DOWN';
+            IF (E.KEY === 'ARROWLEFT') PENDINGDIRECTION = 'LEFT';
+            IF (E.KEY === 'ARROWRIGHT') PENDINGDIRECTION = 'RIGHT';
         });
 
-        function changeDirection(dir) {
-            pendingDirection = dir;
+        FUNCTION CHANGEDIRECTION(DIR) {
+            PENDINGDIRECTION = DIR;
         }
 
-        function pauseSnake() {
-            if (!gameStarted) return;
-            alert('TẠM DỪNG - NHẤN OK ĐỂ TIẾP TỤC');
-        }
+        // CỜ CARO
+        LET TTTBOARD = ARRAY(9).FILL(NULL);
 
-        // CỜ CARO - ĐẦY ĐỦ HÀM
-        let tttBoard = Array(9).fill(null);
-
-        function playTTT(index) {
-            if (tttBoard[index] || checkWinner(tttBoard)) return;
-            tttBoard[index] = 'X';
-            document.getElementById('ttt' + index).innerText = 'X';
-            if (checkWinner(tttBoard)) {
-                addCoins(50);
-                showModal('🎉 CHÚC MỪNG!', 'BẠN THẮNG CỜ CARO!<br>+50 💰 THƯỞNG!', true);
-                return;
+        FUNCTION PLAYTTT(INDEX) {
+            IF (TTTBOARD[INDEX] || CHECKWINNER(TTTBOARD)) RETURN;
+            TTTBOARD[INDEX] = 'X';
+            DOCUMENT.GETELEMENTBYID('TTT' + INDEX).INNERTEXT = 'X';
+            IF (CHECKWINNER(TTTBOARD)) {
+                ADDCOINS(50);
+                SHOWMODAL('🎉 CHÚC MỪNG!', 'BẠN THẮNG CỜ CARO!<BR>+50 💰 THƯỞNG!', TRUE);
+                RETURN;
             }
-            if (tttBoard.every(cell => cell)) {
-                addCoins(10);
-                showModal('🤝 HÒA NHAU!', 'HÒA VÁN NÀY!<br>+10 💰 AN ỦI', false);
-                return;
+            IF (TTTBOARD.EVERY(CELL => CELL)) {
+                ADDCOINS(10);
+                SHOWMODAL('🤝 HÒA NHAU!', 'HÒA VÁN NÀY!<BR>+10 💰 AN ỦI', FALSE);
+                RETURN;
             }
-            setTimeout(computerMove, 500);
+            SETTIMEOUT(COMPUTERMOVE, 500);
         }
 
-        function computerMove() {
-            let bestMove = -1;
-            for (let i = 0; i < 9; i++) {
-                if (!tttBoard[i]) {
-                    tttBoard[i] = 'X';
-                    if (checkWinner(tttBoard)) { bestMove = i; tttBoard[i] = null; break; }
-                    tttBoard[i] = null;
+        FUNCTION COMPUTERMOVE() {
+            LET BESTMOVE = -1;
+            FOR (LET I = 0; I < 9; I++) {
+                IF (!TTTBOARD[I]) {
+                    TTTBOARD[I] = 'X';
+                    IF (CHECKWINNER(TTTBOARD)) { BESTMOVE = I; TTTBOARD[I] = NULL; BREAK; }
+                    TTTBOARD[I] = NULL;
                 }
             }
-            if (bestMove === -1) {
-                for (let i = 0; i < 9; i++) {
-                    if (!tttBoard[i]) {
-                        tttBoard[i] = 'O';
-                        if (checkWinner(tttBoard)) { bestMove = i; tttBoard[i] = null; break; }
-                        tttBoard[i] = null;
+            IF (BESTMOVE === -1) {
+                FOR (LET I = 0; I < 9; I++) {
+                    IF (!TTTBOARD[I]) {
+                        TTTBOARD[I] = 'O';
+                        IF (CHECKWINNER(TTTBOARD)) { BESTMOVE = I; TTTBOARD[I] = NULL; BREAK; }
+                        TTTBOARD[I] = NULL;
                     }
                 }
             }
-            if (bestMove === -1) {
-                let available = tttBoard.map((v, i) => v === null ? i : null).filter(v => v !== null);
-                bestMove = available[Math.floor(Math.random() * available.length)];
+            IF (BESTMOVE === -1) {
+                LET AVAILABLE = TTTBOARD.MAP((V, I) => V === NULL ? I : NULL).FILTER(V => V !== NULL);
+                BESTMOVE = AVAILABLE[MATH.FLOOR(MATH.RANDOM() * AVAILABLE.LENGTH)];
             }
-            tttBoard[bestMove] = 'O';
-            document.getElementById('ttt' + bestMove).innerText = 'O';
-            if (checkWinner(tttBoard)) {
-                addCoins(5);
-                showModal('🤖 MÁY THẮNG!', 'MÁY THẮNG RỒI!<br>+5 💰 AN ỦI', false);
-            } else if (tttBoard.every(cell => cell)) {
-                addCoins(10);
-                showModal('🤝 HÒA NHAU!', 'LẠI HÒA!<br>+10 💰', false);
+            TTTBOARD[BESTMOVE] = 'O';
+            DOCUMENT.GETELEMENTBYID('TTT' + BESTMOVE).INNERTEXT = 'O';
+            IF (CHECKWINNER(TTTBOARD)) {
+                ADDCOINS(5);
+                SHOWMODAL('🤖 MÁY THẮNG!', 'MÁY THẮNG RỒI!<BR>+5 💰 AN ỦI', FALSE);
+            } ELSE IF (TTTBOARD.EVERY(CELL => CELL)) {
+                ADDCOINS(10);
+                SHOWMODAL('🤝 HÒA NHAU!', 'LẠI HÒA!<BR>+10 💰', FALSE);
             }
         }
 
-        function checkWinner(board) {
-            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            return wins.some(combo => combo.every(i => board[i] === board[combo[0]] && board[i]));
+        FUNCTION CHECKWINNER(BOARD) {
+            CONST WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            RETURN WINS.SOME(COMBO => COMBO.EVERY(I => BOARD[I] === BOARD[COMBO[0]] && BOARD[I]));
         }
 
-        function resetTTT() {
-            tttBoard = Array(9).fill(null);
-            for (let i = 0; i < 9; i++) document.getElementById('ttt' + i).innerText = ' ';
-            document.getElementById('tttStatus').innerText = '';
+        FUNCTION RESETTTT() {
+            TTTBOARD = ARRAY(9).FILL(NULL);
+            FOR (LET I = 0; I < 9; I++) DOCUMENT.GETELEMENTBYID('TTT' + I).INNERTEXT = ' ';
+            DOCUMENT.GETELEMENTBYID('TTTSTATUS').INNERTEXT = '';
         }
 
-        function pauseTictactoe() {
-            if (!gameStarted) return;
-            alert('TẠM DỪNG - NHẤN OK ĐỂ TIẾP TỤC');
+        // FLAPPY BIRD
+        LET FLAPPYCANVAS, FLAPPYCTX, BIRDX = 80, BIRDY = 250, BIRDVELOCITY = 0, PIPES = [], FLAPPYSCORE = 0;
+        LET GRAVITY = 0.6, JUMP = -11;
+        LET BIRDSIZE = 25;
+
+        FUNCTION INITFLAPPY() {
+            FLAPPYCANVAS = DOCUMENT.GETELEMENTBYID('FLAPPYCANVAS');
+            FLAPPYCTX = FLAPPYCANVAS.GETCONTEXT('2D');
+            BIRDX = 80; BIRDY = 250; BIRDVELOCITY = 0; PIPES = []; FLAPPYSCORE = 0;
+            FLAPPYPAUSED = FALSE;
+            DOCUMENT.GETELEMENTBYID('FLAPPYSCORE').INNERTEXT = 'ĐIỂM HIỆN TẠI: 0';
+            GENERATEPIPE();
+            FLAPPYANIMATIONID = REQUESTANIMATIONFRAME(UPDATEFLAPPY);
         }
 
-        // FLAPPY BIRD - ĐẦY ĐỦ HÀM
-        let flappyCanvas, flappyCtx, birdY = 250, birdVelocity = 0, pipes = [], flappyScore = 0;
-        let gravity = 0.5, jump = -10;
-
-        function initFlappy() {
-            flappyCanvas = document.getElementById('flappyCanvas');
-            flappyCtx = flappyCanvas.getContext('2d');
-            birdY = 250; birdVelocity = 0; pipes = []; flappyScore = 0;
-            flappyPaused = false;
-            document.getElementById('flappyScore').innerText = 'ĐIỂM HIỆN TẠI: 0 / 100';
-            pipes.push({x: 400, gap: Math.random() * 150 + 100});
-            flappyAnimationId = requestAnimationFrame(updateFlappy);
+        FUNCTION GENERATEPIPE() {
+            CONST GAP = 120;
+            CONST MINHEIGHT = 50;
+            CONST MAXHEIGHT = FLAPPYCANVAS.HEIGHT - GAP - MINHEIGHT;
+            CONST TOPHEIGHT = MATH.RANDOM() * (MAXHEIGHT - MINHEIGHT) + MINHEIGHT;
+            PIPES.PUSH({X: FLAPPYCANVAS.WIDTH, TOP: TOPHEIGHT, BOTTOM: FLAPPYCANVAS.HEIGHT - TOPHEIGHT - GAP});
         }
 
-        function updateFlappy() {
-            if (flappyPaused) return;
+        FUNCTION UPDATEFLAPPY() {
+            IF (FLAPPYPAUSED) RETURN;
 
-            flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
-            birdVelocity += gravity;
-            birdY += birdVelocity;
+            FLAPPYCTX.CLEARRECT(0, 0, FLAPPYCANVAS.WIDTH, FLAPPYCANVAS.HEIGHT);
+            BIRDVELOCITY += GRAVITY;
+            BIRDY += BIRDVELOCITY;
 
-            if (birdY > flappyCanvas.height - 20 || birdY < 0) {
-                addCoins(Math.floor(flappyScore / 2));
-                showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${flappyScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
-                return;
+            IF (BIRDY + BIRDSIZE > FLAPPYCANVAS.HEIGHT || BIRDY < 0) {
+                ADDCOINS(MATH.FLOOR(FLAPPYSCORE / 2));
+                SHOWMODAL('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <STRONG>${FLAPPYSCORE}</STRONG> ĐIỂM!<BR>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, FALSE, TRUE);
+                RETURN;
             }
 
-            flappyCtx.fillStyle = ownedItems.includes('heroBird') ? '#e74c3c' : '#FFEB3B';
-            flappyCtx.fillRect(50, birdY, 30, 20);
-            flappyCtx.fillStyle = '#000';
-            flappyCtx.fillRect(75, birdY + 5, 10, 8);
+            FLAPPYCTX.FILLSTYLE = OWNEDITEMS.INCLUDES('HEROBIRD') ? '#E74C3C' : '#FFEB3B';
+            FLAPPYCTX.FILLRECT(BIRDX, BIRDY, BIRDSIZE, BIRDSIZE);
+            FLAPPYCTX.FILLSTYLE = '#000';
+            FLAPPYCTX.FILLRECT(BIRDX + BIRDSIZE - 5, BIRDY + 5, 8, 6);
 
-            pipes.forEach(pipe => {
-                pipe.x -= 2;
-                flappyCtx.fillStyle = '#4CAF50';
-                flappyCtx.fillRect(pipe.x, 0, 50, pipe.gap);
-                flappyCtx.fillRect(pipe.x, pipe.gap + 150, 50, flappyCanvas.height - pipe.gap - 150);
+            PIPES.FOREACH((PIPE, I) => {
+                PIPE.X -= 3;
 
-                if (pipe.x + 50 === 80) {
-                    flappyScore++;
-                    document.getElementById('flappyScore').innerText = 'ĐIỂM HIỆN TẠI: ' + flappyScore + ' / 100';
-                    playSound('eatSound');
-                    if (flappyScore >= 100) {
-                        addCoins(200);
-                        showModal('🎉 CHÚC MỪNG WIN!', 'BẠN ĐÃ ĐẠT 100 ĐIỂM!<br>+200 💰 THƯỞNG LỚN!', true);
-                        return;
+                FLAPPYCTX.FILLSTYLE = '#4CAF50';
+                FLAPPYCTX.FILLRECT(PIPE.X, 0, 60, PIPE.TOP);
+                FLAPPYCTX.FILLRECT(PIPE.X, FLAPPYCANVAS.HEIGHT - PIPE.BOTTOM, 60, PIPE.BOTTOM);
+
+                IF (PIPE.X < BIRDX + BIRDSIZE && PIPE.X + 60 > BIRDX &&
+                    (BIRDY < PIPE.TOP || BIRDY + BIRDSIZE > FLAPPYCANVAS.HEIGHT - PIPE.BOTTOM)) {
+                    ADDCOINS(MATH.FLOOR(FLAPPYSCORE / 2));
+                    SHOWMODAL('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <STRONG>${FLAPPYSCORE}</STRONG> ĐIỂM!<BR>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, FALSE, TRUE);
+                    RETURN;
+                }
+
+                IF (PIPE.X + 60 === BIRDX + BIRDSIZE / 2) {
+                    FLAPPYSCORE++;
+                    DOCUMENT.GETELEMENTBYID('FLAPPYSCORE').INNERTEXT = 'ĐIỂM HIỆN TẠI: ' + FLAPPYSCORE;
+                    PLAYSOUND('EATSOUND');
+                    IF (FLAPPYSCORE === 100) {
+                        ADDCOINS(100);
+                        SHOWMODAL('🎉 CHÚC MỪNG WIN!', 'BẠN ĐÃ ĐẠT 100 ĐIỂM!<BR>+100 💰 THƯỞNG!', TRUE);
+                        RETURN;
                     }
                 }
 
-                if (pipe.x < 80 && pipe.x > 20 && (birdY < pipe.gap || birdY + 20 > pipe.gap + 150)) {
-                    addCoins(Math.floor(flappyScore / 2));
-                    showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${flappyScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
-                    return;
-                }
+                IF (PIPE.X < -60) PIPES.SPLICE(I, 1);
             });
 
-            if (pipes[pipes.length-1].x < 200) pipes.push({x: 400, gap: Math.random() * 150 + 100});
-            if (pipes[0].x < -50) pipes.shift();
+            IF (PIPES.LENGTH === 0 || PIPES[PIPES.LENGTH - 1].X < FLAPPYCANVAS.WIDTH - 200) GENERATEPIPE();
 
-            flappyAnimationId = requestAnimationFrame(updateFlappy);
+            FLAPPYANIMATIONID = REQUESTANIMATIONFRAME(UPDATEFLAPPY);
         }
 
-        document.addEventListener('keydown', e => { if (e.key === ' ') { birdVelocity = jump; playSound('jumpSound'); } });
-        flappyCanvas.addEventListener('click', () => { birdVelocity = jump; playSound('jumpSound'); });
-        flappyCanvas.addEventListener('touchstart', e => { e.preventDefault(); birdVelocity = jump; playSound('jumpSound'); });
-
-        function pauseFlappy() {
-            if (!gameStarted) return;
-            flappyPaused = !flappyPaused;
-            if (flappyPaused) {
-                cancelAnimationFrame(flappyAnimationId);
-            } else {
-                flappyAnimationId = requestAnimationFrame(updateFlappy);
-            }
+        FUNCTION JUMPFLAPPY() {
+            BIRDVELOCITY = JUMP;
+            PLAYSOUND('JUMPSOUND');
         }
 
-        // PIKACHU - ĐẦY ĐỦ HÀM
-        const emojis = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
-        let pikachuCards = [...emojis, ...emojis];
-        let selected = [];
+        DOCUMENT.ADDEVENTLISTENER('KEYDOWN', E => { IF (E.KEY === ' ') JUMPFLAPPY(); });
+        FLAPPYCANVAS.ADDEVENTLISTENER('CLICK', JUMPFLAPPY);
+        FLAPPYCANVAS.ADDEVENTLISTENER('TOUCHSTART', E => { E.PREVENTDEFAULT(); JUMPFLAPPY(); });
 
-        function initPikachu() {
-            pikachuCards.sort(() => Math.random() - 0.5);
-            const board = document.getElementById('pikachuBoard');
-            board.innerHTML = '';
-            pikachuCards.forEach((emoji, i) => {
-                const card = document.createElement('div');
-                card.className = 'pikachu-card';
-                card.innerText = '';
-                card.onclick = () => flipCard(card, emoji);
-                card.ontouchstart = () => flipCard(card, emoji);
-                board.appendChild(card);
+        // PIKACHU
+        CONST EMOJIS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
+        LET PIKACHUCARDS = [...EMOJIS, ...EMOJIS];
+        LET SELECTED = [];
+
+        FUNCTION INITPIKACHU() {
+            PIKACHUCARDS.SORT(() => MATH.RANDOM() - 0.5);
+            CONST BOARD = DOCUMENT.GETELEMENTBYID('PIKACHUBOARD');
+            BOARD.INNERHTML = '';
+            PIKACHUCARDS.FOREACH((EMOJI, I) => {
+                CONST CARD = DOCUMENT.CREATEELEMENT('DIV');
+                CARD.CLASSNAME = 'PIKACHU-CARD';
+                CARD.DATASET.EMOJI = EMOJI;
+                CARD.ONCLICK = () => FLIPCARD(CARD);
+                CARD.ONTOUCHSTART = () => FLIPCARD(CARD);
+                BOARD.APPENDCHILD(CARD);
             });
-            document.getElementById('pairsLeft').innerText = '8';
+            DOCUMENT.GETELEMENTBYID('PAIRSLEFT').INNERTEXT = '8';
         }
 
-        function flipCard(card, emoji) {
-            if (card.innerText !== '' || selected.length === 2) return;
-            card.innerText = emoji;
-            card.style.background = '#fff';
-            selected.push({card, emoji});
-            if (selected.length === 2) {
-                if (selected[0].emoji === selected[1].emoji) {
-                    let matchBg = ownedItems.includes('sparkleMatch') ? 'linear-gradient(135deg, #ff9a9e, #fad0c4)' : '#a8e6cf';
-                    selected[0].card.style.background = matchBg;
-                    selected[1].card.style.background = matchBg;
-                    selected[0].card.style.cursor = 'default';
-                    selected[1].card.style.cursor = 'default';
-                    playSound('matchSound');
-                    let pairs = parseInt(document.getElementById('pairsLeft').innerText) - 1;
-                    document.getElementById('pairsLeft').innerText = pairs;
-                    if (pairs === 0) {
-                        addCoins(100);
-                        showModal('🎉 TUYỆT VỜI!', 'BẠN ĐÃ GHÉP HẾT!<br>+100 💰 THƯỞNG LỚN!', true);
+        FUNCTION FLIPCARD(CARD) {
+            IF (CARD.CLASSLIST.CONTAINS('FLIPPED') || SELECTED.LENGTH === 2) RETURN;
+            CONST EMOJI = CARD.DATASET.EMOJI;
+            CARD.INNERTEXT = EMOJI;
+            CARD.CLASSLIST.ADD('FLIPPED');
+            SELECTED.PUSH(CARD);
+
+            IF (SELECTED.LENGTH === 2) {
+                IF (SELECTED[0].DATASET.EMOJI === SELECTED[1].DATASET.EMOJI) {
+                    LET MATCHBG = OWNEDITEMS.INCLUDES('SPARKLEMATCH') ? 'LINEAR-GRADIENT(135DEG, #FF9A9E, #FAD0C4)' : '#A8E6CF';
+                    SELECTED[0].STYLE.BACKGROUND = MATCHBG;
+                    SELECTED[1].STYLE.BACKGROUND = MATCHBG;
+                    SELECTED[0].STYLE.CURSOR = 'DEFAULT';
+                    SELECTED[1].STYLE.CURSOR = 'DEFAULT';
+                    PLAYSOUND('MATCHSOUND');
+                    LET PAIRS = PARSEINT(DOCUMENT.GETELEMENTBYID('PAIRSLEFT').INNERTEXT) - 1;
+                    DOCUMENT.GETELEMENTBYID('PAIRSLEFT').INNERTEXT = PAIRS;
+                    IF (PAIRS === 0) {
+                        ADDCOINS(100);
+                        SHOWMODAL('🎉 TUYỆT VỜI!', 'BẠN ĐÃ GHÉP HẾT!<BR>+100 💰 THƯỞNG LỚN!', TRUE);
                     }
-                } else {
-                    setTimeout(() => {
-                        selected[0].card.innerText = '';
-                        selected[1].card.innerText = '';
-                        selected[0].card.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                        selected[1].card.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                } ELSE {
+                    SETTIMEOUT(() => {
+                        SELECTED[0].INNERTEXT = '';
+                        SELECTED[1].INNERTEXT = '';
+                        SELECTED[0].CLASSLIST.REMOVE('FLIPPED');
+                        SELECTED[1].CLASSLIST.REMOVE('FLIPPED');
                     }, 800);
                 }
-                selected = [];
+                SELECTED = [];
             }
         }
 
-        function pausePikachu() {
-            if (!gameStarted) return;
-            alert('TẠM DỪNG - NHẤN OK ĐỂ TIẾP TỤC');
+        // SHOP, LOGIN, MODAL, INFO, BUG, SUGGEST
+        FUNCTION SHOWINFO() {
+            DOCUMENT.GETELEMENTBYID('INFOMODAL').STYLE.DISPLAY = 'FLEX';
         }
 
-        // DINO GAME - ĐẦY ĐỦ HÀM
-        let dinoCanvas, dinoCtx, dinoX = 50, dinoY = 150, dinoVelocity = 0, obstacles = [], dinoScore = 0;
-        let dinoRunning = false;
-        let endingShown = false;
-
-        function initDino() {
-            dinoCanvas = document.getElementById('dinoCanvas');
-            dinoCtx = dinoCanvas.getContext('2d');
-            dinoX = 50; dinoY = 150; dinoVelocity = 0; obstacles = []; dinoScore = 0; endingShown = false;
-            document.getElementById('dinoScore').innerText = 'ĐIỂM: 0';
-            dinoRunning = true;
-            requestAnimationFrame(updateDino);
+        FUNCTION CLOSEINFO() {
+            DOCUMENT.GETELEMENTBYID('INFOMODAL').STYLE.DISPLAY = 'NONE';
         }
 
-        function updateDino() {
-            if (!dinoRunning) return;
-            dinoCtx.clearRect(0, 0, dinoCanvas.width, dinoCanvas.height);
-            dinoVelocity += 0.5;
-            dinoY += dinoVelocity;
-            if (dinoY > 150) dinoY = 150, dinoVelocity = 0;
-
-            dinoCtx.fillStyle = '#000';
-            dinoCtx.fillRect(dinoX, dinoY, 40, 50);
-
-            if (Math.random() < 0.02) obstacles.push({x: 600, y: 170, w: 20, h: 30});
-
-            obstacles.forEach((obs, i) => {
-                obs.x -= 5;
-                dinoCtx.fillRect(obs.x, obs.y, obs.w, obs.h);
-                if (obs.x < dinoX + 40 && obs.x + obs.w > dinoX && dinoY + 50 > obs.y) {
-                    dinoRunning = false;
-                    addCoins(dinoScore);
-                    if (dinoScore >= 9999 && !endingShown) {
-                        endingShown = true;
-                        showModal('💔 KẾT THÚC BUỒN...', 'DINO GIRL ĐÃ CÓ NGƯỜI MỚI... CÔ ẤY CHIA TAY BẠN RỒI 😭', false);
-                    } else {
-                        showModal('💥 BẠN ĐÃ THUA!', `ĐẠT \( {dinoScore} ĐIỂM!<br>+ \){dinoScore} 💰`, false, true);
-                    }
-                    return;
-                }
-                if (obs.x < 0) obstacles.splice(i, 1);
-            });
-
-            dinoScore++;
-            document.getElementById('dinoScore').innerText = 'ĐIỂM: ' + dinoScore;
-            requestAnimationFrame(updateDino);
+        FUNCTION SHOWLOGINMODAL() {
+            DOCUMENT.GETELEMENTBYID('LOGINMODAL').STYLE.DISPLAY = 'FLEX';
         }
 
-        document.addEventListener('keydown', e => { if (e.key === ' ' && dinoRunning) dinoVelocity = -12; });
-        dinoCanvas.addEventListener('click', () => { if (dinoRunning) dinoVelocity = -12; });
-        dinoCanvas.addEventListener('touchstart', e => { e.preventDefault(); if (dinoRunning) dinoVelocity = -12; });
-
-        // KHINH KHÍ CẦU - ĐẦY ĐỦ HÀM VÀ ĐÚNG YÊU CẦU
-        let balloonCanvas, balloonCtx, balloonX = 200, balloonY = 300, balloonVelocityY = 0, balloonVelocityX = 0;
-        let stars = [], clouds = [], balloonScore = 0;
-        let balloonRunning = false;
-        let isHolding = false;
-        let touchX = 0;
-
-        function initBalloon() {
-            balloonCanvas = document.getElementById('balloonCanvas');
-            balloonCtx = balloonCanvas.getContext('2d');
-            balloonX = 200; balloonY = 300; balloonVelocityY = 0; balloonVelocityX = 0;
-            stars = []; clouds = []; balloonScore = 0;
-            document.getElementById('balloonScore').innerText = 'ĐIỂM: 0';
-            balloonRunning = true;
-            requestAnimationFrame(updateBalloon);
+        FUNCTION CLOSELOGINMODAL() {
+            DOCUMENT.GETELEMENTBYID('LOGINMODAL').STYLE.DISPLAY = 'NONE';
         }
 
-        function updateBalloon() {
-            if (!balloonRunning) return;
-
-            balloonCtx.clearRect(0, 0, balloonCanvas.width, balloonCanvas.height);
-
-            if (isHolding) {
-                balloonVelocityY = -3;
-            } else {
-                balloonVelocityY += 0.3;
-            }
-            balloonY += balloonVelocityY;
-            balloonX += balloonVelocityX;
-            balloonVelocityX *= 0.95;
-
-            if (balloonY < 50 || balloonY > balloonCanvas.height - 100 || balloonX < 50 || balloonX > balloonCanvas.width - 50) {
-                balloonRunning = false;
-                addCoins(balloonScore);
-                showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>\( {balloonScore}</strong> ĐIỂM!<br>+ \){balloonScore} 💰`, false, true);
-                return;
-            }
-
-            balloonCtx.fillStyle = '#E91E63';
-            balloonCtx.beginPath();
-            balloonCtx.arc(balloonX, balloonY, 50, 0, Math.PI * 2);
-            balloonCtx.fill();
-            balloonCtx.fillStyle = '#FF9800';
-            balloonCtx.fillRect(balloonX - 25, balloonY + 50, 50, 60);
-
-            if (Math.random() < 0.02) stars.push({x: 400, y: Math.random() * (balloonCanvas.height - 100) + 50});
-            if (Math.random() < 0.015) clouds.push({x: 400, y: Math.random() * (balloonCanvas.height - 100) + 50});
-
-            stars.forEach((star, i) => {
-                star.x -= 3;
-                balloonCtx.fillStyle = '#FFD700';
-                balloonCtx.font = '30px Arial';
-                balloonCtx.fillText('⭐', star.x, star.y);
-                if (Math.abs(star.x - balloonX) < 50 && Math.abs(star.y - balloonY) < 60) {
-                    balloonScore += 10;
-                    document.getElementById('balloonScore').innerText = 'ĐIỂM: ' + balloonScore;
-                    playSound('eatSound');
-                    stars.splice(i, 1);
-                }
-                if (star.x < 0) stars.splice(i, 1);
-            });
-
-            clouds.forEach((cloud, i) => {
-                cloud.x -= 3;
-                balloonCtx.fillStyle = '#9E9E9E';
-                balloonCtx.fillRect(cloud.x, cloud.y - 30, 100, 60);
-                if (Math.abs(cloud.x + 50 - balloonX) < 70 && Math.abs(cloud.y - balloonY) < 80) {
-                    balloonRunning = false;
-                    addCoins(balloonScore);
-                    showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>\( {balloonScore}</strong> ĐIỂM!<br>+ \){balloonScore} 💰`, false, true);
-                    return;
-                }
-                if (cloud.x < 0) clouds.splice(i, 1);
-            });
-
-            requestAnimationFrame(updateBalloon);
-        }
-
-        balloonCanvas.addEventListener('mousedown', e => {
-            isHolding = true;
-            touchX = e.clientX;
-        });
-        balloonCanvas.addEventListener('mousemove', e => {
-            if (isHolding) {
-                balloonVelocityX = (e.clientX - touchX) * 0.1;
-                touchX = e.clientX;
-            }
-        });
-        balloonCanvas.addEventListener('mouseup', () => isHolding = false);
-        balloonCanvas.addEventListener('mouseleave', () => isHolding = false);
-
-        balloonCanvas.addEventListener('touchstart', e => {
-            isHolding = true;
-            touchX = e.touches[0].clientX;
-            e.preventDefault();
-        });
-        balloonCanvas.addEventListener('touchmove', e => {
-            if (isHolding) {
-                balloonVelocityX = (e.touches[0].clientX - touchX) * 0.2;
-                touchX = e.touches[0].clientX;
-            }
-            e.preventDefault();
-        });
-        balloonCanvas.addEventListener('touchend', () => isHolding = false);
-
-        // SHOP, LOGIN, MODAL, INFO, BUG, SUGGEST - ĐẦY ĐỦ HÀM
-
-        function showInfo() {
-            document.getElementById('infoModal').style.display = 'flex';
-        }
-
-        function closeInfo() {
-            document.getElementById('infoModal').style.display = 'none';
-        }
-
-        function showLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-        }
-
-        function closeLoginModal() {
-            document.getElementById('loginModal').style.display = 'none';
-        }
-
-        function register() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value;
-            if (user && pass) {
-                localStorage.setItem('pass_' + user, pass);
-                alert('ĐĂNG KÝ THÀNH CÔNG!');
-                closeLoginModal();
+        FUNCTION REGISTER() {
+            CONST USER = DOCUMENT.GETELEMENTBYID('USERNAME').VALUE.TRIM();
+            CONST PASS = DOCUMENT.GETELEMENTBYID('PASSWORD').VALUE;
+            IF (USER && PASS) {
+                LOCALSTORAGE.SETITEM('PASS_' + USER, PASS);
+                ALERT('ĐĂNG KÝ THÀNH CÔNG!');
+                CLOSELOGINMODAL();
             }
         }
 
-        function login() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value;
-            if (user && pass && localStorage.getItem('pass_' + user) === pass) {
-                currentUser = user;
-                localStorage.setItem('currentUser', user);
-                alert('ĐĂNG NHẬP THÀNH CÔNG!');
-                loadUser();
-                closeLoginModal();
-            } else {
-                alert('SAI TÊN HOẶC MẬT KHẨU!');
+        FUNCTION LOGIN() {
+            CONST USER = DOCUMENT.GETELEMENTBYID('USERNAME').VALUE.TRIM();
+            CONST PASS = DOCUMENT.GETELEMENTBYID('PASSWORD').VALUE;
+            IF (USER && PASS && LOCALSTORAGE.GETITEM('PASS_' + USER) === PASS) {
+                CURRENTUSER = USER;
+                LOCALSTORAGE.SETITEM('CURRENTUSER', USER);
+                ALERT('ĐĂNG NHẬP THÀNH CÔNG!');
+                LOADUSER();
+                CLOSELOGINMODAL();
+            } ELSE {
+                ALERT('SAI TÊN HOẶC MẬT KHẨU!');
             }
         }
 
-        function logout() {
-            if (confirm('ĐĂNG XUẤT?')) {
-                localStorage.removeItem('currentUser');
-                currentUser = null;
-                saveCoins();
-                loadUser();
+        FUNCTION LOGOUT() {
+            IF (CONFIRM('ĐĂNG XUẤT?')) {
+                LOCALSTORAGE.REMOVEITEM('CURRENTUSER');
+                CURRENTUSER = NULL;
+                SAVECOINS();
+                LOADUSER();
             }
         }
 
-        function updateShopButtons() {
-            const buttons = {
-                'redSnake': 'buy-redSnake',
-                'rainbowSnake': 'buy-rainbowSnake',
-                'heroBird': 'buy-heroBird',
-                'sparkleMatch': 'buy-sparkleMatch'
+        FUNCTION UPDATESHOPBUTTONS() {
+            CONST BUTTONS = {
+                'REDSNAKE': 'BUY-REDSNAKE',
+                'RAINBOWSNAKE': 'BUY-RAINBOWSNAKE',
+                'HEROBIRD': 'BUY-HEROBIRD',
+                'SPARKLEMATCH': 'BUY-SPARKLEMATCH'
             };
-            Object.keys(buttons).forEach(item => {
-                const btn = document.getElementById(buttons[item]);
-                if (btn) {
-                    if (ownedItems.includes(item)) {
-                        btn.innerText = 'ĐÃ SỞ HỮU';
-                        btn.disabled = true;
-                    } else {
-                        btn.innerText = 'MUA';
-                        btn.disabled = false;
+            OBJECT.KEYS(BUTTONS).FOREACH(ITEM => {
+                CONST BTN = DOCUMENT.GETELEMENTBYID(BUTTONS[ITEM]);
+                IF (BTN) {
+                    IF (OWNEDITEMS.INCLUDES(ITEM)) {
+                        BTN.INNERTEXT = 'ĐÃ SỞ HỮU';
+                        BTN.DISABLED = TRUE;
+                    } ELSE {
+                        BTN.INNERTEXT = 'MUA';
+                        BTN.DISABLED = FALSE;
                     }
                 }
             });
         }
 
-        function buyItem(item, cost) {
-            if (playerCoins >= cost && !ownedItems.includes(item)) {
-                playerCoins -= cost;
-                ownedItems.push(item);
-                saveCoins();
-                document.getElementById('playerCoins').innerText = playerCoins;
-                document.getElementById('playerCoinsShop').innerText = playerCoins;
-                alert('🎉 MUA THÀNH CÔNG! ITEM ĐÃ ĐƯỢC THÊM VÀO KHO.');
-                updateShopButtons();
-            } else if (ownedItems.includes(item)) {
-                alert('BẠN ĐÃ SỞ HỮU ITEM NÀY RỒI!');
-            } else {
-                alert('KHÔNG ĐỦ ĐIỂM ĐỂ MUA!');
+        FUNCTION BUYITEM(ITEM, COST) {
+            IF (PLAYERCOINS >= COST && !OWNEDITEMS.INCLUDES(ITEM)) {
+                PLAYERCOINS -= COST;
+                OWNEDITEMS.PUSH(ITEM);
+                SAVECOINS();
+                DOCUMENT.GETELEMENTBYID('PLAYERCOINS').INNERTEXT = PLAYERCOINS;
+                DOCUMENT.GETELEMENTBYID('PLAYERCOINSSHOP').INNERTEXT = PLAYERCOINS;
+                ALERT('🎉 MUA THÀNH CÔNG! ITEM ĐÃ ĐƯỢC THÊM VÀO KHO.');
+                UPDATESHOPBUTTONS();
+            } ELSE IF (OWNEDITEMS.INCLUDES(ITEM)) {
+                ALERT('BẠN ĐÃ SỞ HỮU ITEM NÀY RỒI!');
+            } ELSE {
+                ALERT('KHÔNG ĐỦ ĐIỂM ĐỂ MUA!');
             }
         }
 
-        function showBugModal() {
-            document.getElementById('bugModal').style.display = 'flex';
+        FUNCTION SHOWBUGMODAL() {
+            DOCUMENT.GETELEMENTBYID('BUGMODAL').STYLE.DISPLAY = 'FLEX';
         }
 
-        function closeBugModal() {
-            document.getElementById('bugModal').style.display = 'none';
+        FUNCTION CLOSEBUGMODAL() {
+            DOCUMENT.GETELEMENTBYID('BUGMODAL').STYLE.DISPLAY = 'NONE';
         }
 
-        function sendBugReport() {
-            const email = document.getElementById('bugEmail').value.trim();
-            const message = document.getElementById('bugMessage').value.trim();
-            if (email && message) {
-                alert('CẢM ƠN BẠN ĐÃ BÁO CÁO LỖI, MÌNH SẼ SỚM SỬA LỖI TRONG VÒNG 24H HOẶC HƠN NẾU MÌNH BẬN');
-                document.getElementById('bugEmail').value = '';
-                document.getElementById('bugMessage').value = '';
-                closeBugModal();
-            } else {
-                alert('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ TIN NHẮN!');
+        FUNCTION SENDBUGREPORT() {
+            CONST EMAIL = DOCUMENT.GETELEMENTBYID('BUGEMAIL').VALUE.TRIM();
+            CONST MESSAGE = DOCUMENT.GETELEMENTBYID('BUGMESSAGE').VALUE.TRIM();
+            IF (EMAIL && MESSAGE) {
+                ALERT('CẢM ƠN BẠN ĐÃ BÁO CÁO LỖI, MÌNH SẼ SỚM SỬA LỖI TRONG VÒNG 24H HOẶC HƠN NẾU MÌNH BẬN');
+                DOCUMENT.GETELEMENTBYID('BUGEMAIL').VALUE = '';
+                DOCUMENT.GETELEMENTBYID('BUGMESSAGE').VALUE = '';
+                CLOSEBUGMODAL();
+            } ELSE {
+                ALERT('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ TIN NHẮN!');
             }
         }
 
-        function showSuggestModal() {
-            document.getElementById('suggestModal').style.display = 'flex';
+        FUNCTION SHOWSUGGESTMODAL() {
+            DOCUMENT.GETELEMENTBYID('SUGGESTMODAL').STYLE.DISPLAY = 'FLEX';
         }
 
-        function closeSuggestModal() {
-            document.getElementById('suggestModal').style.display = 'none';
+        FUNCTION CLOSESUGGESTMODAL() {
+            DOCUMENT.GETELEMENTBYID('SUGGESTMODAL').STYLE.DISPLAY = 'NONE';
         }
 
-        function sendSuggest() {
-            const email = document.getElementById('suggestEmail').value.trim();
-            const message = document.getElementById('suggestMessage').value.trim();
-            if (email && message) {
-                alert('CẢM ƠN GỢI Ý CỦA BẠN! MÌNH SẼ XEM XÉT THÊM TRÒ MỚI ❤️');
-                document.getElementById('suggestEmail').value = '';
-                document.getElementById('suggestMessage').value = '';
-                closeSuggestModal();
-            } else {
-                alert('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ GỢI Ý!');
+        FUNCTION SENDSUGGEST() {
+            CONST EMAIL = DOCUMENT.GETELEMENTBYID('SUGGESTEMAIL').VALUE.TRIM();
+            CONST MESSAGE = DOCUMENT.GETELEMENTBYID('SUGGESTMESSAGE').VALUE.TRIM();
+            IF (EMAIL && MESSAGE) {
+                ALERT('CẢM ƠN GỢI Ý CỦA BẠN! MÌNH SẼ XEM XÉT THÊM TRÒ MỚI ❤️');
+                DOCUMENT.GETELEMENTBYID('SUGGESTEMAIL').VALUE = '';
+                DOCUMENT.GETELEMENTBYID('SUGGESTMESSAGE').VALUE = '';
+                CLOSESUGGESTMODAL();
+            } ELSE {
+                ALERT('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ GỢI Ý!');
             }
         }
     </script>
