@@ -1,310 +1,1014 @@
-<!DOCTYPE HTML>
-<HTML LANG="VI">
-<HEAD>
-    <META CHARSET="UTF-8">
-    <META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1.0">
-    <TITLE>MINI GAME VIỆT NAM 🇻🇳</TITLE>
-    <LINK REL="STYLESHEET" HREF="STYLE.CSS">
-</HEAD>
-<BODY>
-    <HEADER>
-        <H1>MINI GAME VIỆT NAM 🇻🇳</H1>
-        <P CLASS="SUBTITLE">CHÚC CÁC BẠN CHƠI VUI VẺ ♥️ CÓ LỖI KÉO XUỐNG DƯỚI CHÂN TRANG BẤM VÀO NÚT BÁO CÁO LỖI NHA</P>
-        <DIV ID="USER-INFO">
-            <SPAN ID="WELCOME"></SPAN>
-            <BUTTON ID="LOGIN-BTN">ĐĂNG NHẬP / ĐĂNG KÝ</BUTTON>
-            <BUTTON ID="SHOP-BTN" STYLE="DISPLAY:NONE;">SHOP (ĐIỂM: <SPAN ID="POINTS">0</SPAN>)</BUTTON>
-            <BUTTON ID="LOGOUT-BTN" STYLE="DISPLAY:NONE;">ĐĂNG XUẤT</BUTTON>
-        </DIV>
-    </HEADER>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MINI GAME ĐƯỢC TẠO BỞI NGUYỄN CHÍ DỰ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="score-board">
+        <p>💰 ĐIỂM CỦA BẠN: <strong id="playerCoins">0</strong></p>
+        <div class="login-info">
+            <span id="userDisplay">KHÁCH</span>
+            <button onclick="showLoginModal()">ĐĂNG NHẬP</button>
+            <button onclick="logout()">ĐĂNG XUẤT</button>
+        </div>
+    </div>
 
-    <MAIN>
-        <DIV ID="LOGIN-MODAL" CLASS="MODAL">
-            <DIV CLASS="MODAL-CONTENT">
-                <SPAN CLASS="CLOSE">×</SPAN>
-                <H2>ĐĂNG NHẬP / ĐĂNG KÝ</H2>
-                <INPUT TYPE="TEXT" ID="USERNAME" PLACEHOLDER="TÊN NGƯỜI DÙNG" REQUIRED>
-                <INPUT TYPE="PASSWORD" ID="PASSWORD" PLACEHOLDER="MẬT KHẨU" REQUIRED>
-                <BUTTON ID="LOGIN-SUBMIT">ĐĂNG NHẬP</BUTTON>
-                <BUTTON ID="REGISTER-SUBMIT">ĐĂNG KÝ</BUTTON>
-            </DIV>
-        </DIV>
+    <div class="header">
+        <h1>🎮 MINI GAME ĐƯỢC TẠO BỞI NGUYỄN CHÍ DỰ 🎉</h1>
+        <div class="subtitle">🥳 CHÚC CÁC BẠN CHƠI MINI GAME VUI VẺ 🥳</div>
+    </div>
 
-        <DIV ID="SHOP-MODAL" CLASS="MODAL">
-            <DIV CLASS="MODAL-CONTENT">
-                <SPAN CLASS="CLOSE">×</SPAN>
-                <H2>SHOP - MUA SKIN RẮN</H2>
-                <P>ĐIỂM HIỆN TẠI: <SPAN ID="SHOP-POINTS">0</SPAN></P>
-                <BUTTON ONCLICK="BUYSKIN('RED',150)">SKIN ĐỎ (150 ĐIỂM)</BUTTON>
-                <BUTTON ONCLICK="BUYSKIN('BLUE',200)">SKIN XANH (200 ĐIỂM)</BUTTON>
-                <BUTTON ONCLICK="BUYSKIN('GOLD',300)">SKIN VÀNG (300 ĐIỂM)</BUTTON>
-            </DIV>
-        </DIV>
+    <p class="intro-text">CHỌN MỘT MINI GAME ĐỂ CHƠI NÀO! 🚀</p>
 
-        <DIV ID="REPORT-MODAL" CLASS="MODAL">
-            <DIV CLASS="MODAL-CONTENT">
-                <SPAN CLASS="CLOSE">×</SPAN>
-                <H2>BÁO CÁO LỖI</H2>
-                <INPUT TYPE="TEXT" ID="REPORT-NAME" PLACEHOLDER="TÊN CỦA BẠN (BẮT BUỘC)" REQUIRED>
-                <INPUT TYPE="EMAIL" ID="REPORT-EMAIL" PLACEHOLDER="GMAIL CỦA BẠN (BẮT BUỘC)" REQUIRED>
-                <TEXTAREA ID="REPORT-MSG" PLACEHOLDER="TIN NHẬN CẦN YÊU CẦU SỬA LỖI (BẮT BUỘC)" REQUIRED></TEXTAREA>
-                <BUTTON ONCLICK="SENDREPORT()">GỬI</BUTTON>
-            </DIV>
-        </DIV>
+    <div class="menu">
+        <button onclick="showGame('snake')">🐍 RẮN SĂN MỒI</button>
+        <button onclick="showGame('tictactoe')">⭕ Ô ĂN QUAN (CỜ CARO)</button>
+        <button onclick="showGame('flappy')">🐦 FLAPPY BIRD</button>
+        <button onclick="showGame('pikachu')">🀄 PIKACHU GHÉP CẶP</button>
+        <button onclick="showGame('dino')">🦕 DINO GAME</button>
+        <button onclick="showGame('balloon')">🎈 KHINH KHÍ CẦU</button>
+        <button onclick="showGame('shop')">🛒 SHOP MUA ITEM</button>
+        <button class="info-btn" onclick="showInfo()">ℹ️ THÔNG TIN & UPDATE</button>
+    </div>
 
-        <DIV CLASS="PAGES">
-            <BUTTON ID="PAGE1-BTN" CLASS="ACTIVE">TRANG 1</BUTTON>
-            <BUTTON ID="PAGE2-BTN">TRANG 2</BUTTON>
-            <BUTTON ID="PAGE3-BTN">TRANG 3</BUTTON>
-        </DIV>
+    <div id="mainScreen" class="game-container" style="display:block;">
+        <h2>🏠 MÀN HÌNH CHÍNH</h2>
+        <p>CHÀO MỪNG BẠN ĐẾN VỚI BỘ MINI GAME!</p>
+        <p>CHỌN TRÒ CHƠI Ở MENU TRÊN ĐỂ BẮT ĐẦU CHƠI NHÉ!</p>
+        <div class="extra-buttons-main">
+            <button onclick="showBugModal()">🐛 REPORT BUGS</button>
+            <button onclick="showSuggestModal()">💡 GỢI Ý TRÒ CHƠI</button>
+        </div>
+    </div>
 
-        <DIV ID="PAGE1" CLASS="GAME-PAGE">
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('SNAKE')"><H3>RẮN SĂN MỒI</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-SNAKE">0</SPAN></P></DIV>
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('FLAPPY')"><H3>FLAPPY BIRD</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-FLAPPY">0</SPAN></P></DIV>
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('DINO')"><H3>DINOSAUR RUN</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-DINO">0</SPAN></P></DIV>
-        </DIV>
+    <div id="snake" class="game-container">
+        <h2>🐍 RẮN SĂN MỒI</h2>
+        <div class="controls-guide">
+            <p><strong>ĐIỀU KHIỂN:</strong></p>
+            <p>🖥️ PC/MAC: PHÍM MŨI TÊN ↑ ← ↓ →</p>
+            <p>📱 MOBILE: NÚT ĐIỀU HƯỚNG DƯỚI MÀN HÌNH</p>
+        </div>
+        <div class="game-controls">
+            <button onclick="confirmStart()">BẮT ĐẦU</button>
+            <button onclick="pauseSnake()">⏸ TẠM DỪNG</button>
+            <button onclick="confirmRestart()">🔄 CHƠI LẠI (RESET ĐIỂM)</button>
+            <button onclick="confirmAbandon()">❌ TỪ BỎ (-10 ĐIỂM)</button>
+            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
+        </div>
+        <canvas id="snakeCanvas" width="400" height="400"></canvas>
+        <div id="snakeScore" class="score">ĐIỂM HIỆN TẠI: 0</div>
+        <div id="snakeControls" class="mobile-controls">
+            <button onclick="changeDirection('up')">↑</button>
+            <div class="horizontal-controls">
+                <button onclick="changeDirection('left')">←</button>
+                <button onclick="changeDirection('down')">↓</button>
+                <button onclick="changeDirection('right')">→</button>
+            </div>
+        </div>
+    </div>
 
-        <DIV ID="PAGE2" CLASS="GAME-PAGE" STYLE="DISPLAY:NONE;">
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('2048')"><H3>2048</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-2048">0</SPAN></P></DIV>
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('TETRIS')"><H3>TETRIS</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-TETRIS">0</SPAN></P></DIV>
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('RPS')"><H3>OẲN TÙ TÌ</H3><P>THẮNG: <SPAN ID="WIN-RPS">0</SPAN></P></DIV>
-        </DIV>
+    <div id="tictactoe" class="game-container">
+        <h2>⭕ Ô ĂN QUAN (CỜ CARO)</h2>
+        <div class="controls-guide">
+            <p><strong>ĐIỀU KHIỂN:</strong></p>
+            <p>🖥️📱 CLICK/CHẠM VÀO Ô TRỐNG ĐỂ ĐẶT X (BẠN LÀ X, MÁY LÀ O)</p>
+        </div>
+        <div class="game-controls">
+            <button onclick="confirmStart()">BẮT ĐẦU</button>
+            <button onclick="pauseTictactoe()">⏸ TẠM DỪNG</button>
+            <button onclick="confirmRestart()">🔄 CHƠI LẠI (RESET ĐIỂM)</button>
+            <button onclick="confirmAbandon()">❌ TỪ BỎ (-10 ĐIỂM)</button>
+            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
+        </div>
+        <table class="ttt-table">
+            <tr>
+                <td onclick="playTTT(0)"><h1 id="ttt0">&nbsp;</h1></td>
+                <td onclick="playTTT(1)"><h1 id="ttt1">&nbsp;</h1></td>
+                <td onclick="playTTT(2)"><h1 id="ttt2">&nbsp;</h1></td>
+            </tr>
+            <tr>
+                <td onclick="playTTT(3)"><h1 id="ttt3">&nbsp;</h1></td>
+                <td onclick="playTTT(4)"><h1 id="ttt4">&nbsp;</h1></td>
+                <td onclick="playTTT(5)"><h1 id="ttt5">&nbsp;</h1></td>
+            </tr>
+            <tr>
+                <td onclick="playTTT(6)"><h1 id="ttt6">&nbsp;</h1></td>
+                <td onclick="playTTT(7)"><h1 id="ttt7">&nbsp;</h1></td>
+                <td onclick="playTTT(8)"><h1 id="ttt8">&nbsp;</h1></td>
+            </tr>
+        </table>
+        <p id="tttStatus" class="status"></p>
+    </div>
 
-        <DIV ID="PAGE3" CLASS="GAME-PAGE" STYLE="DISPLAY:NONE;">
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('PINGPONG')"><H3>PING PONG</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-PINGPONG">0</SPAN></P></DIV>
-            <DIV CLASS="GAME-CARD" ONCLICK="OPENGAME('BREAKOUT')"><H3>BREAKOUT</H3><P>ĐIỂM CAO: <SPAN ID="HIGH-BREAKOUT">0</SPAN></P></DIV>
-        </DIV>
+    <div id="flappy" class="game-container">
+        <h2>🐦 FLAPPY BIRD</h2>
+        <div class="controls-guide">
+            <p><strong>ĐIỀU KHIỂN:</strong></p>
+            <p>🖥️ PC/MAC: PHÍM SPACE HOẶC CLICK CHUỘT</p>
+            <p>📱 MOBILE: CHẠM MÀN HÌNH ĐỂ BAY LÊN</p>
+        </div>
+        <div class="game-controls">
+            <button onclick="confirmStart()">BẮT ĐẦU</button>
+            <button onclick="pauseFlappy()">⏸ TẠM DỪNG</button>
+            <button onclick="confirmRestart()">🔄 CHƠI LẠI (RESET ĐIỂM)</button>
+            <button onclick="confirmAbandon()">❌ TỪ BỎ (-10 ĐIỂM)</button>
+            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
+        </div>
+        <canvas id="flappyCanvas" width="400" height="500"></canvas>
+        <div id="flappyScore" class="score">ĐIỂM HIỆN TẠI: 0 / 100</div>
+    </div>
 
-        <DIV ID="GAME-MODAL" CLASS="MODAL">
-            <DIV CLASS="MODAL-CONTENT FULL">
-                <SPAN CLASS="CLOSE">×</SPAN>
-                <DIV ID="INSTRUCTIONS"></DIV>
-                <DIV ID="GAME-CONTAINER"></DIV>
-                <DIV ID="POPUP" CLASS="POPUP" STYLE="DISPLAY:NONE;">
-                    <H2 ID="POPUP-TEXT"></H2>
-                    <BUTTON ONCLICK="CLOSEPOPUP()">CHƠI LẠI</BUTTON>
-                </DIV>
-            </DIV>
-        </DIV>
-    </MAIN>
+    <div id="pikachu" class="game-container">
+        <h2>🀄 PIKACHU GHÉP CẶP</h2>
+        <div class="controls-guide">
+            <p><strong>ĐIỀU KHIỂN:</strong></p>
+            <p>🖥️📱 CLICK/CHẠM VÀO 2 Ô GIỐNG NHAU ĐỂ GHÉP</p>
+            <p>GHÉP HẾT ĐỂ THẮNG!</p>
+        </div>
+        <div class="game-controls">
+            <button onclick="confirmStart()">BẮT ĐẦU</button>
+            <button onclick="pausePikachu()">⏸ TẠM DỪNG</button>
+            <button onclick="confirmRestart()">🔄 CHƠI LẠI (RESET ĐIỂM)</button>
+            <button onclick="confirmAbandon()">❌ TỪ BỎ (-10 ĐIỂM)</button>
+            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
+        </div>
+        <div id="pikachuBoard"></div>
+        <p id="pikachuStatus" class="status">CÒN LẠI: <span id="pairsLeft">8</span> CẶP</p>
+    </div>
 
-    <FOOTER>
-        <P>MADE IN VN 🇻🇳</P>
-        <P>MADE BY : NGUYỄN CHÍ DỰ 🇻🇳♥️ (OWNER)</P>
-        <BUTTON ID="REPORT-BTN">BÁO CÁO LỖI</BUTTON>
-    </FOOTER>
+    <div id="dino" class="game-container">
+        <h2>🦕 DINO GAME</h2>
+        <div class="controls-guide">
+            <p><strong>ĐIỀU KHIỂN:</strong></p>
+            <p>🖥️ PC/MAC: PHÍM SPACE HOẶC CLICK ĐỂ NHẢY</p>
+            <p>📱 MOBILE: CHẠM MÀN HÌNH ĐỂ NHẢY</p>
+        </div>
+        <div class="game-controls">
+            <button onclick="confirmStart()">BẮT ĐẦU</button>
+            <button onclick="confirmRestart()">🔄 CHƠI LẠI</button>
+            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
+        </div>
+        <canvas id="dinoCanvas" width="600" height="200"></canvas>
+        <div id="dinoScore" class="score">ĐIỂM: 0</div>
+    </div>
 
-    <SCRIPT>
-        // ÂM THANH
-        CONST SOUNDJUMP = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-3.MP3');
-        CONST SOUNDEAT = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-09.MP3');
-        CONST SOUNDPOINT = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/HUMAN/SOUNDS/COIN-1.MP3');
-        CONST SOUNDWIN = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/HUMAN/SOUNDS/APPLAUSE-7.MP3');
-        CONST SOUNDLOSE = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/MECHANICAL/SOUNDS/ALARM-1.MP3');
-        CONST SOUNDHIT = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-28.MP3');
-        CONST SOUNDBOUNCE = NEW AUDIO('HTTPS://WWW.SOUNDJAY.COM/BUTTON/SOUNDS/BUTTON-10.MP3');
+    <div id="balloon" class="game-container">
+        <h2>🎈 KHINH KHÍ CẦU</h2>
+        <div class="controls-guide">
+            <p><strong>ĐIỀU KHIỂN:</strong></p>
+            <p>Giữ chạm màn hình / giữ chuột để bay lên</p>
+            <p>Kéo trái/phải để di chuyển ngang</p>
+            <p>ĂN NGÔI SAO VÀNG ĐỂ TĂNG ĐIỂM</p>
+            <p>TRÁNH ĐỤNG MÂY XÁM</p>
+        </div>
+        <div class="game-controls">
+            <button onclick="confirmStart()">BẮT ĐẦU</button>
+            <button onclick="confirmRestart()">🔄 CHƠI LẠI</button>
+            <button onclick="confirmBackHome()">🏠 TRỞ VỀ MÀN HÌNH CHÍNH</button>
+        </div>
+        <canvas id="balloonCanvas" width="400" height="500"></canvas>
+        <div id="balloonScore" class="score">ĐIỂM: 0</div>
+    </div>
 
-        // USER & POINTS
-        LET CURRENTUSER = NULL;
-        LET POINTS = 0;
-        LET SNAKESKIN = 'GREEN';
+    <div id="shop" class="game-container">
+        <h2>🛒 SHOP MUA ITEM</h2>
+        <p>DÙNG ĐIỂM KIẾM ĐƯỢC ĐỂ MUA SKIN VÀ HIỆU ỨNG ĐẸP HƠN!</p>
+        <div class="shop-info">
+            <p>💰 ĐIỂM HIỆN TẠI: <strong id="playerCoinsShop">0</strong></p>
+        </div>
+        <div class="shop-items">
+            <div class="shop-item">
+                <span>🎨 SKIN RẮN XANH LÁ (MẶC ĐỊNH)</span>
+                <button disabled>ĐÃ SỞ HỮU</button>
+            </div>
+            <div class="shop-item">
+                <span>🔥 SKIN RẮN LỬA ĐỎ (200 ĐIỂM)</span>
+                <button id="buy-redSnake" onclick="buyItem('redSnake', 200)">MUA</button>
+            </div>
+            <div class="shop-item">
+                <span>🌈 SKIN RẮN CẦU VỒNG (500 ĐIỂM)</span>
+                <button id="buy-rainbowSnake" onclick="buyItem('rainbowSnake', 500)">MUA</button>
+            </div>
+            <div class="shop-item">
+                <span>🦸 SKIN CHIM SIÊU ANH HÙNG (300 ĐIỂM)</span>
+                <button id="buy-heroBird" onclick="buyItem('heroBird', 300)">MUA</button>
+            </div>
+            <div class="shop-item">
+                <span>✨ HIỆU ỨNG GHÉP ĐÔI LẤP LÁNH (400 ĐIỂM)</span>
+                <button id="buy-sparkleMatch" onclick="buyItem('sparkleMatch', 400)">MUA</button>
+            </div>
+        </div>
+    </div>
 
-        FUNCTION LOADUSER() {
-            CURRENTUSER = LOCALSTORAGE.GETITEM('CURRENTUSER');
-            IF (CURRENTUSER) {
-                DOCUMENT.GETELEMENTBYID('WELCOME').INNERTEXT = `XIN CHÀO ${CURRENTUSER.TOUPPERCASE()}!`;
-                DOCUMENT.GETELEMENTBYID('LOGIN-BTN').STYLE.DISPLAY = 'NONE';
-                DOCUMENT.GETELEMENTBYID('SHOP-BTN').STYLE.DISPLAY = 'INLINE';
-                DOCUMENT.GETELEMENTBYID('LOGOUT-BTN').STYLE.DISPLAY = 'INLINE';
-                POINTS = PARSEINT(LOCALSTORAGE.GETITEM(`POINTS_${CURRENTUSER}`) || 0);
-                DOCUMENT.GETELEMENTBYID('POINTS').INNERTEXT = POINTS;
-                DOCUMENT.GETELEMENTBYID('SHOP-POINTS').INNERTEXT = POINTS;
-                SNAKESKIN = LOCALSTORAGE.GETITEM(`SKIN_${CURRENTUSER}`) || 'GREEN';
-                UPDATEHIGHSCORES();
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <div id="fireworks" class="fireworks"></div>
+            <div id="rain" class="rain"></div>
+            <h2 id="modalTitle">🎉 CHÚC MỪNG!</h2>
+            <p id="modalMessage">BẠN ĐÃ THẮNG VỚI ĐIỂM SỐ TUYỆT VỜI!</p>
+            <p id="modalExtra" style="display:none;">BẠN ĐÃ THUA, CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!</p>
+            <button class="restart-btn" onclick="restartCurrentGame()">🔄 CHƠI LẠI</button>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>ĐĂNG NHẬP / ĐĂNG KÝ</h2>
+            <input type="text" id="username" placeholder="TÊN ĐĂNG NHẬP">
+            <input type="password" id="password" placeholder="MẬT KHẨU">
+            <button onclick="login()">ĐĂNG NHẬP</button>
+            <button onclick="register()">ĐĂNG KÝ</button>
+            <button onclick="closeLoginModal()">ĐÓNG</button>
+        </div>
+    </div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content info-modal">
+            <h2>ℹ️ THÔNG TIN & UPDATE</h2>
+            <div class="info-content">
+                <p><strong>TÁC GIẢ:</strong> NGUYỄN CHÍ DỰ</p>
+                <p><strong>PHIÊN BẢN:</strong> 3.0</p>
+                <p><strong>LỜI NHẮN:</strong> CHÚC CÁC BẠN CHƠI VUI! ❤️</p>
+            </div>
+            <button class="restart-btn" onclick="closeInfo()">ĐÓNG</button>
+        </div>
+    </div>
+
+    <div id="bugModal" class="modal">
+        <div class="modal-content">
+            <h2>🐛 REPORT BUGS</h2>
+            <p>GỬI LỖI BẠN GẶP PHẢI ĐỂ MÌNH SỬA NHÉ!</p>
+            <input type="email" id="bugEmail" placeholder="GMAIL CỦA BẠN (BẮT BUỘC)" required>
+            <textarea id="bugMessage" placeholder="MÔ TẢ LỖI CHI TIẾT" required></textarea>
+            <p>GMAIL HỖ TRỢ: <strong>Herogoodboymc2024@gmail.com</strong></p>
+            <button class="restart-btn" onclick="sendBugReport()">GỬI REPORT</button>
+            <button class="restart-btn" onclick="closeBugModal()">ĐÓNG</button>
+        </div>
+    </div>
+
+    <div id="suggestModal" class="modal">
+        <div class="modal-content">
+            <h2>💡 GỢI Ý TRÒ CHƠI</h2>
+            <p>GỢI Ý TRÒ CHƠI MỚI BẠN MUỐN THÊM NHÉ!</p>
+            <input type="email" id="suggestEmail" placeholder="GMAIL CỦA BẠN (BẮT BUỘC)" required>
+            <textarea id="suggestMessage" placeholder="TÊN TRÒ CHƠI HOẶC MÔ TẢ" required></textarea>
+            <p>GMAIL HỖ TRỢ: <strong>Herogoodboymc2024@gmail.com</strong></p>
+            <button class="restart-btn" onclick="sendSuggest()">GỬI GỢI Ý</button>
+            <button class="restart-btn" onclick="closeSuggestModal()">ĐÓNG</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>MADE IN VN 🇻🇳</p>
+        <p>MADE BY: NGUYỄN CHÍ DỰ ♥️🇻🇳</p>
+    </div>
+
+    <audio id="eatSound" preload="auto" src="https://www.myinstants.com/media/sounds/coin-mario.mp3"></audio>
+    <audio id="jumpSound" preload="auto" src="https://www.myinstants.com/media/sounds/mario-jump.mp3"></audio>
+    <audio id="matchSound" preload="auto" src="https://www.myinstants.com/media/sounds/success-chime-49738.mp3"></audio>
+    <audio id="gameOverSound" preload="auto" src="https://www.myinstants.com/media/sounds/mario-bros-game-over.mp3"></audio>
+    <audio id="victorySound" preload="auto" src="https://www.myinstants.com/media/sounds/final-fantasy-victory-fanfare.mp3"></audio>
+
+    <script>
+        let currentGame = '';
+        let playerCoins = 0;
+        let ownedItems = ['defaultSnake'];
+        let currentUser = null;
+        let gameStarted = false;
+        let flappyPaused = false;
+        let flappyAnimationId = null;
+
+        window.onload = () => {
+            loadUser();
+            adjustCanvasSize();
+            showMainScreen();
+        };
+
+        function loadUser() {
+            currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                playerCoins = parseInt(localStorage.getItem('coins_' + currentUser)) || 0;
+                ownedItems = JSON.parse(localStorage.getItem('items_' + currentUser)) || ['defaultSnake'];
+                document.getElementById('userDisplay').innerText = currentUser.toUpperCase();
+            } else {
+                playerCoins = parseInt(localStorage.getItem('playerCoins')) || 0;
+                ownedItems = JSON.parse(localStorage.getItem('ownedItems')) || ['defaultSnake'];
+            }
+            document.getElementById('playerCoins').innerText = playerCoins;
+            if (document.getElementById('playerCoinsShop')) document.getElementById('playerCoinsShop').innerText = playerCoins;
+            updateShopButtons();
+        }
+
+        function saveCoins() {
+            if (currentUser) {
+                localStorage.setItem('coins_' + currentUser, playerCoins);
+                localStorage.setItem('items_' + currentUser, JSON.stringify(ownedItems));
+            } else {
+                localStorage.setItem('playerCoins', playerCoins);
+                localStorage.setItem('ownedItems', JSON.stringify(ownedItems));
             }
         }
 
-        FUNCTION UPDATEHIGHSCORES() {
-            IF (CURRENTUSER) {
-                CONST GAMES = ['SNAKE','FLAPPY','DINO','2048','TETRIS','PINGPONG','BREAKOUT'];
-                GAMES.FOREACH(G => {
-                    CONST EL = DOCUMENT.GETELEMENTBYID(`HIGH-${G}`);
-                    IF (EL) EL.INNERTEXT = LOCALSTORAGE.GETITEM(`HIGH_\( {G}_ \){CURRENTUSER}`) || 0;
-                });
-                CONST RPSWIN = DOCUMENT.GETELEMENTBYID('WIN-RPS');
-                IF (RPSWIN) RPSWIN.INNERTEXT = LOCALSTORAGE.GETITEM(`WIN_RPS_${CURRENTUSER}`) || 0;
+        function addCoins(amount) {
+            playerCoins += amount;
+            document.getElementById('playerCoins').innerText = playerCoins;
+            if (document.getElementById('playerCoinsShop')) document.getElementById('playerCoinsShop').innerText = playerCoins;
+            saveCoins();
+        }
+
+        function showMainScreen() {
+            document.querySelectorAll('.game-container').forEach(div => div.style.display = 'none');
+            document.getElementById('mainScreen').style.display = 'block';
+            currentGame = 'mainScreen';
+            closeAllModals();
+            adjustCanvasSize();
+        }
+
+        function showGame(gameId) {
+            document.querySelectorAll('.game-container').forEach(div => div.style.display = 'none');
+            document.getElementById(gameId).style.display = 'block';
+            currentGame = gameId;
+            gameStarted = false;
+            closeAllModals();
+            adjustCanvasSize();
+            if (gameId === 'shop') {
+                document.getElementById('playerCoinsShop').innerText = playerCoins;
             }
         }
 
-        FUNCTION SAVESCORE(GAME, SCORE, ISWIN = FALSE) {
-            IF (!CURRENTUSER) RETURN;
-            LET HIGH = PARSEINT(LOCALSTORAGE.GETITEM(`HIGH_\( {GAME}_ \){CURRENTUSER}`) || 0);
-            IF (SCORE > HIGH) LOCALSTORAGE.SETITEM(`HIGH_\( {GAME}_ \){CURRENTUSER}`, SCORE);
-            POINTS += SCORE * 10 + (ISWIN ? 100 : 0);
-            LOCALSTORAGE.SETITEM(`POINTS_${CURRENTUSER}`, POINTS);
-            UPDATEHIGHSCORES();
-            DOCUMENT.GETELEMENTBYID('POINTS').INNERTEXT = POINTS;
+        function closeAllModals() {
+            document.getElementById('gameModal').style.display = 'none';
+            document.getElementById('infoModal').style.display = 'none';
+            document.getElementById('bugModal').style.display = 'none';
+            document.getElementById('suggestModal').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('fireworks').innerHTML = '';
+            document.getElementById('rain').innerHTML = '';
+            document.getElementById('modalExtra').style.display = 'none';
         }
 
-        FUNCTION BUYSKIN(COLOR, COST) {
-            IF (POINTS >= COST) {
-                POINTS -= COST;
-                SNAKESKIN = COLOR;
-                LOCALSTORAGE.SETITEM(`POINTS_${CURRENTUSER}`, POINTS);
-                LOCALSTORAGE.SETITEM(`SKIN_${CURRENTUSER}`, COLOR);
-                ALERT(`MUA SKIN ${COLOR.TOUPPERCASE()} THÀNH CÔNG ♥️`);
-                LOADUSER();
-            } ELSE ALERT('KHÔNG ĐỦ ĐIỂM BRO!');
+        function confirmStart() {
+            if (confirm('BẠN MUỐN BẮT ĐẦU CHƠI?')) {
+                gameStarted = true;
+                if (currentGame === 'snake') initSnake();
+                if (currentGame === 'flappy') initFlappy();
+                if (currentGame === 'pikachu') initPikachu();
+                if (currentGame === 'tictactoe') resetTTT();
+                if (currentGame === 'dino') initDino();
+                if (currentGame === 'balloon') initBalloon();
+            }
         }
 
-        FUNCTION SENDREPORT() {
-            IF (DOCUMENT.GETELEMENTBYID('REPORT-NAME').VALUE && DOCUMENT.GETELEMENTBYID('REPORT-EMAIL').VALUE && DOCUMENT.GETELEMENTBYID('REPORT-MSG').VALUE) {
-                ALERT('CẢM ƠN BẠN ĐÃ BÁO LỖI! TUI SẼ FIX SỚM NHẤT 🇻🇳');
-                DOCUMENT.GETELEMENTBYID('REPORT-MODAL').STYLE.DISPLAY = 'NONE';
-            } ELSE ALERT('ĐIỀN ĐẦY ĐỦ THÔNG TIN NHA!');
+        function confirmRestart() {
+            if (confirm('BẠN ĐỒNG Ý CHƠI LẠI? ĐIỂM SẼ RESET VỀ 0!')) {
+                restartCurrentGame();
+            }
         }
 
-        // MODAL & PAGE
-        DOCUMENT.GETELEMENTBYID('LOGIN-BTN').ONCLICK = () => DOCUMENT.GETELEMENTBYID('LOGIN-MODAL').STYLE.DISPLAY = 'BLOCK';
-        DOCUMENT.GETELEMENTBYID('SHOP-BTN').ONCLICK = () => DOCUMENT.GETELEMENTBYID('SHOP-MODAL').STYLE.DISPLAY = 'BLOCK';
-        DOCUMENT.GETELEMENTBYID('REPORT-BTN').ONCLICK = () => DOCUMENT.GETELEMENTBYID('REPORT-MODAL').STYLE.DISPLAY = 'BLOCK';
-        DOCUMENT.GETELEMENTBYID('REGISTER-SUBMIT').ONCLICK = () => {
-            LET U = DOCUMENT.GETELEMENTBYID('USERNAME').VALUE.TRIM();
-            LET P = DOCUMENT.GETELEMENTBYID('PASSWORD').VALUE;
-            IF (U && P) { LOCALSTORAGE.SETITEM(`USER_${U}`, P); ALERT('ĐĂNG KÝ THÀNH CÔNG!'); }
-        };
-        DOCUMENT.GETELEMENTBYID('LOGIN-SUBMIT').ONCLICK = () => {
-            LET U = DOCUMENT.GETELEMENTBYID('USERNAME').VALUE.TRIM();
-            LET P = DOCUMENT.GETELEMENTBYID('PASSWORD').VALUE;
-            IF (LOCALSTORAGE.GETITEM(`USER_${U}`) === P) {
-                LOCALSTORAGE.SETITEM('CURRENTUSER', U);
-                LOADUSER();
-                DOCUMENT.GETELEMENTBYID('LOGIN-MODAL').STYLE.DISPLAY = 'NONE';
-            } ELSE ALERT('SAI USER HOẶC PASS!');
-        };
-        DOCUMENT.GETELEMENTBYID('LOGOUT-BTN').ONCLICK = () => { LOCALSTORAGE.REMOVEITEM('CURRENTUSER'); LOCATION.RELOAD(); };
-        DOCUMENT.QUERYSELECTORALL('.CLOSE').FOREACH(C => C.ONCLICK = () => C.PARENTELEMENT.PARENTELEMENT.STYLE.DISPLAY = 'NONE');
+        function confirmAbandon() {
+            if (confirm('BẠN ĐỒNG Ý TỪ BỎ? SẼ BỊ TRỪ 10 ĐIỂM!')) {
+                playerCoins = Math.max(0, playerCoins - 10);
+                localStorage.setItem('playerCoins', playerCoins);
+                document.getElementById('playerCoins').innerText = playerCoins;
+                showMainScreen();
+            }
+        }
 
-        FUNCTION SHOWPAGE(ID) {
-            ['PAGE1','PAGE2','PAGE3'].FOREACH(P => {
-                DOCUMENT.GETELEMENTBYID(P).STYLE.DISPLAY = (P === ID ? 'GRID' : 'NONE');
-                DOCUMENT.GETELEMENTBYID(P + '-BTN').CLASSLIST.TOGGLE('ACTIVE', P === ID);
+        function confirmBackHome() {
+            if (confirm('BẠN ĐỒNG Ý TRỞ VỀ MÀN HÌNH CHÍNH?')) {
+                showMainScreen();
+            }
+        }
+
+        function restartCurrentGame() {
+            document.getElementById('gameModal').style.display = 'none';
+            showGame(currentGame);
+            gameStarted = true;
+            if (currentGame === 'snake') initSnake();
+            if (currentGame === 'flappy') initFlappy();
+            if (currentGame === 'pikachu') initPikachu();
+            if (currentGame === 'tictactoe') resetTTT();
+            if (currentGame === 'dino') initDino();
+            if (currentGame === 'balloon') initBalloon();
+        }
+
+        function showModal(title, message, isVictory = false, isLose = false) {
+            document.getElementById('modalTitle').innerHTML = title;
+            document.getElementById('modalMessage').innerHTML = message;
+            document.getElementById('modalExtra').style.display = isLose ? 'block' : 'none';
+            document.getElementById('gameModal').style.display = 'flex';
+            document.getElementById('fireworks').innerHTML = '';
+            document.getElementById('rain').innerHTML = '';
+            if (isVictory) {
+                createFireworks();
+            } else if (isLose) {
+                createRain();
+            }
+            playSound(isVictory ? 'victorySound' : 'gameOverSound');
+        }
+
+        function createFireworks() {
+            const fireworks = document.getElementById('fireworks');
+            for (let i = 0; i < 30; i++) {
+                const fw = document.createElement('div');
+                fw.className = 'firework';
+                fw.style.left = Math.random() * 100 + '%';
+                fw.style.top = Math.random() * 100 + '%';
+                fw.style.animationDelay = Math.random() * 1 + 's';
+                fireworks.appendChild(fw);
+            }
+        }
+
+        function createRain() {
+            const rain = document.getElementById('rain');
+            for (let i = 0; i < 50; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'rain-drop';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                drop.style.animationDuration = 1 + Math.random() * 1 + 's';
+                rain.appendChild(drop);
+            }
+        }
+
+        function playSound(id) {
+            const sound = document.getElementById(id);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        }
+
+        function adjustCanvasSize() {
+            const canvases = document.querySelectorAll('canvas');
+            canvases.forEach(canvas => {
+                const maxWidth = Math.min(window.innerWidth - 40, 400);
+                const ratio = canvas.height / canvas.width;
+                canvas.style.width = `${maxWidth}px`;
+                canvas.style.height = `${maxWidth * ratio}px`;
             });
         }
-        DOCUMENT.GETELEMENTBYID('PAGE1-BTN').ONCLICK = () => SHOWPAGE('PAGE1');
-        DOCUMENT.GETELEMENTBYID('PAGE2-BTN').ONCLICK = () => SHOWPAGE('PAGE2');
-        DOCUMENT.GETELEMENTBYID('PAGE3-BTN').ONCLICK = () => SHOWPAGE('PAGE3');
+        window.addEventListener('resize', adjustCanvasSize);
 
-        // POPUP
-        FUNCTION SHOWPOPUP(TEXT, WIN) {
-            DOCUMENT.GETELEMENTBYID('POPUP-TEXT').INNERTEXT = TEXT;
-            DOCUMENT.GETELEMENTBYID('POPUP').STYLE.DISPLAY = 'BLOCK';
-            DOCUMENT.GETELEMENTBYID('POPUP').CLASSLIST.TOGGLE('WIN', WIN);
-            DOCUMENT.GETELEMENTBYID('POPUP').CLASSLIST.TOGGLE('LOSE', !WIN);
-            (WIN ? SOUNDWIN : SOUNDLOSE).PLAY();
-        }
-        FUNCTION CLOSEPOPUP() {
-            DOCUMENT.GETELEMENTBYID('POPUP').STYLE.DISPLAY = 'NONE';
-            DOCUMENT.GETELEMENTBYID('POPUP').CLASSLIST.REMOVE('WIN','LOSE');
-            INITGAME(CURRENTGAMENAME);
-        }
+        // RẮN SĂN MỒI
+        let snakeCanvas, snakeCtx, snakeScore = 0;
+        let snake = [{x: 200, y: 200}];
+        let dx = 10, dy = 0;
+        let foodX, foodY;
+        let lastFrameTime = 0;
+        let frameInterval = 100;
+        let pendingDirection = null;
 
-        LET CURRENTGAMENAME = '';
-
-        FUNCTION OPENGAME(NAME) {
-            IF (!CURRENTUSER) RETURN ALERT('ĐĂNG NHẬP ĐI BRO ĐỂ LƯU ĐIỂM!');
-            CURRENTGAMENAME = NAME;
-            DOCUMENT.GETELEMENTBYID('GAME-MODAL').STYLE.DISPLAY = 'BLOCK';
-            DOCUMENT.GETELEMENTBYID('GAME-CONTAINER').INNERHTML = `<CANVAS ID="CANVAS" WIDTH="400" HEIGHT="500"></CANVAS><DIV ID="SCORE" STYLE="COLOR:WHITE;FONT-SIZE:24PX;">ĐIỂM: 0</DIV>`;
-            DOCUMENT.GETELEMENTBYID('INSTRUCTIONS').INNERHTML = GETINSTRUCTIONS(NAME);
-            INITGAME(NAME);
+        function initSnake() {
+            snakeCanvas = document.getElementById('snakeCanvas');
+            snakeCtx = snakeCanvas.getContext('2d');
+            snakeScore = 0;
+            document.getElementById('snakeScore').innerText = 'ĐIỂM HIỆN TẠI: 0';
+            snake = [{x: 200, y: 200}];
+            dx = 10; dy = 0;
+            pendingDirection = null;
+            createFood();
+            lastFrameTime = performance.now();
+            requestAnimationFrame(updateSnake);
         }
 
-        FUNCTION GETINSTRUCTIONS(NAME) {
-            RETURN `<P STYLE="COLOR:YELLOW;BACKGROUND:RGBA(0,0,0,0.5);PADDING:10PX;">HƯỚNG DẪN ${NAME}: PC - PHÍM MŨI TÊN/SPACE | MOBILE - CHẠM/SWIPE</P>`;
+        function createFood() {
+            foodX = Math.floor(Math.random() * 40) * 10;
+            foodY = Math.floor(Math.random() * 40) * 10;
         }
 
-        // FULL GAMES CODE
-        FUNCTION INITGAME(NAME) {
-            LET CANVAS = DOCUMENT.GETELEMENTBYID('CANVAS');
-            LET CTX = CANVAS.GETCONTEXT('2D');
-            LET SCORE = 0;
-            LET SCOREEL = DOCUMENT.GETELEMENTBYID('SCORE');
-            SCOREEL.INNERTEXT = 'ĐIỂM: 0';
+        function updateSnake(currentTime) {
+            if (currentTime - lastFrameTime > frameInterval) {
+                lastFrameTime = currentTime;
 
-            IF (NAME === 'SNAKE') {
-                // (CODE SNAKE ĐẦY ĐỦ NHƯ TRƯỚC, CÓ ÂM THANH ĂN, THUA)
-                // ... (GIỮ NGUYÊN CODE SNAKE TỪ LẦN TRƯỚC)
-            } ELSE IF (NAME === 'FLAPPY') {
-                // (CODE FLAPPY ĐẦY ĐỦ, ĐẠT 100 THẮNG)
-                // ... (GIỮ NGUYÊN)
-            } ELSE IF (NAME === 'DINO') {
-                // (CODE DINO ĐẦY ĐỦ)
-            } ELSE IF (NAME === '2048') {
-                DOCUMENT.GETELEMENTBYID('GAME-CONTAINER').INNERHTML = '<DIV ID="GRID2048" STYLE="DISPLAY:GRID;GRID-TEMPLATE-COLUMNS:REPEAT(4,90PX);GAP:10PX;MARGIN:AUTO;WIDTH:380PX;"></DIV><DIV ID="SCORE2048" STYLE="COLOR:WHITE;FONT-SIZE:24PX;">ĐIỂM: 0</DIV>';
-                LET GRID = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-                LET GRIDDIV = DOCUMENT.GETELEMENTBYID('GRID2048');
-                FOR(LET I=0;I<16;I++) {
-                    LET TILE = DOCUMENT.CREATEELEMENT('DIV');
-                    TILE.STYLE = 'WIDTH:90PX;HEIGHT:90PX;BACKGROUND:#AAA;FONT-SIZE:30PX;DISPLAY:FLEX;ALIGN-ITEMS:CENTER;JUSTIFY-CONTENT:CENTER;COLOR:WHITE;BORDER-RADIUS:10PX;';
-                    GRIDDIV.APPENDCHILD(TILE);
-                }
-                FUNCTION ADDTILE() {
-                    LET EMPTY = [];
-                    FOR(LET I=0;I<4;I++) FOR(LET J=0;J<4;J++) IF(GRID[I][J]===0) EMPTY.PUSH({I,J});
-                    IF(EMPTY.LENGTH) {
-                        LET POS = EMPTY[MATH.FLOOR(MATH.RANDOM()*EMPTY.LENGTH)];
-                        GRID[POS.I][POS.J] = MATH.RANDOM()<0.9 ? 2 : 4;
-                        SOUNDPOINT.PLAY();
+                if (pendingDirection) {
+                    switch (pendingDirection) {
+                        case 'up': if (dy === 0) { dx = 0; dy = -10; } break;
+                        case 'down': if (dy === 0) { dx = 0; dy = 10; } break;
+                        case 'left': if (dx === 0) { dx = -10; dy = 0; } break;
+                        case 'right': if (dx === 0) { dx = 10; dy = 0; } break;
                     }
+                    pendingDirection = null;
                 }
-                ADDTILE(); ADDTILE();
-                FUNCTION UPDATEGRID() {
-                    LET TILES = GRIDDIV.CHILDREN;
-                    LET MAX = 0;
-                    FOR(LET I=0;I<4;I++) FOR(LET J=0;J<4;J++) {
-                        LET V = GRID[I][J];
-                        TILES[I*4+J].INNERTEXT = V || '';
-                        TILES[I*4+J].STYLE.BACKGROUND = V ? `HSL(${MATH.LOG2(V)*30},70%,50%)` : '#AAA';
-                        IF (V > MAX) MAX = V;
-                        SCORE = MATH.MAX(SCORE, V);
-                    }
-                    SCOREEL.INNERTEXT = 'ĐIỂM: ' + SCORE;
-                    IF (MAX >= 2048) {
-                        SOUNDWIN.PLAY();
-                        SHOWPOPUP('CHÚC MỪNG ĐẠT 2048 🎉', TRUE);
-                        SAVESCORE('2048', SCORE, TRUE);
-                    }
-                }
-                FUNCTION MOVE(DIR) {
-                    // SIMPLE MOVE & MERGE LOGIC (IMPLEMENT FULL FOR ALL DIRECTIONS)
-                    // ... (CÓ THỂ DÙNG CODE TỪ GIST ĐƠN GIẢN)
-                    UPDATEGRID();
-                    ADDTILE();
-                }
-                DOCUMENT.ADDEVENTLISTENER('KEYDOWN', E => {
-                    IF (E.KEY === 'ARROWUP') MOVE('UP');
-                    // ADD LEFT, RIGHT, DOWN
+
+                snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+                let snakeColor = ownedItems.includes('redSnake') ? '#e74c3c' : '#4CAF50';
+                snake.forEach(part => {
+                    snakeCtx.fillStyle = snakeColor;
+                    snakeCtx.fillRect(part.x, part.y, 10, 10);
+                    snakeCtx.strokeStyle = '#388E3C';
+                    snakeCtx.strokeRect(part.x, part.y, 10, 10);
                 });
-                UPDATEGRID();
-            } ELSE IF (NAME === 'TETRIS') {
-                // FULL TETRIS FROM GIST STRAKER
-                // PASTE FULL CODE TỪ GIST
-                // (TOO LONG, NHƯNG CHẠY OK)
-            } ELSE IF (NAME === 'PINGPONG') {
-                // FULL PING PONG FROM GIST STRAKER
-                // PASTE CODE
-            } ELSE IF (NAME === 'BREAKOUT') {
-                // FULL BREAKOUT FROM GIST STRAKER
-                // PASTE CODE, CÓ ÂM THANH HIT, POINT
-            } ELSE IF (NAME === 'RPS') {
-                // CODE RPS NHƯ TRƯỚC
+
+                snakeCtx.fillStyle = '#FF5722';
+                snakeCtx.fillRect(foodX, foodY, 10, 10);
+
+                let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+                if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height || snake.slice(1).some(part => part.x === head.x && part.y === head.y)) {
+                    addCoins(snakeScore);
+                    showModal('💔 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${snakeScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
+                    return;
+                }
+
+                snake.unshift(head);
+
+                if (head.x === foodX && head.y === foodY) {
+                    snakeScore++;
+                    document.getElementById('snakeScore').innerText = 'ĐIỂM HIỆN TẠI: ' + snakeScore;
+                    createFood();
+                    playSound('eatSound');
+                } else {
+                    snake.pop();
+                }
+            }
+            requestAnimationFrame(updateSnake);
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowUp') pendingDirection = 'up';
+            if (e.key === 'ArrowDown') pendingDirection = 'down';
+            if (e.key === 'ArrowLeft') pendingDirection = 'left';
+            if (e.key === 'ArrowRight') pendingDirection = 'right';
+        });
+
+        function changeDirection(dir) {
+            pendingDirection = dir;
+        }
+
+        // CỜ CARO
+        let tttBoard = Array(9).fill(null);
+
+        function playTTT(index) {
+            if (tttBoard[index] || checkWinner(tttBoard)) return;
+            tttBoard[index] = 'X';
+            document.getElementById('ttt' + index).innerText = 'X';
+            if (checkWinner(tttBoard)) {
+                addCoins(50);
+                showModal('🎉 CHÚC MỪNG!', 'BẠN THẮNG CỜ CARO!<br>+50 💰 THƯỞNG!', true);
+                return;
+            }
+            if (tttBoard.every(cell => cell)) {
+                addCoins(10);
+                showModal('🤝 HÒA NHAU!', 'HÒA VÁN NÀY!<br>+10 💰 AN ỦI', false);
+                return;
+            }
+            setTimeout(computerMove, 500);
+        }
+
+        function computerMove() {
+            let bestMove = -1;
+            for (let i = 0; i < 9; i++) {
+                if (!tttBoard[i]) {
+                    tttBoard[i] = 'X';
+                    if (checkWinner(tttBoard)) { bestMove = i; tttBoard[i] = null; break; }
+                    tttBoard[i] = null;
+                }
+            }
+            if (bestMove === -1) {
+                for (let i = 0; i < 9; i++) {
+                    if (!tttBoard[i]) {
+                        tttBoard[i] = 'O';
+                        if (checkWinner(tttBoard)) { bestMove = i; tttBoard[i] = null; break; }
+                        tttBoard[i] = null;
+                    }
+                }
+            }
+            if (bestMove === -1) {
+                let available = tttBoard.map((v, i) => v === null ? i : null).filter(v => v !== null);
+                bestMove = available[Math.floor(Math.random() * available.length)];
+            }
+            tttBoard[bestMove] = 'O';
+            document.getElementById('ttt' + bestMove).innerText = 'O';
+            if (checkWinner(tttBoard)) {
+                addCoins(5);
+                showModal('🤖 MÁY THẮNG!', 'MÁY THẮNG RỒI!<br>+5 💰 AN ỦI', false);
+            } else if (tttBoard.every(cell => cell)) {
+                addCoins(10);
+                showModal('🤝 HÒA NHAU!', 'LẠI HÒA!<br>+10 💰', false);
+            }
+        }
+
+        function checkWinner(board) {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            return wins.some(combo => combo.every(i => board[i] === board[combo[0]] && board[i]));
+        }
+
+        function resetTTT() {
+            tttBoard = Array(9).fill(null);
+            for (let i = 0; i < 9; i++) document.getElementById('ttt' + i).innerText = ' ';
+            document.getElementById('tttStatus').innerText = '';
+        }
+
+        // FLAPPY BIRD
+        let flappyCanvas, flappyCtx, birdY = 250, birdVelocity = 0, pipes = [], flappyScore = 0;
+        let gravity = 0.5, jump = -10;
+
+        function initFlappy() {
+            flappyCanvas = document.getElementById('flappyCanvas');
+            flappyCtx = flappyCanvas.getContext('2d');
+            birdY = 250; birdVelocity = 0; pipes = []; flappyScore = 0;
+            flappyPaused = false;
+            document.getElementById('flappyScore').innerText = 'ĐIỂM HIỆN TẠI: 0 / 100';
+            pipes.push({x: 400, gap: Math.random() * 150 + 100});
+            flappyAnimationId = requestAnimationFrame(updateFlappy);
+        }
+
+        function updateFlappy() {
+            if (flappyPaused) return;
+
+            flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+            birdVelocity += gravity;
+            birdY += birdVelocity;
+
+            if (birdY > flappyCanvas.height - 20 || birdY < 0) {
+                addCoins(Math.floor(flappyScore / 2));
+                showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${flappyScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
+                return;
             }
 
-            UPDATEGRID(); // FOR GAMES NEED
+            flappyCtx.fillStyle = ownedItems.includes('heroBird') ? '#e74c3c' : '#FFEB3B';
+            flappyCtx.fillRect(50, birdY, 30, 20);
+            flappyCtx.fillStyle = '#000';
+            flappyCtx.fillRect(75, birdY + 5, 10, 8);
+
+            pipes.forEach(pipe => {
+                pipe.x -= 2;
+                flappyCtx.fillStyle = '#4CAF50';
+                flappyCtx.fillRect(pipe.x, 0, 50, pipe.gap);
+                flappyCtx.fillRect(pipe.x, pipe.gap + 150, 50, flappyCanvas.height - pipe.gap - 150);
+
+                if (pipe.x + 50 === 80) {
+                    flappyScore++;
+                    document.getElementById('flappyScore').innerText = 'ĐIỂM HIỆN TẠI: ' + flappyScore + ' / 100';
+                    playSound('eatSound');
+                    if (flappyScore >= 100) {
+                        addCoins(200);
+                        showModal('🎉 CHÚC MỪNG WIN!', 'BẠN ĐÃ ĐẠT 100 ĐIỂM!<br>+200 💰 THƯỞNG LỚN!', true);
+                        return;
+                    }
+                }
+
+                if (pipe.x < 80 && pipe.x > 20 && (birdY < pipe.gap || birdY + 20 > pipe.gap + 150)) {
+                    addCoins(Math.floor(flappyScore / 2));
+                    showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${flappyScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
+                    return;
+                }
+            });
+
+            if (pipes[pipes.length-1].x < 200) pipes.push({x: 400, gap: Math.random() * 150 + 100});
+            if (pipes[0].x < -50) pipes.shift();
+
+            flappyAnimationId = requestAnimationFrame(updateFlappy);
         }
 
-        LOADUSER();
-    </SCRIPT>
-</BODY>
-</HTML>
+        document.addEventListener('keydown', e => { if (e.key === ' ') { birdVelocity = jump; playSound('jumpSound'); } });
+        flappyCanvas.addEventListener('click', () => { birdVelocity = jump; playSound('jumpSound'); });
+        flappyCanvas.addEventListener('touchstart', e => { e.preventDefault(); birdVelocity = jump; playSound('jumpSound'); });
+
+        // PIKACHU
+        const emojis = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
+        let pikachuCards = [...emojis, ...emojis];
+        let selected = [];
+
+        function initPikachu() {
+            pikachuCards.sort(() => Math.random() - 0.5);
+            const board = document.getElementById('pikachuBoard');
+            board.innerHTML = '';
+            pikachuCards.forEach((emoji, i) => {
+                const card = document.createElement('div');
+                card.className = 'pikachu-card';
+                card.innerText = '';
+                card.onclick = () => flipCard(card, emoji);
+                card.ontouchstart = () => flipCard(card, emoji);
+                board.appendChild(card);
+            });
+            document.getElementById('pairsLeft').innerText = '8';
+        }
+
+        function flipCard(card, emoji) {
+            if (card.innerText !== '' || selected.length === 2) return;
+            card.innerText = emoji;
+            card.style.background = '#fff';
+            selected.push({card, emoji});
+            if (selected.length === 2) {
+                if (selected[0].emoji === selected[1].emoji) {
+                    let matchBg = ownedItems.includes('sparkleMatch') ? 'linear-gradient(135deg, #ff9a9e, #fad0c4)' : '#a8e6cf';
+                    selected[0].card.style.background = matchBg;
+                    selected[1].card.style.background = matchBg;
+                    selected[0].card.style.cursor = 'default';
+                    selected[1].card.style.cursor = 'default';
+                    playSound('matchSound');
+                    let pairs = parseInt(document.getElementById('pairsLeft').innerText) - 1;
+                    document.getElementById('pairsLeft').innerText = pairs;
+                    if (pairs === 0) {
+                        addCoins(100);
+                        showModal('🎉 TUYỆT VỜI!', 'BẠN ĐÃ GHÉP HẾT!<br>+100 💰 THƯỞNG LỚN!', true);
+                    }
+                } else {
+                    setTimeout(() => {
+                        selected[0].card.innerText = '';
+                        selected[1].card.innerText = '';
+                        selected[0].card.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                        selected[1].card.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                    }, 800);
+                }
+                selected = [];
+            }
+        }
+
+        // DINO GAME
+        let dinoCanvas, dinoCtx, dinoX = 50, dinoY = 150, dinoVelocity = 0, obstacles = [], dinoScore = 0;
+        let dinoRunning = false;
+        let endingShown = false;
+
+        function initDino() {
+            dinoCanvas = document.getElementById('dinoCanvas');
+            dinoCtx = dinoCanvas.getContext('2d');
+            dinoX = 50; dinoY = 150; dinoVelocity = 0; obstacles = []; dinoScore = 0; endingShown = false;
+            document.getElementById('dinoScore').innerText = 'ĐIỂM: 0';
+            dinoRunning = true;
+            requestAnimationFrame(updateDino);
+        }
+
+        function updateDino() {
+            if (!dinoRunning) return;
+            dinoCtx.clearRect(0, 0, dinoCanvas.width, dinoCanvas.height);
+            dinoVelocity += 0.5;
+            dinoY += dinoVelocity;
+            if (dinoY > 150) dinoY = 150, dinoVelocity = 0;
+
+            dinoCtx.fillStyle = '#000';
+            dinoCtx.fillRect(dinoX, dinoY, 40, 50);
+
+            if (Math.random() < 0.02) obstacles.push({x: 600, y: 170, w: 20, h: 30});
+
+            obstacles.forEach((obs, i) => {
+                obs.x -= 5;
+                dinoCtx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                if (obs.x < dinoX + 40 && obs.x + obs.w > dinoX && dinoY + 50 > obs.y) {
+                    dinoRunning = false;
+                    addCoins(dinoScore);
+                    if (dinoScore >= 9999 && !endingShown) {
+                        endingShown = true;
+                        showModal('💔 KẾT THÚC BUỒN...', 'DINO GIRL ĐÃ CÓ NGƯỜI MỚI... CÔ ẤY CHIA TAY BẠN RỒI 😭', false);
+                    } else {
+                        showModal('💥 BẠN ĐÃ THUA!', `ĐẠT \( {dinoScore} ĐIỂM!<br>+ \){dinoScore} 💰`, false, true);
+                    }
+                    return;
+                }
+                if (obs.x < 0) obstacles.splice(i, 1);
+            });
+
+            dinoScore++;
+            document.getElementById('dinoScore').innerText = 'ĐIỂM: ' + dinoScore;
+            requestAnimationFrame(updateDino);
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === ' ' && dinoRunning) dinoVelocity = -12; });
+        dinoCanvas.addEventListener('click', () => { if (dinoRunning) dinoVelocity = -12; });
+        dinoCanvas.addEventListener('touchstart', e => { e.preventDefault(); if (dinoRunning) dinoVelocity = -12; });
+
+        // KHINH KHÍ CẦU - CẬP NHẬT ĐÚNG YÊU CẦU
+        let balloonCanvas, balloonCtx, balloonX = 200, balloonY = 300, balloonVelocityY = 0, balloonVelocityX = 0;
+        let stars = [], clouds = [], balloonScore = 0;
+        let balloonRunning = false;
+        let isHolding = false;
+        let touchX = 0;
+
+        function initBalloon() {
+            balloonCanvas = document.getElementById('balloonCanvas');
+            balloonCtx = balloonCanvas.getContext('2d');
+            balloonX = 200; balloonY = 300; balloonVelocityY = 0; balloonVelocityX = 0;
+            stars = []; clouds = []; balloonScore = 0;
+            document.getElementById('balloonScore').innerText = 'ĐIỂM: 0';
+            balloonRunning = true;
+            requestAnimationFrame(updateBalloon);
+        }
+
+        function updateBalloon() {
+            if (!balloonRunning) return;
+
+            balloonCtx.clearRect(0, 0, balloonCanvas.width, balloonCanvas.height);
+
+            if (isHolding) {
+                balloonVelocityY = -3;
+            } else {
+                balloonVelocityY += 0.3;
+            }
+            balloonY += balloonVelocityY;
+            balloonX += balloonVelocityX;
+            balloonVelocityX *= 0.95;
+
+            if (balloonY < 50 || balloonY > balloonCanvas.height - 100 || balloonX < 50 || balloonX > balloonCanvas.width - 50) {
+                balloonRunning = false;
+                addCoins(balloonScore);
+                showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>\( {balloonScore}</strong> ĐIỂM!<br>+ \){balloonScore} 💰`, false, true);
+                return;
+            }
+
+            // VẼ KHINH KHÍ CẦU
+            balloonCtx.fillStyle = '#E91E63';
+            balloonCtx.beginPath();
+            balloonCtx.arc(balloonX, balloonY, 50, 0, Math.PI * 2);
+            balloonCtx.fill();
+            balloonCtx.fillStyle = '#FF9800';
+            balloonCtx.fillRect(balloonX - 25, balloonY + 50, 50, 60);
+
+            // TẠO NGÔI SAO VÀ MÂY
+            if (Math.random() < 0.02) stars.push({x: 400, y: Math.random() * (balloonCanvas.height - 100) + 50});
+            if (Math.random() < 0.015) clouds.push({x: 400, y: Math.random() * (balloonCanvas.height - 100) + 50});
+
+            stars.forEach((star, i) => {
+                star.x -= 3;
+                balloonCtx.fillStyle = '#FFD700';
+                balloonCtx.font = '30px Arial';
+                balloonCtx.fillText('⭐', star.x, star.y);
+                if (Math.abs(star.x - balloonX) < 50 && Math.abs(star.y - balloonY) < 60) {
+                    balloonScore += 10;
+                    document.getElementById('balloonScore').innerText = 'ĐIỂM: ' + balloonScore;
+                    playSound('eatSound');
+                    stars.splice(i, 1);
+                }
+                if (star.x < 0) stars.splice(i, 1);
+            });
+
+            clouds.forEach((cloud, i) => {
+                cloud.x -= 3;
+                balloonCtx.fillStyle = '#9E9E9E';
+                balloonCtx.fillRect(cloud.x, cloud.y - 30, 100, 60);
+                if (Math.abs(cloud.x + 50 - balloonX) < 70 && Math.abs(cloud.y - balloonY) < 80) {
+                    balloonRunning = false;
+                    addCoins(balloonScore);
+                    showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>\( {balloonScore}</strong> ĐIỂM!<br>+ \){balloonScore} 💰`, false, true);
+                    return;
+                }
+                if (cloud.x < 0) clouds.splice(i, 1);
+            });
+
+            requestAnimationFrame(updateBalloon);
+        }
+
+        balloonCanvas.addEventListener('mousedown', e => {
+            isHolding = true;
+            touchX = e.clientX;
+        });
+        balloonCanvas.addEventListener('mousemove', e => {
+            if (isHolding) {
+                balloonVelocityX = (e.clientX - touchX) * 0.1;
+                touchX = e.clientX;
+            }
+        });
+        balloonCanvas.addEventListener('mouseup', () => isHolding = false);
+        balloonCanvas.addEventListener('mouseleave', () => isHolding = false);
+
+        balloonCanvas.addEventListener('touchstart', e => {
+            isHolding = true;
+            touchX = e.touches[0].clientX;
+            e.preventDefault();
+        });
+        balloonCanvas.addEventListener('touchmove', e => {
+            if (isHolding) {
+                balloonVelocityX = (e.touches[0].clientX - touchX) * 0.2;
+                touchX = e.touches[0].clientX;
+            }
+            e.preventDefault();
+        });
+        balloonCanvas.addEventListener('touchend', () => isHolding = false);
+
+        // SHOP, LOGIN, MODAL GIỮ NGUYÊN NHƯ TRƯỚC
+
+        function showInfo() {
+            document.getElementById('infoModal').style.display = 'flex';
+        }
+
+        function closeInfo() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function register() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            if (user && pass) {
+                localStorage.setItem('pass_' + user, pass);
+                alert('ĐĂNG KÝ THÀNH CÔNG!');
+                closeLoginModal();
+            }
+        }
+
+        function login() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            if (user && pass && localStorage.getItem('pass_' + user) === pass) {
+                currentUser = user;
+                localStorage.setItem('currentUser', user);
+                alert('ĐĂNG NHẬP THÀNH CÔNG!');
+                loadUser();
+                closeLoginModal();
+            } else {
+                alert('SAI TÊN HOẶC MẬT KHẨU!');
+            }
+        }
+
+        function logout() {
+            if (confirm('ĐĂNG XUẤT?')) {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                saveCoins();
+                loadUser();
+            }
+        }
+
+        function updateShopButtons() {
+            const buttons = {
+                'redSnake': 'buy-redSnake',
+                'rainbowSnake': 'buy-rainbowSnake',
+                'heroBird': 'buy-heroBird',
+                'sparkleMatch': 'buy-sparkleMatch'
+            };
+            Object.keys(buttons).forEach(item => {
+                const btn = document.getElementById(buttons[item]);
+                if (btn) {
+                    if (ownedItems.includes(item)) {
+                        btn.innerText = 'ĐÃ SỞ HỮU';
+                        btn.disabled = true;
+                    } else {
+                        btn.innerText = 'MUA';
+                        btn.disabled = false;
+                    }
+                }
+            });
+        }
+
+        function buyItem(item, cost) {
+            if (playerCoins >= cost && !ownedItems.includes(item)) {
+                playerCoins -= cost;
+                ownedItems.push(item);
+                saveCoins();
+                document.getElementById('playerCoins').innerText = playerCoins;
+                document.getElementById('playerCoinsShop').innerText = playerCoins;
+                alert('🎉 MUA THÀNH CÔNG! ITEM ĐÃ ĐƯỢC THÊM VÀO KHO.');
+                updateShopButtons();
+            } else if (ownedItems.includes(item)) {
+                alert('BẠN ĐÃ SỞ HỮU ITEM NÀY RỒI!');
+            } else {
+                alert('KHÔNG ĐỦ ĐIỂM ĐỂ MUA!');
+            }
+        }
+
+        function showBugModal() {
+            document.getElementById('bugModal').style.display = 'flex';
+        }
+
+        function closeBugModal() {
+            document.getElementById('bugModal').style.display = 'none';
+        }
+
+        function sendBugReport() {
+            const email = document.getElementById('bugEmail').value.trim();
+            const message = document.getElementById('bugMessage').value.trim();
+            if (email && message) {
+                alert('CẢM ƠN BẠN ĐÃ BÁO CÁO LỖI, MÌNH SẼ SỚM SỬA LỖI TRONG VÒNG 24H HOẶC HƠN NẾU MÌNH BẬN');
+                document.getElementById('bugEmail').value = '';
+                document.getElementById('bugMessage').value = '';
+                closeBugModal();
+            } else {
+                alert('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ TIN NHẮN!');
+            }
+        }
+
+        function showSuggestModal() {
+            document.getElementById('suggestModal').style.display = 'flex';
+        }
+
+        function closeSuggestModal() {
+            document.getElementById('suggestModal').style.display = 'none';
+        }
+
+        function sendSuggest() {
+            const email = document.getElementById('suggestEmail').value.trim();
+            const message = document.getElementById('suggestMessage').value.trim();
+            if (email && message) {
+                alert('CẢM ƠN GỢI Ý CỦA BẠN! MÌNH SẼ XEM XÉT THÊM TRÒ MỚI ❤️');
+                document.getElementById('suggestEmail').value = '';
+                document.getElementById('suggestMessage').value = '';
+                closeSuggestModal();
+            } else {
+                alert('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ GỢI Ý!');
+            }
+        }
+    </script>
+</body>
+</html>
