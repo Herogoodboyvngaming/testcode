@@ -455,4 +455,333 @@
                 if (pendingDirection) {
                     switch (pendingDirection) {
                         case 'up': if (dy === 0) { dx = 0; dy = -10; } break;
-                        case 'down': if
+                        case 'down': if (dy === 0) { dx = 0; dy = 10; } break;
+                        case 'left': if (dx === 0) { dx = -10; dy = 0; } break;
+                        case 'right': if (dx === 0) { dx = 10; dy = 0; } break;
+                    }
+                    pendingDirection = null;
+                }
+
+                snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+                let snakeColor = ownedItems.includes('redSnake') ? '#e74c3c' : '#4CAF50';
+                snake.forEach(part => {
+                    snakeCtx.fillStyle = snakeColor;
+                    snakeCtx.fillRect(part.x, part.y, 10, 10);
+                    snakeCtx.strokeStyle = '#388E3C';
+                    snakeCtx.strokeRect(part.x, part.y, 10, 10);
+                });
+
+                snakeCtx.fillStyle = '#FF5722';
+                snakeCtx.fillRect(foodX, foodY, 10, 10);
+
+                let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+                if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height || snake.slice(1).some(part => part.x === head.x && part.y === head.y)) {
+                    addCoins(snakeScore);
+                    showModal('💔 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${snakeScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
+                    return;
+                }
+
+                snake.unshift(head);
+
+                if (head.x === foodX && head.y === foodY) {
+                    snakeScore++;
+                    document.getElementById('snakeScore').innerText = 'ĐIỂM HIỆN TẠI: ' + snakeScore;
+                    createFood();
+                    playSound('eatSound');
+                } else {
+                    snake.pop();
+                }
+            }
+            requestAnimationFrame(updateSnake);
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowUp') pendingDirection = 'up';
+            if (e.key === 'ArrowDown') pendingDirection = 'down';
+            if (e.key === 'ArrowLeft') pendingDirection = 'left';
+            if (e.key === 'ArrowRight') pendingDirection = 'right';
+        });
+
+        function changeDirection(dir) {
+            pendingDirection = dir;
+        }
+
+        // CỜ CARO
+        let tttBoard = Array(9).fill(null);
+
+        function playTTT(index) {
+            if (tttBoard[index] || checkWinner(tttBoard)) return;
+            tttBoard[index] = 'X';
+            document.getElementById('ttt' + index).innerText = 'X';
+            if (checkWinner(tttBoard)) {
+                addCoins(50);
+                showModal('🎉 CHÚC MỪNG!', 'BẠN THẮNG CỜ CARO!<br>+50 💰 THƯỞNG!', true);
+                return;
+            }
+            if (tttBoard.every(cell => cell)) {
+                addCoins(10);
+                showModal('🤝 HÒA NHAU!', 'HÒA VÁN NÀY!<br>+10 💰 AN ỦI', false);
+                return;
+            }
+            setTimeout(computerMove, 500);
+        }
+
+        function computerMove() {
+            let bestMove = -1;
+            for (let i = 0; i < 9; i++) {
+                if (!tttBoard[i]) {
+                    tttBoard[i] = 'X';
+                    if (checkWinner(tttBoard)) { bestMove = i; tttBoard[i] = null; break; }
+                    tttBoard[i] = null;
+                }
+            }
+            if (bestMove === -1) {
+                for (let i = 0; i < 9; i++) {
+                    if (!tttBoard[i]) {
+                        tttBoard[i] = 'O';
+                        if (checkWinner(tttBoard)) { bestMove = i; tttBoard[i] = null; break; }
+                        tttBoard[i] = null;
+                    }
+                }
+            }
+            if (bestMove === -1) {
+                let available = tttBoard.map((v, i) => v === null ? i : null).filter(v => v !== null);
+                bestMove = available[Math.floor(Math.random() * available.length)];
+            }
+            tttBoard[bestMove] = 'O';
+            document.getElementById('ttt' + bestMove).innerText = 'O';
+            if (checkWinner(tttBoard)) {
+                addCoins(5);
+                showModal('🤖 MÁY THẮNG!', 'MÁY THẮNG RỒI!<br>+5 💰 AN ỦI', false);
+            } else if (tttBoard.every(cell => cell)) {
+                addCoins(10);
+                showModal('🤝 HÒA NHAU!', 'LẠI HÒA!<br>+10 💰', false);
+            }
+        }
+
+        function checkWinner(board) {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            return wins.some(combo => combo.every(i => board[i] === board[combo[0]] && board[i]));
+        }
+
+        function resetTTT() {
+            tttBoard = Array(9).fill(null);
+            for (let i = 0; i < 9; i++) document.getElementById('ttt' + i).innerText = ' ';
+            document.getElementById('tttStatus').innerText = '';
+        }
+
+        // FLAPPY BIRD
+        let flappyCanvas, flappyCtx, birdX = 80, birdY = 250, birdVelocity = 0, pipes = [];
+        let gravity = 0.6, jump = -11;
+        let birdSize = 25;
+
+        function initFlappy() {
+            flappyCanvas = document.getElementById('flappyCanvas');
+            flappyCtx = flappyCanvas.getContext('2d');
+            birdX = 80; birdY = 250; birdVelocity = 0; pipes = []; flappyScore = 0;
+            flappyPaused = false;
+            document.getElementById('flappyScore').innerText = 'ĐIỂM HIỆN TẠI: 0';
+            generatePipe();
+            flappyAnimationId = requestAnimationFrame(updateFlappy);
+        }
+
+        function generatePipe() {
+            const gap = 120;
+            const minHeight = 50;
+            const maxHeight = flappyCanvas.height - gap - minHeight;
+            const topHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+            pipes.push({x: flappyCanvas.width, top: topHeight, bottom: flappyCanvas.height - topHeight - gap});
+        }
+
+        function updateFlappy() {
+            if (flappyPaused) return;
+
+            flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+            birdVelocity += gravity;
+            birdY += birdVelocity;
+
+            if (birdY + birdSize > flappyCanvas.height || birdY < 0) {
+                addCoins(Math.floor(flappyScore / 2));
+                showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${flappyScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
+                return;
+            }
+
+            flappyCtx.fillStyle = ownedItems.includes('heroBird') ? '#e74c3c' : '#FFEB3B';
+            flappyCtx.fillRect(birdX, birdY, birdSize, birdSize);
+            flappyCtx.fillStyle = '#000';
+            flappyCtx.fillRect(birdX + birdSize - 5, birdY + 5, 8, 6);
+
+            pipes.forEach((pipe, i) => {
+                pipe.x -= 3;
+
+                flappyCtx.fillStyle = '#4CAF50';
+                flappyCtx.fillRect(pipe.x, 0, 60, pipe.top);
+                flappyCtx.fillRect(pipe.x, flappyCanvas.height - pipe.bottom, 60, pipe.bottom);
+
+                if (pipe.x < birdX + birdSize && pipe.x + 60 > birdX &&
+                    (birdY < pipe.top || birdY + birdSize > flappyCanvas.height - pipe.bottom)) {
+                    addCoins(Math.floor(flappyScore / 2));
+                    showModal('💥 BẠN ĐÃ THUA!', `BẠN ĐẠT <strong>${flappyScore}</strong> ĐIỂM!<br>CÓ MUỐN CHƠI LẠI KHÔNG? HÃY BẤM VÀO NÚT BÊN DƯỚI!`, false, true);
+                    return;
+                }
+
+                if (pipe.x + 60 === birdX + birdSize / 2) {
+                    flappyScore++;
+                    document.getElementById('flappyScore').innerText = 'ĐIỂM HIỆN TẠI: ' + flappyScore;
+                    playSound('eatSound');
+                    if (flappyScore === 100) {
+                        addCoins(100);
+                        showModal('🎉 CHÚC MỪNG WIN!', 'BẠN ĐÃ ĐẠT 100 ĐIỂM!<br>+100 💰 THƯỞNG!', true);
+                        return;
+                    }
+                }
+
+                if (pipe.x < -60) pipes.splice(i, 1);
+            });
+
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < flappyCanvas.width - 200) generatePipe();
+
+            flappyAnimationId = requestAnimationFrame(updateFlappy);
+        }
+
+        function jumpFlappy() {
+            birdVelocity = jump;
+            playSound('jumpSound');
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === ' ') { e.preventDefault(); jumpFlappy(); } });
+        flappyCanvas.addEventListener('click', jumpFlappy);
+        flappyCanvas.addEventListener('touchstart', e => { e.preventDefault(); jumpFlappy(); });
+
+        // SHOP & LOGIN & MODAL
+        function showInfo() {
+            document.getElementById('infoModal').style.display = 'flex';
+        }
+
+        function closeInfo() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function register() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            if (user && pass) {
+                localStorage.setItem('pass_' + user, pass);
+                alert('ĐĂNG KÝ THÀNH CÔNG!');
+                closeLoginModal();
+            }
+        }
+
+        function login() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            if (user && pass && localStorage.getItem('pass_' + user) === pass) {
+                currentUser = user;
+                localStorage.setItem('currentUser', user);
+                alert('ĐĂNG NHẬP THÀNH CÔNG!');
+                loadUser();
+                closeLoginModal();
+            } else {
+                alert('SAI TÊN HOẶC MẬT KHẨU!');
+            }
+        }
+
+        function logout() {
+            if (confirm('ĐĂNG XUẤT?')) {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                saveCoins();
+                loadUser();
+            }
+        }
+
+        function updateShopButtons() {
+            const buttons = {
+                'redSnake': 'buy-redSnake',
+                'rainbowSnake': 'buy-rainbowSnake',
+                'heroBird': 'buy-heroBird'
+            };
+            Object.keys(buttons).forEach(item => {
+                const btn = document.getElementById(buttons[item]);
+                if (btn) {
+                    if (ownedItems.includes(item)) {
+                        btn.innerText = 'ĐÃ SỞ HỮU';
+                        btn.disabled = true;
+                    } else {
+                        btn.innerText = 'MUA';
+                        btn.disabled = false;
+                    }
+                }
+            });
+        }
+
+        function buyItem(item, cost) {
+            if (playerCoins >= cost && !ownedItems.includes(item)) {
+                playerCoins -= cost;
+                ownedItems.push(item);
+                saveCoins();
+                document.getElementById('playerCoins').innerText = playerCoins;
+                document.getElementById('playerCoinsShop').innerText = playerCoins;
+                alert('🎉 MUA THÀNH CÔNG! ITEM ĐÃ ĐƯỢC THÊM VÀO KHO.');
+                updateShopButtons();
+            } else if (ownedItems.includes(item)) {
+                alert('BẠN ĐÃ SỞ HỮU ITEM NÀY RỒI!');
+            } else {
+                alert('KHÔNG ĐỦ ĐIỂM ĐỂ MUA!');
+            }
+        }
+
+        function showBugModal() {
+            document.getElementById('bugModal').style.display = 'flex';
+        }
+
+        function closeBugModal() {
+            document.getElementById('bugModal').style.display = 'none';
+        }
+
+        function sendBugReport() {
+            const email = document.getElementById('bugEmail').value.trim();
+            const message = document.getElementById('bugMessage').value.trim();
+            if (email && message) {
+                alert('CẢM ƠN BẠN ĐÃ BÁO CÁO LỖI, MÌNH SẼ SỚM SỬA LỖI TRONG VÒNG 24H HOẶC HƠN NẾU MÌNH BẬN');
+                document.getElementById('bugEmail').value = '';
+                document.getElementById('bugMessage').value = '';
+                closeBugModal();
+            } else {
+                alert('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ TIN NHẮN!');
+            }
+        }
+
+        function showSuggestModal() {
+            document.getElementById('suggestModal').style.display = 'flex';
+        }
+
+        function closeSuggestModal() {
+            document.getElementById('suggestModal').style.display = 'none';
+        }
+
+        function sendSuggest() {
+            const email = document.getElementById('suggestEmail').value.trim();
+            const message = document.getElementById('suggestMessage').value.trim();
+            if (email && message) {
+                alert('CẢM ƠN GỢI Ý CỦA BẠN! MÌNH SẼ XEM XÉT THÊM TRÒ MỚI ❤️');
+                document.getElementById('suggestEmail').value = '';
+                document.getElementById('suggestMessage').value = '';
+                closeSuggestModal();
+            } else {
+                alert('VUI LÒNG NHẬP ĐẦY ĐỦ GMAIL VÀ GỢI Ý!');
+            }
+        }
+    </script>
+</body>
+</html>
