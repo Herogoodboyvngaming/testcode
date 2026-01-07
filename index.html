@@ -12,7 +12,7 @@
     <!-- Nút bật/tắt âm thanh -->
     <div id="sound-btn" class="control-btn">🔊</div>
 
-    <!-- Hướng dẫn tap lần đầu (ẩn sau khi unlock) -->
+    <!-- Hint unlock âm thanh lần đầu -->
     <div id="hint">Tap màn hình để bật âm thanh nổ!</div>
 
     <script>
@@ -27,41 +27,47 @@
         });
 
         let particles = [];
-        let fireworks = [];
+        let rockets = [];
         let soundEnabled = true;
-        let hasInteracted = false;
+        let unlocked = false;
 
-        // Âm thanh nổ thực tế (royalty-free từ Mixkit)
-        const explosionUrls = [
+        // Âm thanh nổ đa dạng + to
+        const sounds = [
             'https://assets.mixkit.co/sfx/preview/mixkit-large-firework-explosion-1670.mp3',
             'https://assets.mixkit.co/sfx/preview/mixkit-firework-explosion-1669.mp3',
-            'https://assets.mixkit.co/sfx/preview/mixkit-single-firework-explosion-1675.mp3'
+            'https://assets.mixkit.co/sfx/preview/mixkit-single-firework-explosion-1675.mp3',
+            'https://assets.mixkit.co/sfx/preview/mixkit-firework-whistle-launch-1674.mp3'
         ];
-        const explosionAudios = explosionUrls.map(url => {
+        const audioPool = sounds.map(url => {
             const a = new Audio(url);
             a.preload = 'auto';
             return a;
         });
 
-        // Sound im lặng để force unlock audio context
-        const silent = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+        // Unlock chắc chắn
+        const unlockAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
 
-        function forceUnlock() {
-            silent.play().catch(() => {});
-            explosionAudios.forEach(a => a.play().catch(() => {}));
+        function unlockSound() {
+            if (unlocked) return;
+            unlocked = true;
+            document.getElementById('hint').style.display = 'none';
+            unlockAudio.play().catch(() => {});
+            audioPool.forEach(a => a.play().catch(() => {}));
         }
 
-        function playExplosion() {
-            if (!soundEnabled || !hasInteracted) return;
-            const a = explosionAudios[Math.floor(Math.random() * explosionAudios.length)].cloneNode();
+        function playSound() {
+            if (!soundEnabled || !unlocked) return;
+            const a = audioPool[Math.floor(Math.random() * audioPool.length)].cloneNode();
             a.volume = 1.0;
             a.play().catch(() => {});
         }
 
         class Particle {
             constructor(x, y, vx, vy, color, size, life, trail = false) {
-                this.x = x; this.y = y;
-                this.vx = vx; this.vy = vy;
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
                 this.color = color;
                 this.size = size;
                 this.life = life;
@@ -73,61 +79,63 @@
             update() {
                 if (this.trail) {
                     this.trailPoints.push({x: this.x, y: this.y});
-                    if (this.trailPoints.length > 30) this.trailPoints.shift();
+                    if (this.trailPoints.length > 35) this.trailPoints.shift();
                 }
 
                 this.vx *= 0.98;
                 this.vy *= 0.98;
-                this.vy += 0.12;
+                this.vy += 0.15; // gravity mạnh hơn cho falling đẹp
                 this.x += this.vx;
                 this.y += this.vy;
                 this.life--;
             }
 
             draw() {
-                if (this.life <= 0) return;
-                const opacity = this.life / this.maxLife;
+                const alpha = this.life / this.maxLife;
 
-                // Trail dài như ngoài đời
+                // Trail dài cho sparks rơi
                 if (this.trail && this.trailPoints.length > 1) {
                     ctx.beginPath();
                     ctx.moveTo(this.trailPoints[0].x, this.trailPoints[0].y);
                     for (let i = 1; i < this.trailPoints.length; i++) {
                         ctx.lineTo(this.trailPoints[i].x, this.trailPoints[i].y);
                     }
-                    ctx.strokeStyle = `\( {this.color} \){Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
-                    ctx.lineWidth = this.size * 1.8;
+                    ctx.strokeStyle = this.color + Math.floor(alpha * 200).toString(16).padStart(2, '0');
+                    ctx.lineWidth = this.size * 1.5;
                     ctx.stroke();
                 }
 
                 // Đầu hạt sáng
-                ctx.globalAlpha = opacity;
+                ctx.globalAlpha = alpha;
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
+
+                // Glow nhẹ
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0;
                 ctx.globalAlpha = 1;
             }
         }
 
-        class Firework {
-            constructor(targetX = null, targetY = null) {
-                this.x = targetX || Math.random() * canvas.width;
+        class Rocket {
+            constructor() {
+                this.x = Math.random() * canvas.width;
                 this.y = canvas.height;
-                this.targetX = targetX || this.x;
-                this.targetY = targetY || Math.random() * (canvas.height * 0.35) + 60;
-                this.vx = (this.targetX - this.x) / 70;
-                this.vy = -22 - Math.random() * 8; // Bay lên nhanh mạnh
-                this.trailPoints = [];
+                this.targetY = Math.random() * canvas.height * 0.3 + 80;
+                this.vy = -20 - Math.random() * 10;
+                this.trail = [];
             }
 
             update() {
-                this.trailPoints.push({x: this.x, y: this.y});
-                if (this.trailPoints.length > 35) this.trailPoints.shift();
+                this.trail.push({x: this.x, y: this.y});
+                if (this.trail.length > 40) this.trail.shift();
 
-                this.x += this.vx;
                 this.y += this.vy;
-                this.vy += 0.16;
+                this.vy += 0.2;
 
                 if (this.y <= this.targetY) {
                     this.explode();
@@ -137,44 +145,47 @@
             }
 
             draw() {
-                // Trail launch dài trắng
-                if (this.trailPoints.length > 1) {
-                    ctx.beginPath();
-                    ctx.moveTo(this.trailPoints[0].x, this.trailPoints[0].y);
-                    for (let i = 1; i < this.trailPoints.length; i++) {
-                        ctx.lineTo(this.trailPoints[i].x, this.trailPoints[i].y);
-                    }
-                    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-                    ctx.lineWidth = 4;
-                    ctx.stroke();
+                // Trail trắng dài khi bay lên
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y + 10);
+                for (let i = 0; i < this.trail.length; i++) {
+                    ctx.lineTo(this.trail[i].x, this.trail[i].y);
                 }
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.lineWidth = 5;
+                ctx.stroke();
 
                 // Đầu rocket sáng
-                ctx.fillStyle = '#ffffaa';
+                ctx.fillStyle = '#ffff00';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#ffff00';
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, 5, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, 6, 0, Math.PI * 2);
                 ctx.fill();
+                ctx.shadowBlur = 0;
             }
 
             explode() {
-                const count = 80 + Math.floor(Math.random() * 80);
+                const colors = ['#ff0000', '#00ff00', '#ffff00', '#00ffff', '#ff00ff', '#ff8800', '#ffffff'];
+                const count = 100 + Math.random() * 100;
+
                 for (let i = 0; i < count; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = 3 + Math.random() * 9;
+                    const angle = (i / count) * Math.PI * 2;
+                    const speed = 3 + Math.random() * 8;
                     const vx = Math.cos(angle) * speed;
                     const vy = Math.sin(angle) * speed;
-                    const hue = Math.random() * 360;
-                    const color = `hsl(${hue}, 100%, 65%)`;
-                    const size = 1.8 + Math.random() * 2.5;
-                    const life = 70 + Math.random() * 70;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const size = 2 + Math.random() * 3;
+                    const life = 80 + Math.random() * 60;
                     particles.push(new Particle(this.x, this.y, vx, vy, color, size, life, true));
                 }
-                playExplosion();
+
+                playSound();
             }
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(0,0,0,0.12)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             particles.forEach((p, i) => {
@@ -183,9 +194,9 @@
                 else p.draw();
             });
 
-            fireworks = fireworks.filter(f => {
-                f.draw();
-                return f.update();
+            rockets = rockets.filter(r => {
+                r.draw();
+                return r.update();
             });
 
             requestAnimationFrame(animate);
@@ -193,37 +204,31 @@
 
         animate();
 
-        // Tự động bắn pháo liên tục
+        // Tự động bắn pháo
         setInterval(() => {
-            fireworks.push(new Firework());
-        }, 1200);
+            rockets.push(new Rocket());
+        }, 1000);
 
         // Tap để bắn thêm + unlock sound
-        function handleInteraction() {
-            if (!hasInteracted) {
-                hasInteracted = true;
-                document.getElementById('hint').style.display = 'none';
-                forceUnlock();
-            }
+        function tapHandler(e) {
+            unlockSound();
+            e.preventDefault();
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const y = e.touches ? e.touches[0].clientY : e.clientY;
+            const rocket = new Rocket();
+            rocket.x = x;
+            rocket.targetY = y * 0.6;
+            rockets.push(rocket);
         }
 
-        canvas.addEventListener('click', (e) => {
-            handleInteraction();
-            fireworks.push(new Firework(e.clientX, e.clientY * 0.6));
-        });
-        canvas.addEventListener('touchstart', (e) => {
-            handleInteraction();
-            e.preventDefault();
-            const t = e.touches[0];
-            fireworks.push(new Firework(t.clientX, t.clientY * 0.6));
-        });
+        canvas.addEventListener('click', tapHandler);
+        canvas.addEventListener('touchstart', tapHandler);
 
-        // Nút bật/tắt âm thanh
-        const soundBtn = document.getElementById('sound-btn');
-        soundBtn.addEventListener('click', () => {
+        // Nút âm thanh
+        document.getElementById('sound-btn').addEventListener('click', () => {
             soundEnabled = !soundEnabled;
-            soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
-            handleInteraction();
+            document.getElementById('sound-btn').textContent = soundEnabled ? '🔊' : '🔇';
+            unlockSound();
         });
     </script>
 </body>
