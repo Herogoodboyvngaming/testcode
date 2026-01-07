@@ -1,4 +1,4 @@
-/* style.css - PHIÊN BẢN ĐẸP HOÀN HẢO, ĐÃ ĐƯỢC CẬP NHẬT ĐỂ PHÙ HỢP VỚI CODE MỚI NHẤT */
+/* style.css - PHIÊN BẢN ĐẸP HOÀN HẢO NHẤT, ĐÃ ĐƯỢC TẠO LẠI TỪ ĐẦU ĐỂ MÀY KHÔNG BỊ LỖI NỮA NHA!!! */
 
 * {
     box-sizing: border-box;
@@ -217,7 +217,7 @@ canvas {
     line-height: 90px;
 }
 
-#pikachuBoard {
+#pikachuBoard, .pikachu-board {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
